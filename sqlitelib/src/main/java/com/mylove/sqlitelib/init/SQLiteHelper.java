@@ -14,6 +14,9 @@ import java.util.Map;
  * @overview
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
+    /**
+     * 表名
+     */
     private String tabName;
     private Map<String, String> fieldMap;
     private String id;
@@ -47,14 +50,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     /**
      * @param context  上下文
-     * @param tabName  tab名
+     * @param dbName   tab名
      * @param fieldMap 表字段
-     * @param name     db名
+     * @param tabName  db名
      * @param version  版本号
      */
-    public SQLiteHelper(Context context, String tabName, Map<String, String> fieldMap, String name, int version) {
-        super(context, name, null, version);
+    public SQLiteHelper(Context context, String dbName, String id, String idType, boolean increase, Map<String, String> fieldMap, String tabName, int version) {
+        super(context, dbName, null, version);
         this.tabName = tabName;
+        this.id = id;
+        this.increase = increase;
         this.fieldMap = fieldMap;
+        this.idType = idType;
     }
 }
