@@ -3,7 +3,9 @@ package com.mylove.sqlitelib;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mylove.sqlitelib.init.SQLiteHelper;
+import com.mylove.sqlitelib.annotation.TableBean;
+import com.mylove.sqlitelib.db.TableCallBack;
+import com.mylove.sqlitelib.db.TableObject;
 
 /**
  * @author YanYi
@@ -23,13 +25,28 @@ public class DataDao {
         this.version = builder.version;
     }
 
-    private SQLiteDatabase getDB() {
-        SQLiteHelper sqLiteHelper = SQLiteInject.init(context, dbName, version);
+    private <T> boolean isTabBean(T t) {
+        TableBean annotation = t.getClass().getAnnotation(TableBean.class);
+        if (annotation != null) {
+            return true;
+        } else if (t instanceof TableObject) {
+            return true;
+        } else if (TableCallBack.class.isAssignableFrom(t.getClass())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private <T> SQLiteDatabase getDB(T t) {
+        SQLiteHelper sqLiteHelper = SQLiteInject.init(context, dbName, version, t);
         return sqLiteHelper.getWritableDatabase();
     }
 
     public <T> void insert(T t) {
-
+        if (!isTabBean(t)) {
+            SQLiteDatabase db = getDB(t);
+        }
     }
 
     public static class Builder {

@@ -1,4 +1,4 @@
-package com.mylove.sqlitelib.init;
+package com.mylove.sqlitelib;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,7 +31,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
         field = field.deleteCharAt(field.length() - 1);
         String sql;
-        if (increase && idType.equals("java.lang.Long")) {
+        if (increase && idType.equals("long")) {
             sql = "create table " + tabName + "(" + id + " integer primary key autoincrement," + field + ")";//有主键自增
         } else if (!TextUtils.isEmpty(id) && !"null".equals(id) && id.trim().length() != 0) {
             sql = "create table " + tabName + "(" + id + " integer primary key," + field + ")";//有主键
@@ -43,9 +43,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS " + tabName;
-        db.execSQL(sql);
-        onCreate(db);
+        if (newVersion > oldVersion) {
+            String sql = "SELECT * INTO " + tabName + "_New" + " FROM " + tabName;
+            db.execSQL(sql);
+            sql = "DROP TABLE IF EXISTS " + tabName;
+            db.execSQL(sql);
+            onCreate(db);
+            sql = "DROP TABLE IF EXISTS " + tabName + "_New";
+            db.execSQL(sql);
+        } else {
+            String sql = "DROP TABLE IF EXISTS " + tabName;
+            db.execSQL(sql);
+            onCreate(db);
+        }
     }
 
     /**

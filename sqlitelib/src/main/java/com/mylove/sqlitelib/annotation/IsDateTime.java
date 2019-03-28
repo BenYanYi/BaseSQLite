@@ -7,12 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  * @author YanYi
- * @date 2019/3/26 16:58
+ * @date 2019/3/28 17:22
  * @email ben@yanyi.red
- * @overview id(默认不自增)
+ * @overview
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ID {
-    boolean increase() default false;
+public @interface IsDateTime {
+    boolean isDateTime() default true;
 }

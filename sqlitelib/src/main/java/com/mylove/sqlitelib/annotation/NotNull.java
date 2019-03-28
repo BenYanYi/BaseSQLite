@@ -11,8 +11,8 @@ import java.lang.annotation.Target;
  * @email ben@yanyi.red
  * @overview
  */
-@Target(ElementType.PARAMETER)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotNull {
-    boolean value() default true;
+    boolean notNull() default true;
 }

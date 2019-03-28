@@ -1,0 +1,49 @@
+package com.mylove.sqlitelib;
+
+import java.util.List;
+
+/**
+ * @author YanYi
+ * @date 2019/3/28 14:53
+ * @email ben@yanyi.red
+ * @overview
+ */
+class TabMsg {
+    private String id;
+    private String type;
+    private boolean increase = false;
+
+    private List<FieldMsg> list;
+
+    String getId() {
+        return id;
+    }
+
+    void setId(String id) {
+        this.id = id;
+    }
+
+    String getType() {
+        return type;
+    }
+
+    void setType(String type) {
+        this.type = type;
+    }
+
+    boolean isIncrease() {
+        return increase;
+    }
+
+    void setIncrease(boolean increase) {
+        this.increase = increase;
+    }
+
+    List<FieldMsg> getList() {
+        return list;
+    }
+
+    void setList(List<FieldMsg> list) {
+        this.list = list;
+    }
+}
