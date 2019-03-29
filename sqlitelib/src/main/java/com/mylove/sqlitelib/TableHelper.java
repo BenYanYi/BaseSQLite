@@ -5,36 +5,35 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
-import java.util.Map;
-
 /**
  * @author YanYi
  * @date 2019/3/26 17:05
  * @email ben@yanyi.red
  * @overview
  */
-public class SQLiteHelper extends SQLiteOpenHelper {
+class TableHelper extends SQLiteOpenHelper {
     /**
      * 表名
      */
     private String tabName;
-    private Map<String, String> fieldMap;
-    private String id;
-    private String idType;
-    private boolean increase;
+    private TabMsg tabMsg;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuilder field = new StringBuilder();
-        for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
-            field.append(entry.getKey()).append(" ").append(entry.getValue()).append(",");
+        for (FieldMsg fieldMsg : tabMsg.getList()) {
+            field.append(fieldMsg.getKey()).append(" ").append(fieldMsg.getType()).append(" ");
+            if (fieldMsg.isNotNULL()) {
+                field.append("NOT NULL");
+            }
+            field.append(",");
         }
         field = field.deleteCharAt(field.length() - 1);
         String sql;
-        if (increase && idType.equals("long")) {
-            sql = "create table " + tabName + "(" + id + " integer primary key autoincrement," + field + ")";//有主键自增
-        } else if (!TextUtils.isEmpty(id) && !"null".equals(id) && id.trim().length() != 0) {
-            sql = "create table " + tabName + "(" + id + " integer primary key," + field + ")";//有主键
+        if (tabMsg.isIncrease() && (tabMsg.getType().equals("long") || tabMsg.getType().equals("Long"))) {
+            sql = "create table " + tabName + "(" + tabMsg.getId() + " integer primary key autoincrement," + field + ")";//有主键自增
+        } else if (!TextUtils.isEmpty(tabMsg.getId()) && !"null".equals(tabMsg.getId()) && tabMsg.getId().trim().length() != 0) {
+            sql = "create table " + tabName + "(" + tabMsg.getId() + " integer primary key NOT NULL," + field + ")";//有主键
         } else {
             sql = "create table " + tabName + " (" + field + ")";
         }
@@ -65,12 +64,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
      * @param tabName  db名
      * @param version  版本号
      */
-    public SQLiteHelper(Context context, String dbName, String id, String idType, boolean increase, Map<String, String> fieldMap, String tabName, int version) {
+    TableHelper(Context context, String dbName, TabMsg tabMsg, String tabName, int version) {
         super(context, dbName, null, version);
         this.tabName = tabName;
-        this.id = id;
-        this.increase = increase;
-        this.fieldMap = fieldMap;
-        this.idType = idType;
+        this.tabMsg = tabMsg;
     }
 }
