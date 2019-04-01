@@ -2,10 +2,12 @@ package com.mylove.sqlitelib;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
+import com.mylove.sqlitelib.condition.ConditionMsg;
 import com.mylove.sqlitelib.condition.TableCondition;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * @author YanYi
@@ -19,7 +21,7 @@ public class TableSession {
     private String dbName;
     private int version;
 
-    TableSession(Context context, Builder builder) {
+    private TableSession(Context context, Builder builder) {
         this.context = context;
         this.dbName = builder.dbName;
         this.version = builder.version;
@@ -32,17 +34,16 @@ public class TableSession {
 
     public <T> TableCondition where(Class<T> tClass) {
         TableCondition.Builder builder = new TableCondition.Builder()
-                .setInMap(new HashMap<String, Object>())
-                .setNotInMap(new HashMap<String, Object>())
-                .setToMap(new HashMap<String, Object>())
-                .setNotToMap(new HashMap<String, Object>())
-                .setOrMap(new HashMap<String, Object>())
-                .setNotOrMap(new HashMap<String, Object>());
+                .setEqList(new ArrayList<ConditionMsg>())
+                .setNotEqList(new ArrayList<ConditionMsg>())
+                .setGreaterList(new ArrayList<ConditionMsg>())
+                .setLessList(new ArrayList<ConditionMsg>())
+                .setInList(new ArrayList<ConditionMsg>());
         return builder.builder(getDB(tClass), tClass);
     }
 
     public static class Builder {
-        private String dbName = DB_NAME;
+        private String dbName = null;
         private int version = 1;
 
         public Builder setDbName(String dbName) {
@@ -56,6 +57,9 @@ public class TableSession {
         }
 
         public TableSession builder(Context context) {
+            if (TextUtils.isEmpty(dbName)) {
+                dbName = context.getPackageName() + "_TABLE_DB";
+            }
             return new TableSession(context, this);
         }
     }

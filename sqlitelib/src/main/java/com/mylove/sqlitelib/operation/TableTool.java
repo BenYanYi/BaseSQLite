@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.text.TextUtils;
 
 import com.googlecode.openbeans.PropertyDescriptor;
+import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.annotation.ID;
+import com.mylove.sqlitelib.exception.TableException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,72 +17,70 @@ import java.lang.reflect.Method;
  * @email ben@yanyi.red
  * @overview
  */
-class TableTool {
-    static <T> ContentValues values(T t) {
+public class TableTool {
+    public static <T> ContentValues values(T t) {
         ContentValues values = new ContentValues();
-        Class<?> aClass = t.getClass();
         try {
             Field[] fields = t.getClass().getDeclaredFields();
             for (Field field : fields) {
-
-//                PropertyDescriptor pd = new PropertyDescriptor(field.getName(), aClass);
-////                Method rM = pd.getReadMethod();//获得读方法
-////                Integer num = (Integer) rM.invoke(t);//因为知道是int类型的属性,所以转换成integer就是了。。也可以不转换直接打印
-////                System.out.println(num);
-
-                ID annotation = field.getAnnotation(ID.class);
-                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), aClass);
-                Method method = descriptor.getReadMethod();//获得读方法
-                if (annotation != null) {
-                    boolean boo = annotation.increase();
-                    if (!boo) {
-                        Boolean invoke = (Boolean) method.invoke(t);
-                        values.put(field.getName(), (invoke ? 1 : 0));
+                if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
+                        !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
+                    ID annotation = field.getAnnotation(ID.class);
+                    PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), t.getClass());
+                    Method method = descriptor.getReadMethod();//获得读方法
+                    if (annotation != null) {
+                        boolean boo = annotation.increase();
+                        if (boo) {
+                            if (!field.getType().getSimpleName().toLowerCase().equals("long")) {
+                                String invoke = String.valueOf(method.invoke(t));
+                                if (!TextUtils.isEmpty(invoke) && !"null".equals(invoke) && invoke.trim().length() != 0) {
+                                    contentValue(values, field, invoke);
+                                } else {
+                                    throw new TableException("表id需为long型才能自增,其余情况需要为表id设置值");
+                                }
+                            }
+                        }
+                    } else {
+                        String invoke = String.valueOf(method.invoke(t));
+                        contentValue(values, field, invoke);
                     }
-                } else {
-                    String invoke = String.valueOf(method.invoke(t));
-                    contentValue(values, field, invoke);
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
+        JLog.v(values);
         return values;
     }
 
     private static void contentValue(ContentValues values, Field field, String invoke) {
         if (!TextUtils.isEmpty(invoke) && !"null".equals(invoke) && invoke.trim().length() != 0) {
-            switch (field.getType().getSimpleName()) {
+            switch (field.getType().getSimpleName().toLowerCase()) {
                 case "boolean":
-                case "Boolean":
                     values.put(field.getName(), (invoke.equals("true") ? 1 : 0));
                     break;
                 case "byte":
-                case "Byte":
                     values.put(field.getName(), Byte.parseByte(invoke));
                     break;
                 case "int":
-                case "Integer":
+                case "integer":
                     values.put(field.getName(), Integer.parseInt(invoke));
                     break;
                 case "long":
-                case "Long":
                     values.put(field.getName(), Long.parseLong(invoke));
                     break;
                 case "short":
-                case "Short":
                     values.put(field.getName(), Short.parseShort(invoke));
                     break;
                 case "float":
-                case "Float":
                     values.put(field.getName(), Float.parseFloat(invoke));
                     break;
                 case "double":
-                case "Double":
                     values.put(field.getName(), Double.parseDouble(invoke));
                     break;
                 case "char":
-                case "Character":
+                case "character":
                     values.put(field.getName(), invoke);
                     break;
                 default:

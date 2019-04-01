@@ -2,11 +2,11 @@ package com.mylove.sqlitelib.condition;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mylove.sqlitelib.TableSort;
+import com.mylove.sqlitelib.config.TableSort;
 import com.mylove.sqlitelib.callback.ConditionCallBack;
-import com.mylove.sqlitelib.operation.TabOperation;
+import com.mylove.sqlitelib.operation.TableOperation;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author YanYi
@@ -15,165 +15,212 @@ import java.util.Map;
  * @overview
  */
 public class TableCondition implements ConditionCallBack {
-    private Map<String, Object> toMap;
-    private Map<String, Object> notToMap;
-    private Map<String, Object> orMap;
-    private Map<String, Object> notOrMap;
-    private Map<String, Object> inMap;
-    private Map<String, Object> notInMap;
     private Class<?> tClass;
     private TableSort sort = TableSort.DETAILS;
     private String field;
+    private List<ConditionMsg> eqList;
+    private List<ConditionMsg> notEqList;
+    private List<ConditionMsg> greaterList;
+    private List<ConditionMsg> lessList;
+    private List<ConditionMsg> inList;
 
     private SQLiteDatabase database;
 
-    TableCondition(SQLiteDatabase database, Class<?> tClass, Builder builder) {
+    private TableCondition(SQLiteDatabase database, Class<?> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
-        this.toMap = builder.toMap;
-        this.notToMap = builder.notToMap;
-        this.orMap = builder.orMap;
-        this.notOrMap = builder.notOrMap;
-        this.inMap = builder.inMap;
-        this.notInMap = builder.notInMap;
+        this.eqList = builder.eqList;
+        this.notEqList = builder.notEqList;
+        this.greaterList = builder.greaterList;
+        this.lessList = builder.lessList;
+        this.inList = builder.inList;
     }
 
     @Override
-    public TableCondition equalTo(Map<String, Object> condition) {
-        for (Map.Entry<String, Object> entry : condition.entrySet()) {
-            this.toMap.put(entry.getKey(), entry.getValue());
-        }
+    public TableCondition eq(List<ConditionMsg> list) {
+        this.eqList.addAll(list);
         return this;
     }
 
     @Override
-    public TableCondition equalTo(String field, Object value) {
-        this.toMap.put(field, value);
+    public TableCondition eq(ConditionMsg conditionMsg) {
+        this.eqList.add(conditionMsg);
         return this;
     }
 
     @Override
-    public TableCondition or(Map<String, Object> condition) {
-        for (Map.Entry<String, Object> entry : condition.entrySet()) {
-            this.orMap.put(entry.getKey(), entry.getValue());
-        }
+    public TableCondition notEq(List<ConditionMsg> list) {
+        this.notEqList.addAll(list);
         return this;
     }
 
     @Override
-    public TableCondition or(String field, Object value) {
-        this.orMap.put(field, value);
+    public TableCondition notEq(ConditionMsg conditionMsg) {
+        this.notEqList.add(conditionMsg);
         return this;
     }
 
     @Override
-    public TableCondition in(Map<String, Object> condition) {
-        for (Map.Entry<String, Object> entry : condition.entrySet()) {
-            this.inMap.put(entry.getKey(), "'%" + entry.getValue() + "%'");
-        }
+    public TableCondition greater(List<ConditionMsg> list) {
+        this.greaterList.addAll(list);
         return this;
     }
 
     @Override
-    public TableCondition in(String field, Object value) {
-        this.inMap.put(field, "'%" + value + "%'");
+    public TableCondition greater(ConditionMsg conditionMsg) {
+        this.greaterList.add(conditionMsg);
         return this;
     }
 
     @Override
-    public TableCondition notEqualTo(Map<String, Object> condition) {
-        for (Map.Entry<String, Object> entry : condition.entrySet()) {
-            this.notToMap.put(entry.getKey(), entry.getValue());
-        }
+    public TableCondition less(List<ConditionMsg> list) {
+        this.lessList.addAll(list);
         return this;
     }
 
     @Override
-    public TableCondition notEqualTo(String field, Object value) {
-        this.notToMap.put(field, value);
+    public TableCondition less(ConditionMsg conditionMsg) {
+        this.lessList.add(conditionMsg);
         return this;
     }
 
     @Override
-    public TableCondition notOr(Map<String, Object> condition) {
-        for (Map.Entry<String, Object> entry : condition.entrySet()) {
-            this.notOrMap.put(entry.getKey(), entry.getValue());
-        }
+    public TableCondition in(List<ConditionMsg> list) {
+        this.inList.addAll(list);
         return this;
     }
 
     @Override
-    public TableCondition notOr(String field, Object value) {
-        this.notOrMap.put(field, value);
+    public TableCondition in(ConditionMsg conditionMsg) {
+        this.inList.add(conditionMsg);
         return this;
     }
 
     @Override
-    public TableCondition notIn(Map<String, Object> condition) {
-        for (Map.Entry<String, Object> entry : condition.entrySet()) {
-            this.notInMap.put(entry.getKey(), entry.getValue());
-        }
-        return this;
-    }
-
-    @Override
-    public TableCondition notIn(String field, Object value) {
-        this.notInMap.put(field, value);
-        return this;
-    }
-
-    public TableCondition sort(TableSort sort, String field) {
+    public TableCondition sort(String field, TableSort sort) {
+        this.field = field;
         this.sort = sort;
         return this;
     }
 
     @Override
-    public TabOperation operation() {
-        TabOperation.Builder builder = new TabOperation.Builder()
-                .setInMap(this.inMap)
-                .setNotInMap(this.notInMap)
-                .setToMap(this.toMap)
-                .setNotToMap(this.notToMap)
-                .setOrMap(this.orMap)
-                .setNotOrMap(this.notOrMap);
-        return builder.builder(this.database, tClass, this.sort, this.field);
+    public TableOperation operation() {
+        TableOperation.Builder builder = new TableOperation.Builder()
+                .setConditionKey(conditionKey())
+                .setConditionValue(conditionValue())
+                .setField(this.field)
+                .setSort(this.sort);
+        return builder.builder(this.database, tClass);
+    }
+
+    private String conditionKey() {
+        if (this.eqList.size() > 0 || this.notEqList.size() > 0 || this.greaterList.size() > 0 || this.lessList.size() > 0 || this.inList.size() > 0) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < this.eqList.size(); i++) {
+                builder.append(this.eqList.get(i).getField()).append("= ? ");
+                if (this.eqList.get(i).getNexus().isNexus()) {
+                    builder.append("and ");
+                } else {
+                    builder.append("or ");
+                }
+            }
+            for (int i = 0; i < this.notEqList.size(); i++) {
+                builder.append(this.notEqList.get(i).getField()).append("!= ? ");
+                if (this.notEqList.get(i).getNexus().isNexus()) {
+                    builder.append("and ");
+                } else {
+                    builder.append("or ");
+                }
+            }
+            for (int i = 0; i < this.greaterList.size(); i++) {
+                builder.append(this.greaterList.get(i).getField()).append("> ? ");
+                if (this.greaterList.get(i).getNexus().isNexus()) {
+                    builder.append("and ");
+                } else {
+                    builder.append("or ");
+                }
+            }
+            for (int i = 0; i < this.lessList.size(); i++) {
+                builder.append(this.lessList.get(i).getField()).append("< ? ");
+                if (this.lessList.get(i).getNexus().isNexus()) {
+                    builder.append("and ");
+                } else {
+                    builder.append("or ");
+                }
+            }
+            for (int i = 0; i < this.inList.size(); i++) {
+                builder.append(this.inList.get(i).getField()).append("like ? ");
+                if (this.inList.get(i).getNexus().isNexus()) {
+                    builder.append("and ");
+                } else {
+                    builder.append("or ");
+                }
+            }
+            builder = builder.delete(builder.length() - 4, builder.length());
+            return builder.toString();
+        } else {
+            return null;
+        }
+    }
+
+    private String[] conditionValue() {
+        if (this.eqList.size() > 0 || this.notEqList.size() > 0 || this.greaterList.size() > 0 || this.lessList.size() > 0 || this.inList.size() > 0) {
+            int size = this.eqList.size() + this.notEqList.size() + this.greaterList.size() + this.lessList.size() + this.inList.size();
+            String[] values = new String[size];
+            for (int i = 0; i < this.eqList.size(); i++) {
+                values[i] = this.eqList.get(i).getValue();
+            }
+            for (int i = 0; i < this.notEqList.size(); i++) {
+                int index = this.eqList.size() + i;
+                values[index] = notEqList.get(i).getValue();
+            }
+            for (int i = 0; i < this.greaterList.size(); i++) {
+                int index = this.eqList.size() + this.notEqList.size() + i;
+                values[index] = this.greaterList.get(i).getValue();
+            }
+            for (int i = 0; i < this.lessList.size(); i++) {
+                int index = this.eqList.size() + this.notEqList.size() + this.greaterList.size() + i;
+                values[index] = this.lessList.get(i).getValue();
+            }
+            for (int i = 0; i < this.inList.size(); i++) {
+                int index = this.eqList.size() + this.notEqList.size() + this.greaterList.size() + this.lessList.size() + i;
+                values[index] = "'%" + this.inList.get(i).getValue() + "%'";
+            }
+            return values;
+        } else {
+            return null;
+        }
     }
 
     public static class Builder {
-        private Map<String, Object> toMap;
-        private Map<String, Object> notToMap;
-        private Map<String, Object> orMap;
-        private Map<String, Object> notOrMap;
-        private Map<String, Object> inMap;
-        private Map<String, Object> notInMap;
+        private List<ConditionMsg> eqList;
+        private List<ConditionMsg> notEqList;
+        private List<ConditionMsg> greaterList;
+        private List<ConditionMsg> lessList;
+        private List<ConditionMsg> inList;
 
-        public Builder setToMap(Map<String, Object> toMap) {
-            this.toMap = toMap;
+        public Builder setEqList(List<ConditionMsg> eqList) {
+            this.eqList = eqList;
             return this;
         }
 
-        public Builder setNotToMap(Map<String, Object> notToMap) {
-            this.notToMap = notToMap;
+        public Builder setNotEqList(List<ConditionMsg> notEqList) {
+            this.notEqList = notEqList;
             return this;
         }
 
-        public Builder setOrMap(Map<String, Object> orMap) {
-            this.orMap = orMap;
+        public Builder setGreaterList(List<ConditionMsg> greaterList) {
+            this.greaterList = greaterList;
             return this;
         }
 
-        public Builder setNotOrMap(Map<String, Object> notOrMap) {
-            this.notOrMap = notOrMap;
+        public Builder setLessList(List<ConditionMsg> lessList) {
+            this.lessList = lessList;
             return this;
         }
 
-        public Builder setInMap(Map<String, Object> inMap) {
-            this.inMap = inMap;
-            return this;
-        }
-
-        public Builder setNotInMap(Map<String, Object> notInMap) {
-            this.notInMap = notInMap;
+        public Builder setInList(List<ConditionMsg> inList) {
+            this.inList = inList;
             return this;
         }
 

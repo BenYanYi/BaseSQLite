@@ -12,7 +12,7 @@ import com.mylove.sqlitelib.db.TableObject;
  * @email ben@yanyi.red
  * @overview
  */
-class TabInsert {
+class TableInsert {
     private <T> boolean isTabBean(T t) {
         TableBean annotation = t.getClass().getAnnotation(TableBean.class);
         if (annotation != null) {
@@ -25,12 +25,9 @@ class TabInsert {
             return false;
         }
     }
-//
 
     static <T> long insert(T t, SQLiteDatabase database) {
-//        if (!isTabBean(t)) {
         return database.insert(t.getClass().getSimpleName(), null, TableTool.values(t));
-//        }
     }
 
 }

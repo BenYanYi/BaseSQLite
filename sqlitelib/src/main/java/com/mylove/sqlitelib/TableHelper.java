@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
+import com.mylove.loglib.JLog;
+
 /**
  * @author YanYi
  * @date 2019/3/26 17:05
@@ -16,12 +18,12 @@ class TableHelper extends SQLiteOpenHelper {
      * 表名
      */
     private String tabName;
-    private TabMsg tabMsg;
+    private TableMsg tableMsg;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuilder field = new StringBuilder();
-        for (FieldMsg fieldMsg : tabMsg.getList()) {
+        for (FieldMsg fieldMsg : tableMsg.getList()) {
             field.append(fieldMsg.getKey()).append(" ").append(fieldMsg.getType()).append(" ");
             if (fieldMsg.isNotNULL()) {
                 field.append("NOT NULL");
@@ -30,13 +32,14 @@ class TableHelper extends SQLiteOpenHelper {
         }
         field = field.deleteCharAt(field.length() - 1);
         String sql;
-        if (tabMsg.isIncrease() && (tabMsg.getType().equals("long") || tabMsg.getType().equals("Long"))) {
-            sql = "create table " + tabName + "(" + tabMsg.getId() + " integer primary key autoincrement," + field + ")";//有主键自增
-        } else if (!TextUtils.isEmpty(tabMsg.getId()) && !"null".equals(tabMsg.getId()) && tabMsg.getId().trim().length() != 0) {
-            sql = "create table " + tabName + "(" + tabMsg.getId() + " integer primary key NOT NULL," + field + ")";//有主键
+        if (tableMsg.isIncrease() && (tableMsg.getType().equals("long") || tableMsg.getType().equals("Long"))) {
+            sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key autoincrement," + field + ")";//有主键自增
+        } else if (!TextUtils.isEmpty(tableMsg.getId()) && !"null".equals(tableMsg.getId()) && tableMsg.getId().trim().length() != 0) {
+            sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key NOT NULL," + field + ")";//有主键
         } else {
             sql = "create table " + tabName + " (" + field + ")";
         }
+        JLog.v(sql);
         db.execSQL(sql);
     }
 
@@ -64,9 +67,9 @@ class TableHelper extends SQLiteOpenHelper {
      * @param tabName  db名
      * @param version  版本号
      */
-    TableHelper(Context context, String dbName, TabMsg tabMsg, String tabName, int version) {
+    TableHelper(Context context, String dbName, TableMsg tableMsg, String tabName, int version) {
         super(context, dbName, null, version);
         this.tabName = tabName;
-        this.tabMsg = tabMsg;
+        this.tableMsg = tableMsg;
     }
 }

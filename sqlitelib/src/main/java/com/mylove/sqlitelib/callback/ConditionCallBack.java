@@ -1,9 +1,11 @@
 package com.mylove.sqlitelib.callback;
 
-import com.mylove.sqlitelib.operation.TabOperation;
+import com.mylove.sqlitelib.config.TableSort;
+import com.mylove.sqlitelib.condition.ConditionMsg;
 import com.mylove.sqlitelib.condition.TableCondition;
+import com.mylove.sqlitelib.operation.TableOperation;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author YanYi
@@ -12,29 +14,27 @@ import java.util.Map;
  * @overview
  */
 public interface ConditionCallBack {
-    TableCondition equalTo(Map<String, Object> condition);
+    TableCondition eq(List<ConditionMsg> list);
 
-    TableCondition equalTo(String field, Object value);
+    TableCondition eq(ConditionMsg conditionMsg);
 
-    TableCondition or(Map<String, Object> condition);
+    TableCondition notEq(List<ConditionMsg> list);
 
-    TableCondition or(String field, Object value);
+    TableCondition notEq(ConditionMsg conditionMsg);
 
-    TableCondition in(Map<String, Object> condition);
+    TableCondition greater(List<ConditionMsg> list);
 
-    TableCondition in(String field, Object value);
+    TableCondition greater(ConditionMsg conditionMsg);
 
-    TableCondition notEqualTo(Map<String, Object> condition);
+    TableCondition less(List<ConditionMsg> list);
 
-    TableCondition notEqualTo(String field, Object value);
+    TableCondition less(ConditionMsg conditionMsg);
 
-    TableCondition notOr(Map<String, Object> condition);
+    TableCondition in(List<ConditionMsg> list);
 
-    TableCondition notOr(String field, Object value);
+    TableCondition in(ConditionMsg conditionMsg);
 
-    TableCondition notIn(Map<String, Object> condition);
+    TableCondition sort(String field, TableSort sort);
 
-    TableCondition notIn(String field, Object value);
-
-    TabOperation operation();
+    TableOperation operation();
 }

@@ -1,6 +1,8 @@
 package com.mylove.sqlitelib.callback;
 
-import com.mylove.sqlitelib.operation.TabQuery;
+import com.mylove.sqlitelib.operation.TableDelete;
+import com.mylove.sqlitelib.operation.TableQuery;
+import com.mylove.sqlitelib.operation.TableUpdate;
 
 import java.util.List;
 
@@ -15,11 +17,15 @@ public interface OperationCallBack {
 
     <T> long[] insert(List<T> list);
 
-    void delete();
+    TableDelete delete();
 
-    TabQuery query();
+    int deleteAll();
 
-    <T> void update(T t);
+    TableQuery query();
+
+    <T> int updateAll(T t);
+
+    TableUpdate update();
 
 //    void sort(TableSort sort);
 

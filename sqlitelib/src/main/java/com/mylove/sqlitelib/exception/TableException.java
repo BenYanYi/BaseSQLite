@@ -6,14 +6,14 @@ package com.mylove.sqlitelib.exception;
  * @email ben@yanyi.red
  * @overview
  */
-public class TabException extends RuntimeException {
+public class TableException extends RuntimeException {
 
     private static final long serialVersionUID = 3652654932830298674L;
 
-    public TabException() {
+    public TableException() {
     }
 
-    public TabException(String message) {
+    public TableException(String message) {
         super(message);
     }
 }
