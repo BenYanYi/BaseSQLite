@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TableDao session = new TableDao.Builder()
-                .setVersion(2)
                 .builder(this);
 //        DBBean dbBean = new DBBean();
 //        dbBean.setTitle("标题4");
