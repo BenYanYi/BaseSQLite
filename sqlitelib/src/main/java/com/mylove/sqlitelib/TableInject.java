@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.mylove.sqlitelib.annotation.ID;
 import com.mylove.sqlitelib.annotation.NotNull;
+import com.mylove.sqlitelib.annotation.TableBean;
 import com.mylove.sqlitelib.exception.TableException;
 
 import java.lang.reflect.Field;
@@ -20,10 +21,17 @@ import java.util.List;
 class TableInject {
 
     static <T> TableHelper init(Context context, String dbName, int version, Class<T> tClass) {
-        return new TableHelper(context, dbName, getTabMsg(tClass), getTabName(tClass), version);
+        return new TableHelper(context, dbName, getTabMsg(tClass), getTabName(tClass), version, tClass);
     }
 
     private static <T> String getTabName(Class<T> tClass) {
+        TableBean annotation = tClass.getAnnotation(TableBean.class);
+        if (annotation != null) {
+            String value = annotation.value();
+            if (!TextUtils.isEmpty(value) && !"null".equals(value) && value.trim().length() != 0) {
+                return value;
+            }
+        }
         return tClass.getSimpleName();
     }
 
@@ -42,6 +50,11 @@ class TableInject {
                         tableMsg.setIncrease(boo);
                         tableMsg.setId(field.getName());
                         tableMsg.setType(field.getType().getSimpleName());
+                        if (notNull != null) {
+                            tableMsg.setNotNULL(notNull.notNull());
+                        } else {
+                            tableMsg.setNotNULL(false);
+                        }
                     } else {
                         FieldMsg fieldMsg = new FieldMsg();
                         fieldMsg.setKey(field.getName());

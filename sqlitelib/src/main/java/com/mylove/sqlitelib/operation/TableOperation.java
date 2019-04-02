@@ -2,11 +2,8 @@ package com.mylove.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mylove.sqlitelib.config.TableSort;
 import com.mylove.sqlitelib.callback.OperationCallBack;
-import com.mylove.sqlitelib.exception.TableException;
-
-import java.util.List;
+import com.mylove.sqlitelib.config.TableSort;
 
 /**
  * @author YanYi
@@ -32,38 +29,20 @@ public class TableOperation implements OperationCallBack {
     }
 
     @Override
-    public <T> long insert(T t) {
-        if (this.tClass != t.getClass()) {
-            throw new TableException("添加的数据与表不符");
-        }
-        return TableInsert.insert(t, this.database);
-    }
-
-    @Override
-    public <T> long[] insert(List<T> list) {
-        if (list == null || list.size() <= 0) {
-            throw new TableException("添加的数据列表不能为空");
-        }
-        if (this.tClass != list.get(0).getClass()) {
-            throw new TableException("添加的数据与表不符");
-        }
-        long[] l = new long[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            l[i] = TableInsert.insert(list.get(i), this.database);
-        }
-        return l;
+    public TableInsert insert() {
+        return new TableInsert.Builder()
+                .setDatabase(this.database)
+                .builder(this.tClass);
     }
 
     @Override
     public TableDelete delete() {
-        return new TableDelete.Builder().setTableQuery(query()).builder(database, this.tClass);
+        return new TableDelete.Builder()
+                .setTableQuery(query())
+                .setConditionKey(this.conditionKey)
+                .setConditionValue(this.conditionValue)
+                .builder(database, this.tClass);
     }
-
-    @Override
-    public int deleteAll() {
-        return this.database.delete(this.tClass.getSimpleName(), this.conditionKey, this.conditionValue);
-    }
-
 
     @Override
     public TableQuery query() {
@@ -73,11 +52,6 @@ public class TableOperation implements OperationCallBack {
                 .setConditionKey(this.conditionKey)
                 .setConditionValue(this.conditionValue);
         return builder.builder(this.database, this.tClass);
-    }
-
-    @Override
-    public <T> int updateAll(T t) {
-        return this.database.update(t.getClass().getSimpleName(), TableTool.values(t), this.conditionKey, this.conditionValue);
     }
 
     @Override

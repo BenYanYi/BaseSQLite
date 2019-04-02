@@ -7,6 +7,8 @@ import com.googlecode.openbeans.PropertyDescriptor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author YanYi
@@ -18,53 +20,80 @@ public class TableDelete {
     private SQLiteDatabase database;
     private TableQuery tableQuery;
     private Class<?> tClass;
+    private String conditionKey;
+    private String[] conditionValue;
 
     private TableDelete(SQLiteDatabase database, Class<?> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
         this.tableQuery = builder.tableQuery;
+        this.conditionKey = builder.conditionKey;
+        this.conditionValue = builder.conditionValue;
     }
 
-    public void findFirst() {
+    public int findFirst() {
         Object first = this.tableQuery.findFirst();
         if (null != first) {
-            delete(first);
+            return delete(first);
         }
+        return -1;
     }
 
-    public void findLast() {
+    public int findLast() {
         Object last = this.tableQuery.findLast();
         if (null != last) {
-            delete(last);
+            return delete(last);
         }
+        return -1;
     }
 
-    private void delete(Object obj) {
+    public int findAll() {
+        return this.database.delete(this.tClass.getSimpleName(), this.conditionKey, this.conditionValue);
+    }
+
+    private int delete(Object obj) {
         try {
             Field[] fields = obj.getClass().getDeclaredFields();
             StringBuilder builder = new StringBuilder();
-            String[] value = new String[fields.length];
-            for (int i = 0; i < fields.length; i++) {
-                Field field = fields[i];
+            List<String> list = new ArrayList<>();
+            for (Field field : fields) {
                 if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
                         !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
-                    PropertyDescriptor descriptor = new PropertyDescriptor(fields[i].getName(), this.tClass);
+                    PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.tClass);
                     Method method = descriptor.getReadMethod();//获得读方法
-                    builder.append(fields[i].getName()).append("= ? ").append(" and ");
-                    value[i] = (String) method.invoke(obj);
+                    builder.append(field.getName()).append("= ? ").append(" and ");
+                    Object invoke = method.invoke(obj);
+                    list.add(invoke + "");
                 }
             }
-            this.database.delete(this.tClass.getSimpleName(), builder.toString(), value);
+            builder = builder.delete(builder.length() - 4, builder.length());
+            String[] value = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                value[i] = list.get(i);
+            }
+            return this.database.delete(this.tClass.getSimpleName(), builder.toString(), value);
         } catch (Exception e) {
-            e.printStackTrace();
+            return -1;
         }
     }
 
     static class Builder {
         private TableQuery tableQuery;
+        private String conditionKey;
+        private String[] conditionValue;
 
         Builder setTableQuery(TableQuery tableQuery) {
             this.tableQuery = tableQuery;
+            return this;
+        }
+
+        Builder setConditionKey(String conditionKey) {
+            this.conditionKey = conditionKey;
+            return this;
+        }
+
+        Builder setConditionValue(String[] conditionValue) {
+            this.conditionValue = conditionValue;
             return this;
         }
 

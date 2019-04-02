@@ -12,7 +12,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        ndk {
+            moduleName "SQLiteHelper"
+        }
     }
 
     buildTypes {
@@ -22,6 +24,7 @@ android {
         }
     }
 
+    sourceSets { main { jni.srcDirs = ['src/main/jni'] } }
 }
 
 dependencies {

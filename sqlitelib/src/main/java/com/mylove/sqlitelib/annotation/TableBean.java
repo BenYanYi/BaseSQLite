@@ -9,9 +9,10 @@ import java.lang.annotation.Target;
  * @author YanYi
  * @date 2019/3/26 16:55
  * @email ben@yanyi.red
- * @overview
+ * @overview 定义类为表结构
  */
 @Target(ElementType.TYPE)//表示注解方法
 @Retention(RetentionPolicy.RUNTIME)//会持续保存到JVM运行时，可以通过反射来获取
 public @interface TableBean {
+    String value() default "";
 }

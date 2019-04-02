@@ -4,8 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.mylove.sqlitelib.annotation.TableBean;
 import com.mylove.sqlitelib.condition.ConditionMsg;
 import com.mylove.sqlitelib.condition.TableCondition;
+import com.mylove.sqlitelib.exception.TableException;
 
 import java.util.ArrayList;
 
@@ -15,21 +17,30 @@ import java.util.ArrayList;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableSession {
+public class TableDao {
     private Context context;
     public static final String DB_NAME = "base_db_db_name";
     private String dbName;
     private int version;
 
-    private TableSession(Context context, Builder builder) {
+    private TableDao(Context context, Builder builder) {
         this.context = context;
         this.dbName = builder.dbName;
         this.version = builder.version;
     }
 
+    private <T> boolean isTabBean(Class<T> tClass) {
+        TableBean annotation = tClass.getAnnotation(TableBean.class);
+        return annotation != null;
+    }
+
     private <T> SQLiteDatabase getDB(Class<T> tClass) {
-        TableHelper tableHelper = TableInject.init(context, dbName, version, tClass);
-        return tableHelper.getWritableDatabase();
+        if (isTabBean(tClass)) {
+            TableHelper tableHelper = TableInject.init(context, dbName, version, tClass);
+            return tableHelper.getWritableDatabase();
+        } else {
+            throw new TableException("当前类没有定义成表结构类");
+        }
     }
 
     public <T> TableCondition where(Class<T> tClass) {
@@ -53,14 +64,17 @@ public class TableSession {
 
         public Builder setVersion(int version) {
             this.version = version;
+            if (this.version < 1) {
+                this.version = 1;
+            }
             return this;
         }
 
-        public TableSession builder(Context context) {
+        public TableDao builder(Context context) {
             if (TextUtils.isEmpty(dbName)) {
                 dbName = context.getPackageName() + "_TABLE_DB";
             }
-            return new TableSession(context, this);
+            return new TableDao(context, this);
         }
     }
 }

@@ -6,7 +6,7 @@ import com.mylove.sqlitelib.config.TableNexus;
  * @author YanYi
  * @date 2019/4/1 13:58
  * @email ben@yanyi.red
- * @overview
+ * @overview 字段需要进行的条件逻辑
  */
 public class ConditionMsg {
     private String field;

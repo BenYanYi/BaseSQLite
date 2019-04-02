@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.googlecode.openbeans.PropertyDescriptor;
 import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.annotation.ID;
+import com.mylove.sqlitelib.annotation.NotNull;
 import com.mylove.sqlitelib.exception.TableException;
 
 import java.lang.reflect.Field;
@@ -26,6 +27,7 @@ public class TableTool {
                 if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
                         !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
                     ID annotation = field.getAnnotation(ID.class);
+                    NotNull notNull = field.getAnnotation(NotNull.class);
                     PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), t.getClass());
                     Method method = descriptor.getReadMethod();//获得读方法
                     if (annotation != null) {
@@ -33,24 +35,43 @@ public class TableTool {
                         if (boo) {
                             if (!field.getType().getSimpleName().toLowerCase().equals("long")) {
                                 String invoke = String.valueOf(method.invoke(t));
-                                if (!TextUtils.isEmpty(invoke) && !"null".equals(invoke) && invoke.trim().length() != 0) {
-                                    contentValue(values, field, invoke);
-                                } else {
-                                    throw new TableException("表id需为long型才能自增,其余情况需要为表id设置值");
+                                JLog.v(field.getName() + "\t" + invoke);
+                                if (TextUtils.isEmpty(invoke) || "null".equals(invoke) || invoke.trim().length() != 0) {
+                                    JLog.v(field.getName() + "\t" + invoke);
+                                    throw new TableException(field.getName() + "不能为空值,或将" + field.getName() + "类型设置为long");
+                                }
+                            }
+                        } else if (notNull != null) {
+                            boolean b = notNull.notNull();
+                            if (b) {
+                                String invoke = String.valueOf(method.invoke(t));
+                                if (TextUtils.isEmpty(invoke) || "null".equals(invoke) || invoke.trim().length() != 0) {
+                                    throw new TableException(field.getName() + "不能为空值");
                                 }
                             }
                         }
                     } else {
                         String invoke = String.valueOf(method.invoke(t));
-                        contentValue(values, field, invoke);
+                        if (notNull != null) {
+                            boolean b = notNull.notNull();
+                            if (b) {
+                                if (TextUtils.isEmpty(invoke) || "null".equals(invoke) || invoke.trim().length() == 0) {
+                                    throw new TableException(field.getName() + "不能为空值");
+                                } else {
+                                    contentValue(values, field, invoke);
+                                }
+                            } else {
+                                contentValue(values, field, invoke);
+                            }
+                        } else {
+                            contentValue(values, field, invoke);
+                        }
                     }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
-        JLog.v(values);
         return values;
     }
 

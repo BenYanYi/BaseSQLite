@@ -11,7 +11,7 @@ import java.util.List;
  * @author YanYi
  * @date 2019/3/29 13:56
  * @email ben@yanyi.red
- * @overview
+ * @overview 条件处理
  */
 public interface ConditionCallBack {
     TableCondition eq(List<ConditionMsg> list);

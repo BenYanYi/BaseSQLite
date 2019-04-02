@@ -11,6 +11,7 @@ import java.util.List;
 class TableMsg {
     private String id;
     private String type;
+    private boolean isNotNULL = false;
     private boolean increase = false;
 
     private List<FieldMsg> list;
@@ -29,6 +30,14 @@ class TableMsg {
 
     void setType(String type) {
         this.type = type;
+    }
+
+    boolean isNotNULL() {
+        return isNotNULL;
+    }
+
+    void setNotNULL(boolean notNULL) {
+        isNotNULL = notNULL;
     }
 
     boolean isIncrease() {

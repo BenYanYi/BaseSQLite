@@ -117,46 +117,46 @@ public class TableCondition implements ConditionCallBack {
         if (this.eqList.size() > 0 || this.notEqList.size() > 0 || this.greaterList.size() > 0 || this.lessList.size() > 0 || this.inList.size() > 0) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < this.eqList.size(); i++) {
-                builder.append(this.eqList.get(i).getField()).append("= ? ");
                 if (this.eqList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
                 } else {
                     builder.append("or ");
                 }
+                builder.append(this.eqList.get(i).getField()).append(" = ? ");
             }
             for (int i = 0; i < this.notEqList.size(); i++) {
-                builder.append(this.notEqList.get(i).getField()).append("!= ? ");
                 if (this.notEqList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
                 } else {
                     builder.append("or ");
                 }
+                builder.append(this.notEqList.get(i).getField()).append(" != ? ");
             }
             for (int i = 0; i < this.greaterList.size(); i++) {
-                builder.append(this.greaterList.get(i).getField()).append("> ? ");
                 if (this.greaterList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
                 } else {
                     builder.append("or ");
                 }
+                builder.append(this.greaterList.get(i).getField()).append(" > ? ");
             }
             for (int i = 0; i < this.lessList.size(); i++) {
-                builder.append(this.lessList.get(i).getField()).append("< ? ");
                 if (this.lessList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
                 } else {
                     builder.append("or ");
                 }
+                builder.append(this.lessList.get(i).getField()).append(" < ? ");
             }
             for (int i = 0; i < this.inList.size(); i++) {
-                builder.append(this.inList.get(i).getField()).append("like ? ");
                 if (this.inList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
                 } else {
                     builder.append("or ");
                 }
+                builder.append(this.inList.get(i).getField()).append(" like ? ");
             }
-            builder = builder.delete(builder.length() - 4, builder.length());
+            builder = builder.delete(0, 3);
             return builder.toString();
         } else {
             return null;

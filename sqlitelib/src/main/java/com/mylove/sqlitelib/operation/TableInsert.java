@@ -2,9 +2,9 @@ package com.mylove.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mylove.sqlitelib.annotation.TableBean;
-import com.mylove.sqlitelib.db.TableCallBack;
-import com.mylove.sqlitelib.db.TableObject;
+import com.mylove.sqlitelib.exception.TableException;
+
+import java.util.List;
 
 /**
  * @author YanYi
@@ -12,22 +12,54 @@ import com.mylove.sqlitelib.db.TableObject;
  * @email ben@yanyi.red
  * @overview
  */
-class TableInsert {
-    private <T> boolean isTabBean(T t) {
-        TableBean annotation = t.getClass().getAnnotation(TableBean.class);
-        if (annotation != null) {
-            return true;
-        } else if (t instanceof TableObject) {
-            return true;
-        } else if (TableCallBack.class.isAssignableFrom(t.getClass())) {
-            return true;
+public class TableInsert {
+    private SQLiteDatabase database;
+    private Class<?> tClass;
+
+    private TableInsert(Class<?> tClass, Builder builder) {
+        this.tClass = tClass;
+        this.database = builder.database;
+    }
+
+    public <T> long find(T t) {
+        if (this.tClass != t.getClass()) {
+            throw new TableException("添加的数据与表不符");
+        }
+        return insert(t);
+    }
+
+    public <T> long[] find(List<T> list) {
+        if (list == null || list.size() <= 0) {
+            throw new TableException("添加的数据列表不能为空");
+        }
+        if (this.tClass != list.get(0).getClass()) {
+            throw new TableException("添加的数据与表不符");
+        }
+        long[] l = new long[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            l[i] = insert(list.get(i));
+        }
+        return l;
+    }
+
+    private <T> long insert(T t) {
+        if (TableTool.values(t) == null) {
+            return -1;
         } else {
-            return false;
+            return this.database.insert(t.getClass().getSimpleName(), null, TableTool.values(t));
         }
     }
 
-    static <T> long insert(T t, SQLiteDatabase database) {
-        return database.insert(t.getClass().getSimpleName(), null, TableTool.values(t));
-    }
+    static class Builder {
+        private SQLiteDatabase database;
 
+        Builder setDatabase(SQLiteDatabase database) {
+            this.database = database;
+            return this;
+        }
+
+        <T> TableInsert builder(Class<T> tClass) {
+            return new TableInsert(tClass, this);
+        }
+    }
 }

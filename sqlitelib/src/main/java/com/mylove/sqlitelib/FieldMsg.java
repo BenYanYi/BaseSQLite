@@ -34,4 +34,13 @@ class FieldMsg {
     void setNotNULL(boolean notNULL) {
         isNotNULL = notNULL;
     }
+
+    @Override
+    public String toString() {
+        return "FieldMsg{" +
+                "key='" + key + '\'' +
+                ", type='" + type + '\'' +
+                ", isNotNULL=" + isNotNULL +
+                '}';
+    }
 }

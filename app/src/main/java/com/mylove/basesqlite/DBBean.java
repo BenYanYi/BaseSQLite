@@ -13,16 +13,17 @@ import com.mylove.sqlitelib.annotation.TableBean;
 @TableBean
 public class DBBean {
     @ID(increase = true)
-    private int id;
+    private long id;
     @NotNull
     private String title;
     private String msg;
+//    private String tt;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -42,12 +43,21 @@ public class DBBean {
         this.msg = msg;
     }
 
+//    public String getTt() {
+//        return tt;
+//    }
+//
+//    public void setTt(String tt) {
+//        this.tt = tt;
+//    }
+
     @Override
     public String toString() {
         return "DBBean{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", msg='" + msg + '\'' +
+//                ", tt='" + tt + '\'' +
                 '}';
     }
 }
