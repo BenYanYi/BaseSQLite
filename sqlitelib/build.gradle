@@ -32,3 +32,4 @@ dependencies {
     api files('libs/openbeans-1.0.jar')
 //    api 'com.yanyi.benyanyi:loglib:1.0.1'
 }
+apply from: 'bintrayUpload.gradle'
