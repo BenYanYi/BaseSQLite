@@ -9,9 +9,9 @@ import com.mylove.sqlitelib.config.TableNexus;
  * @overview 字段需要进行的条件逻辑
  */
 public class ConditionMsg {
-    private String field;
-    private String value;
-    private TableNexus nexus = TableNexus.DETAILS;
+    private String field;//列字段名
+    private String value;//值
+    private TableNexus nexus = TableNexus.DETAILS;//条件 and 还是 or，默认and
 
     public ConditionMsg(String field, String value) {
         this.field = field;
@@ -24,7 +24,7 @@ public class ConditionMsg {
         this.nexus = nexus;
     }
 
-    public String getField() {
+    String getField() {
         return field;
     }
 
@@ -32,7 +32,7 @@ public class ConditionMsg {
         this.field = field;
     }
 
-    public String getValue() {
+    String getValue() {
         return value;
     }
 
@@ -40,7 +40,7 @@ public class ConditionMsg {
         this.value = value;
     }
 
-    public TableNexus getNexus() {
+    TableNexus getNexus() {
         return nexus;
     }
 

@@ -17,7 +17,8 @@ public class DBBean {
     @NotNull
     private String title;
     private String msg;
-//    private String tt;
+    private String tt;
+//    private String hh;
 
     public long getId() {
         return id;
@@ -43,12 +44,20 @@ public class DBBean {
         this.msg = msg;
     }
 
-//    public String getTt() {
-//        return tt;
+    public String getTt() {
+        return tt;
+    }
+
+    public void setTt(String tt) {
+        this.tt = tt;
+    }
+
+//    public String getHh() {
+//        return hh;
 //    }
 //
-//    public void setTt(String tt) {
-//        this.tt = tt;
+//    public void setHh(String hh) {
+//        this.hh = hh;
 //    }
 
     @Override
@@ -57,7 +66,8 @@ public class DBBean {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", msg='" + msg + '\'' +
-//                ", tt='" + tt + '\'' +
+                ", tt='" + tt + '\'' +
+//                ",hh=" + hh + '\'' +
                 '}';
     }
 }

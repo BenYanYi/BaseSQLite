@@ -21,7 +21,7 @@ import java.util.List;
 class TableInject {
 
     static <T> TableHelper init(Context context, String dbName, int version, Class<T> tClass) {
-        return new TableHelper(context, dbName, getTabMsg(tClass), getTabName(tClass), version, tClass);
+        return new TableHelper(context, dbName, getTabMsg(tClass), getTabName(tClass), version);
     }
 
     private static <T> String getTabName(Class<T> tClass) {

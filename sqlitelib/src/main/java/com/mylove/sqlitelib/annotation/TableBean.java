@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)//表示注解方法
 @Retention(RetentionPolicy.RUNTIME)//会持续保存到JVM运行时，可以通过反射来获取
 public @interface TableBean {
-    String value() default "";
+    String value() default "";//自定义表名
 }

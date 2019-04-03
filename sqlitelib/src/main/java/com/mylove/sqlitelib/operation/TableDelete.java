@@ -31,6 +31,11 @@ public class TableDelete {
         this.conditionValue = builder.conditionValue;
     }
 
+    /**
+     * 删除第一条数据
+     *
+     * @return
+     */
     public int findFirst() {
         Object first = this.tableQuery.findFirst();
         if (null != first) {
@@ -39,6 +44,11 @@ public class TableDelete {
         return -1;
     }
 
+    /**
+     * 删除最后一条数据
+     *
+     * @return
+     */
     public int findLast() {
         Object last = this.tableQuery.findLast();
         if (null != last) {
@@ -47,10 +57,20 @@ public class TableDelete {
         return -1;
     }
 
+    /**
+     * 删除全部数据
+     *
+     * @return
+     */
     public int findAll() {
         return this.database.delete(this.tClass.getSimpleName(), this.conditionKey, this.conditionValue);
     }
 
+    /**
+     * 删除逻辑处理
+     * @param obj
+     * @return
+     */
     private int delete(Object obj) {
         try {
             Field[] fields = obj.getClass().getDeclaredFields();

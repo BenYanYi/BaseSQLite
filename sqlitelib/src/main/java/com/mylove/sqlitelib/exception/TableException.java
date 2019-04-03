@@ -4,7 +4,7 @@ package com.mylove.sqlitelib.exception;
  * @author YanYi
  * @date 2019/3/29 15:11
  * @email ben@yanyi.red
- * @overview
+ * @overview 异常返回
  */
 public class TableException extends RuntimeException {
 

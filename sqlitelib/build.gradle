@@ -12,9 +12,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        ndk {
-            moduleName "SQLiteHelper"
-        }
     }
 
     buildTypes {
@@ -23,8 +20,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    sourceSets { main { jni.srcDirs = ['src/main/jni'] } }
 }
 
 dependencies {
@@ -35,5 +30,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.code.gson:gson:+'
     api files('libs/openbeans-1.0.jar')
-    api 'com.yanyi.benyanyi:loglib:1.0.1'
+//    api 'com.yanyi.benyanyi:loglib:1.0.1'
 }

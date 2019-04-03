@@ -7,15 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
-import com.mylove.loglib.JLog;
-import com.mylove.sqlitelib.annotation.ID;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author YanYi
@@ -29,7 +28,6 @@ class TableHelper extends SQLiteOpenHelper {
      */
     private String tabName;
     private TableMsg tableMsg;
-    private Class<?> tClass;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -52,7 +50,6 @@ class TableHelper extends SQLiteOpenHelper {
         } else {
             sql = "create table " + tabName + " (" + field + ")";
         }
-        JLog.e("数据库创建");
         db.execSQL(sql);
     }
 
@@ -66,8 +63,7 @@ class TableHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
-            JLog.e("数据库" + tableIsExist(this.tabName));
-            if (!tableIsExist(this.tabName)) {
+            if (tableIsExist(this.tabName)) {
                 changeTable(db);
             } else {
                 String sql = "DROP TABLE IF EXISTS " + this.tabName;
@@ -80,8 +76,7 @@ class TableHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion > newVersion) {
-            if (!tableIsExist(this.tabName)) {
-                JLog.e("数据库降级");
+            if (tableIsExist(this.tabName)) {
                 changeTable(db);
             } else {
                 String sql = "DROP TABLE IF EXISTS " + this.tabName;
@@ -91,8 +86,12 @@ class TableHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * 将上一版本数据与字段解析
+     *
+     * @param db
+     */
     private void changeTable(SQLiteDatabase db) {
-        JLog.e();
         List<Map<String, String>> list = new LinkedList<>();
         String sql = "select * from " + this.tabName;
         Cursor cursor = db.rawQuery(sql, null);
@@ -109,41 +108,37 @@ class TableHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
         cursor.close();
-        JLog.e(list);
         sql = "DROP TABLE IF EXISTS " + this.tabName;
         db.execSQL(sql);
         if (list.size() > 0) {
-            List<FieldMsg> list1 = new ArrayList<>();
+            Set<String> set = new HashSet<>();
             for (int i = 0; i < list.size(); i++) {
-                JLog.e(list.get(i).size());
                 for (Map.Entry<String, String> entry : list.get(i).entrySet()) {
-                    FieldMsg fieldMsg = new FieldMsg();
-                    fieldMsg.setType("text");
-                    fieldMsg.setKey(entry.getKey());
-                    list1.add(fieldMsg);
+                    set.add(entry.getKey());
                 }
             }
-            Field[] declaredFields = tClass.getDeclaredFields();
-            for (Field field : declaredFields) {
-                ID annotation = field.getAnnotation(ID.class);
-                if (annotation != null && annotation.increase()) {
-                    for (int i = list1.size() - 1; i >= 0; i--) {
-                        if (list1.get(i).getKey().equals(field.getName())) {
-                            list1.remove(i);
-                        }
-                    }
-                }
-            }
+            Set<String> keySet = new HashSet<>();
             for (int i = 0; i < this.tableMsg.getList().size(); i++) {
-                for (int j = list1.size() - 1; j >= 0; j--) {
-                    if (this.tableMsg.getList().get(i).getKey().equals(list1.get(j).getKey())) {
-                        list1.remove(j);
+                for (String str : set) {
+                    if (this.tableMsg.getList().get(i).getKey().equals(str) || this.tableMsg.getId().equals(str)) {
+                        keySet.add(str);
                     }
                 }
             }
-            this.tableMsg.getList().addAll(list1);
-            JLog.e(tableMsg.getList());
-            JLog.e(list);
+            for (String str : keySet) {
+                set.remove(str);
+            }
+            List<FieldMsg> fieldMsgList = new ArrayList<>();
+            for (String str : set) {
+                FieldMsg fieldMsg = new FieldMsg();
+                fieldMsg.setKey(str);
+                fieldMsg.setType("text");
+                fieldMsg.setNotNULL(false);
+                if (!fieldMsgList.contains(fieldMsg)) {
+                    fieldMsgList.add(fieldMsg);
+                }
+            }
+            this.tableMsg.getList().addAll(fieldMsgList);
             onCreate(db);
             insertData(db, list);
         } else {
@@ -153,25 +148,22 @@ class TableHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * 数据插入表
+     *
+     * @param db
+     * @param list 上一版本数据
+     */
     private void insertData(SQLiteDatabase db, List<Map<String, String>> list) {
-//        Field[] declaredFields = tClass.getDeclaredFields();
-//        List<Map<String, String>> oList = new LinkedList<>();
-//        for (Field field : declaredFields) {
-//            ID annotation = field.getAnnotation(ID.class);
-//            for (int i = 0; i < list.size(); i++) {
-//                for (Map.Entry<String, String> entry : list.get(i).entrySet()) {
-//                    if (annotation)
-//                }
-//            }
-//        }
         for (int i = 0; i < list.size(); i++) {
             ContentValues values = new ContentValues();
             for (Map.Entry<String, String> entry : list.get(i).entrySet()) {
-                values.put(entry.getKey(), entry.getValue());
+                if (!entry.getKey().equals(this.tableMsg.getId())) {
+                    values.put(entry.getKey(), entry.getValue());
+                }
             }
             db.insert(this.tabName, null, values);
         }
-
     }
 
     /**
@@ -181,23 +173,22 @@ class TableHelper extends SQLiteOpenHelper {
      * @param tabName  db名
      * @param version  版本号
      */
-    TableHelper(Context context, String dbName, TableMsg tableMsg, String tabName, int version, Class<?> tClass) {
+    TableHelper(Context context, String dbName, TableMsg tableMsg, String tabName, int version) {
         super(context, dbName, null, version);
         this.tabName = tabName;
         this.tableMsg = tableMsg;
-        this.tClass = tClass;
     }
 
     /**
      * 判断某张表是否存在
      *
      * @param tableName 表名
-     * @return
+     * @return 存在返回false
      */
     private boolean tableIsExist(String tableName) {
         boolean result = false;
         if (tableName == null) {
-            return false;
+            return true;
         }
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -213,8 +204,8 @@ class TableHelper extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception e) {
-            return false;
+            return true;
         }
-        return result;
+        return !result;
     }
 }

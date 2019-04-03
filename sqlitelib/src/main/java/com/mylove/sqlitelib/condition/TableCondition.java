@@ -36,66 +36,133 @@ public class TableCondition implements ConditionCallBack {
         this.inList = builder.inList;
     }
 
+    /**
+     * 相等
+     *
+     * @param list
+     * @return
+     */
     @Override
     public TableCondition eq(List<ConditionMsg> list) {
         this.eqList.addAll(list);
         return this;
     }
 
+    /**
+     * 相等
+     *
+     * @param conditionMsg
+     * @return
+     */
     @Override
     public TableCondition eq(ConditionMsg conditionMsg) {
         this.eqList.add(conditionMsg);
         return this;
     }
 
+    /**
+     * 不等
+     *
+     * @param list
+     * @return
+     */
     @Override
     public TableCondition notEq(List<ConditionMsg> list) {
         this.notEqList.addAll(list);
         return this;
     }
 
+    /**
+     * 不等
+     *
+     * @param conditionMsg
+     * @return
+     */
     @Override
     public TableCondition notEq(ConditionMsg conditionMsg) {
         this.notEqList.add(conditionMsg);
         return this;
     }
 
+    /**
+     * 大于
+     *
+     * @param list
+     * @return
+     */
     @Override
     public TableCondition greater(List<ConditionMsg> list) {
         this.greaterList.addAll(list);
         return this;
     }
 
+    /**
+     * 大于
+     *
+     * @param conditionMsg
+     * @return
+     */
     @Override
     public TableCondition greater(ConditionMsg conditionMsg) {
         this.greaterList.add(conditionMsg);
         return this;
     }
 
+    /**
+     * 小于
+     *
+     * @param list
+     * @return
+     */
     @Override
     public TableCondition less(List<ConditionMsg> list) {
         this.lessList.addAll(list);
         return this;
     }
 
+    /**
+     * 小于
+     *
+     * @param conditionMsg
+     * @return
+     */
     @Override
     public TableCondition less(ConditionMsg conditionMsg) {
         this.lessList.add(conditionMsg);
         return this;
     }
 
+    /**
+     * 包含（模糊查询）
+     *
+     * @param list
+     * @return
+     */
     @Override
     public TableCondition in(List<ConditionMsg> list) {
         this.inList.addAll(list);
         return this;
     }
 
+    /**
+     * 包含（模糊查询）
+     *
+     * @param conditionMsg
+     * @return
+     */
     @Override
     public TableCondition in(ConditionMsg conditionMsg) {
         this.inList.add(conditionMsg);
         return this;
     }
 
+    /**
+     * 排序方式
+     *
+     * @param field 排序依据的字段
+     * @param sort
+     * @return
+     */
     @Override
     public TableCondition sort(String field, TableSort sort) {
         this.field = field;
@@ -103,6 +170,11 @@ public class TableCondition implements ConditionCallBack {
         return this;
     }
 
+    /**
+     * 增删查改处理
+     *
+     * @return
+     */
     @Override
     public TableOperation operation() {
         TableOperation.Builder builder = new TableOperation.Builder()
@@ -113,6 +185,11 @@ public class TableCondition implements ConditionCallBack {
         return builder.builder(this.database, tClass);
     }
 
+    /**
+     * 条件处理
+     *
+     * @return
+     */
     private String conditionKey() {
         if (this.eqList.size() > 0 || this.notEqList.size() > 0 || this.greaterList.size() > 0 || this.lessList.size() > 0 || this.inList.size() > 0) {
             StringBuilder builder = new StringBuilder();
@@ -163,6 +240,11 @@ public class TableCondition implements ConditionCallBack {
         }
     }
 
+    /**
+     * 条件值处理
+     *
+     * @return
+     */
     private String[] conditionValue() {
         if (this.eqList.size() > 0 || this.notEqList.size() > 0 || this.greaterList.size() > 0 || this.lessList.size() > 0 || this.inList.size() > 0) {
             int size = this.eqList.size() + this.notEqList.size() + this.greaterList.size() + this.lessList.size() + this.inList.size();

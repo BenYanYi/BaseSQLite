@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.text.TextUtils;
 
 import com.googlecode.openbeans.PropertyDescriptor;
-import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.annotation.ID;
 import com.mylove.sqlitelib.annotation.NotNull;
 import com.mylove.sqlitelib.exception.TableException;
@@ -35,9 +34,7 @@ public class TableTool {
                         if (boo) {
                             if (!field.getType().getSimpleName().toLowerCase().equals("long")) {
                                 String invoke = String.valueOf(method.invoke(t));
-                                JLog.v(field.getName() + "\t" + invoke);
                                 if (TextUtils.isEmpty(invoke) || "null".equals(invoke) || invoke.trim().length() != 0) {
-                                    JLog.v(field.getName() + "\t" + invoke);
                                     throw new TableException(field.getName() + "不能为空值,或将" + field.getName() + "类型设置为long");
                                 }
                             }
