@@ -61,6 +61,7 @@ public class TableOperation implements OperationCallBack {
                 .builder(this.database, this.tClass);
     }
 
+    @Deprecated
     @Override
     public TableAddOrChange addOrChange() {
         TableInsert tableInsert = new TableInsert.Builder()

@@ -21,5 +21,6 @@ public interface OperationCallBack {
 
     TableUpdate update();
 
+    @Deprecated
     TableAddOrChange addOrChange();
 }
