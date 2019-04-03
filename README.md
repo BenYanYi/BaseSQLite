@@ -13,7 +13,7 @@ SQLite封装
                 .builder(context);
                 
 #### 注解声明
-* @TableBean &nbsp;声明当前类为表结构类，表名为默认为类名，设置value值可更改自定义表明
+* @TableBean &nbsp;声明当前类为表结构类，表名为默认为类名，设置value值可更改自定义表明。<br/><font color=#ff0000>**特别注意，使用TableBean注解的类中属性需要添加set和get方法**</font>
 * @ID &nbsp;声明属性名为表主键id，默认id不自增，设置increase为true则自增
 * @NotNull &nbsp;声明当前属性对应的表列值不能为空
 
