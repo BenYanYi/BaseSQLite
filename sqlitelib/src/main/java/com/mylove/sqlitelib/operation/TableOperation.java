@@ -46,12 +46,12 @@ public class TableOperation implements OperationCallBack {
 
     @Override
     public TableQuery query() {
-        TableQuery.Builder builder = new TableQuery.Builder()
+        return new TableQuery.Builder()
                 .setField(this.field)
                 .setSort(this.sort)
                 .setConditionKey(this.conditionKey)
-                .setConditionValue(this.conditionValue);
-        return builder.builder(this.database, this.tClass);
+                .setConditionValue(this.conditionValue)
+                .builder(this.database, this.tClass);
     }
 
     @Override
@@ -59,6 +59,27 @@ public class TableOperation implements OperationCallBack {
         return new TableUpdate.Builder()
                 .setTableQuery(query())
                 .builder(this.database, this.tClass);
+    }
+
+    @Override
+    public TableAddOrChange addOrChange() {
+        TableInsert tableInsert = new TableInsert.Builder()
+                .setDatabase(this.database)
+                .builder(this.tClass);
+        TableQuery tableQuery = new TableQuery.Builder()
+                .setField(this.field)
+                .setSort(this.sort)
+                .setConditionKey(this.conditionKey)
+                .setConditionValue(this.conditionValue)
+                .builder(this.database, this.tClass);
+        TableUpdate tableUpdate = new TableUpdate.Builder()
+                .setTableQuery(query())
+                .builder(this.database, this.tClass);
+        return new TableAddOrChange.Builder()
+                .setTableInsert(tableInsert)
+                .setTableQuery(tableQuery)
+                .setTableUpdate(tableUpdate)
+                .builder();
     }
 
     public static class Builder {

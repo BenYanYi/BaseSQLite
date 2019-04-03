@@ -55,12 +55,6 @@ public class TableQuery {
         if (list.size() > 0) {
             return list.get(0);
         } else {
-            try {
-                T t = (T) tClass.newInstance();
-                return t;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             return null;
         }
     }
@@ -72,12 +66,6 @@ public class TableQuery {
         if (list.size() > 0) {
             return list.get(list.size() - 1);
         } else {
-            try {
-                T t = (T) tClass.newInstance();
-                return t;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             return null;
         }
     }
