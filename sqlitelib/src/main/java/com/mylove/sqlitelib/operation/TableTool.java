@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.googlecode.openbeans.PropertyDescriptor;
 import com.mylove.sqlitelib.annotation.ID;
 import com.mylove.sqlitelib.annotation.NotNull;
+import com.mylove.sqlitelib.annotation.TableBean;
 import com.mylove.sqlitelib.exception.TableException;
 
 import java.lang.reflect.Field;
@@ -108,5 +109,16 @@ public class TableTool {
         } else {
             values.put(field.getName(), invoke);
         }
+    }
+
+    public static <T> String getTabName(Class<T> tClass) {
+        TableBean annotation = tClass.getAnnotation(TableBean.class);
+        if (annotation != null) {
+            String value = annotation.value();
+            if (!TextUtils.isEmpty(value) && !"null".equals(value) && value.trim().length() != 0) {
+                return value;
+            }
+        }
+        return tClass.getSimpleName();
     }
 }

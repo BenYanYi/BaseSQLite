@@ -46,7 +46,7 @@ public class TableInsert {
         if (TableTool.values(t) == null) {
             return -1;
         } else {
-            return this.database.insert(t.getClass().getSimpleName(), null, TableTool.values(t));
+            return this.database.insert(TableTool.getTabName(this.tClass), null, TableTool.values(t));
         }
     }
 

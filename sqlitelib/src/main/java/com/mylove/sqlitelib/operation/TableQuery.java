@@ -37,7 +37,7 @@ public class TableQuery {
                 orderBy = builder.field + builder.sort.getSort();
             }
         }
-        return this.database.query(tClass.getSimpleName(), null, this.builder.conditionKey,
+        return this.database.query(TableTool.getTabName(this.tClass), null, this.builder.conditionKey,
                 this.builder.conditionValue, null, null, orderBy);
     }
 

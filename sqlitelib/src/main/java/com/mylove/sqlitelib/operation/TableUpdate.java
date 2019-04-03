@@ -77,7 +77,7 @@ public class TableUpdate {
             for (int i = 0; i < list.size(); i++) {
                 value[i] = list.get(i);
             }
-            return this.database.update(this.tClass.getSimpleName(), TableTool.values(t), builder.toString(), value);
+            return this.database.update(TableTool.getTabName(this.tClass), TableTool.values(t), builder.toString(), value);
         } catch (Exception e) {
             return 0;
         }

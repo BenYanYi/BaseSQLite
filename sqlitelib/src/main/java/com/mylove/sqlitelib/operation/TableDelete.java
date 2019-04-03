@@ -63,7 +63,7 @@ public class TableDelete {
      * @return
      */
     public int findAll() {
-        return this.database.delete(this.tClass.getSimpleName(), this.conditionKey, this.conditionValue);
+        return this.database.delete(TableTool.getTabName(this.tClass), this.conditionKey, this.conditionValue);
     }
 
     /**
@@ -91,7 +91,7 @@ public class TableDelete {
             for (int i = 0; i < list.size(); i++) {
                 value[i] = list.get(i);
             }
-            return this.database.delete(this.tClass.getSimpleName(), builder.toString(), value);
+            return this.database.delete(TableTool.getTabName(this.tClass), builder.toString(), value);
         } catch (Exception e) {
             return -1;
         }
