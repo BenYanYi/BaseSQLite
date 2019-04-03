@@ -1,8 +1,7 @@
 # BaseSQLite
-[toc]
-SQLite封装
 
 ## 使用
+
 ### module 下添加
 
     compile 'com.yanyi.benyanyi:sqlitelib:1.0.0'
@@ -59,7 +58,7 @@ your data可以为一条数据，也可以为数据集
 <!--* 自定义列明-->
 <!--* 添加有数据时修改，没数据时添加操作-->
 
-<br/>
+# 联系
 若在使用过程中出现什么问题，可以联系作者<br/>
 作者：演绎<br/>
 QQ：1541612424<br/>
