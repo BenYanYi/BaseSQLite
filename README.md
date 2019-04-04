@@ -18,26 +18,31 @@
 * @ID &nbsp;声明属性名为表主键id，默认id不自增，设置increase为true则自增
 * @NotNull &nbsp;声明当前属性对应的表列值不能为空
 
-#### 添加数据
+#### 添加数据(insert)
 your data可以为一条数据，也可以为数据集
     
     dao.where(your TableBean).(your condition)[可不选].operation().insert().find(your data);
     
     
-#### 删除数据
+#### 删除数据(delete)
 可删除全部(findAll)，也可只删除第一条(findFirst)或最后一条(findLast)
    
     dao.where(your TableBean).(your condition)[可不选].operation().delete().findAll();
    
-#### 查询数据
+#### 查询数据(query)
 可查询所有(findAll)，也可查询第一条(findFirst)或最后一条(findLast)
 
     dao.where(your TableBean).(your condition)[可不选].operation().query().findAll()
     
-#### 更改数据
+#### 更改数据(update)
 可更改所有(findAll(your change data))，也可更改第一条(findFirst(your change data))或最后一条(findLast(your change data))
     
     dao.where(your TableBean).(your condition)[可不选].operation().update().findAll(your change data);
+    
+#### 修改或者添加(changeOrAdd)
+可在不确定数据是否存在时修改数据，数据存在则进行修改，数据不存在是则进行添加,可处理所有数据(findAll(your changeOrAdd data)),也可处理第一条数据(findFirst(your changeOrAdd data))或最后一条数据(findLast(your changeOrAdd data))
+
+    dao.where(your TableBean).(your condition)[可不选].operation().changeOrAdd().findAll(your changeOrAdd data);
     
 #### 条件属性
 * eq(ConditionMsg) 声明当条件中的列为何值时满足条件
@@ -52,6 +57,7 @@ your data可以为一条数据，也可以为数据集
 * TableSort(排序方式)：DETAILS(默认排序)、ASCENDING(正序)、DESCENDING(倒序)
 
 ### 更新记录
+* 2019/04/04 提交1.0.1版本，添加有数据时修改，没数据时添加操作
 * 2019/04/03 提交1.0.0版本,第一次更新
 
 <!--#### 下一版本预计添加内容-->

@@ -8,12 +8,12 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableAddOrChange {
+public class TableChangeOrAdd {
     private TableQuery tableQuery;
     private TableInsert tableInsert;
     private TableUpdate tableUpdate;
 
-    private TableAddOrChange(Builder builder) {
+    private TableChangeOrAdd(Builder builder) {
         this.tableQuery = builder.tableQuery;
         this.tableInsert = builder.tableInsert;
         this.tableUpdate = builder.tableUpdate;
@@ -71,8 +71,8 @@ public class TableAddOrChange {
             return this;
         }
 
-        TableAddOrChange builder() {
-            return new TableAddOrChange(this);
+        TableChangeOrAdd builder() {
+            return new TableChangeOrAdd(this);
         }
     }
 }

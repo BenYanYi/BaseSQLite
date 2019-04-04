@@ -1,6 +1,6 @@
 package com.mylove.sqlitelib.callback;
 
-import com.mylove.sqlitelib.operation.TableAddOrChange;
+import com.mylove.sqlitelib.operation.TableChangeOrAdd;
 import com.mylove.sqlitelib.operation.TableDelete;
 import com.mylove.sqlitelib.operation.TableInsert;
 import com.mylove.sqlitelib.operation.TableQuery;
@@ -21,6 +21,5 @@ public interface OperationCallBack {
 
     TableUpdate update();
 
-    @Deprecated
-    TableAddOrChange addOrChange();
+    TableChangeOrAdd changeOrAdd();
 }
