@@ -3,9 +3,9 @@ package com.mylove.basesqlite;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.TableDao;
-
-import java.util.List;
+import com.mylove.sqlitelib.condition.ConditionMsg;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,13 +34,13 @@ public class MainActivity extends AppCompatActivity {
 //        for (long l : insert) {
 //            JLog.v("插入" + l);
 //        }
-        List<DBBean> all = session.where(DBBean.class).operation().query().findAll();
+//        List<DBBean> all = session.where(DBBean.class).operation().query().findAll();
 //        int last = session.where(DBBean.class).eq(new ConditionMsg("title", "标题2")).operation().delete().findAll();
 //        JLog.v(last);
-//        DBBean bean = new DBBean();
-//        bean.setMsg("内容5");
-//        bean.setTitle("标题5");
-//        int[] first = session.where(DBBean.class).eq(new ConditionMsg("title", "标题10")).operation().update().findAll(bean);
-//        JLog.v(first);
+        DBBean bean = new DBBean();
+        bean.setMsg("内容5");
+        bean.setTitle("标题5");
+        long[] first = session.where(DBBean.class).eq(new ConditionMsg("title", "标题10")).operation().changeOrAdd().findAll(bean);
+        JLog.v(first);
     }
 }
