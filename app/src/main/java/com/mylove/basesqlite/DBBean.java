@@ -18,7 +18,8 @@ public class DBBean {
     private String title;
     private String msg;
     private String tt;
-//    private String hh;
+
+    //    private String hh;
 
     public long getId() {
         return id;
@@ -43,14 +44,14 @@ public class DBBean {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-
-    public String getTt() {
-        return tt;
-    }
-
-    public void setTt(String tt) {
-        this.tt = tt;
-    }
+//
+//    public String getTt() {
+//        return tt;
+//    }
+//
+//    public void setTt(String tt) {
+//        this.tt = tt;
+//    }
 
 //    public String getHh() {
 //        return hh;
