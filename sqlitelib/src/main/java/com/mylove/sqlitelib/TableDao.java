@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.mylove.sqlitelib.annotation.TableBean;
+import com.mylove.sqlitelib.callback.ConditionCallBack;
 import com.mylove.sqlitelib.condition.ConditionMsg;
 import com.mylove.sqlitelib.condition.TableCondition;
 import com.mylove.sqlitelib.exception.TableException;
@@ -43,7 +44,7 @@ public class TableDao {
         }
     }
 
-    public <T> TableCondition where(Class<T> tClass) {
+    public <T> ConditionCallBack where(Class<T> tClass) {
         TableCondition.Builder builder = new TableCondition.Builder()
                 .setEqList(new ArrayList<ConditionMsg>())
                 .setNotEqList(new ArrayList<ConditionMsg>())

@@ -3,13 +3,18 @@ package com.mylove.sqlitelib.operation;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mylove.sqlitelib.callback.OperationCallBack;
+import com.mylove.sqlitelib.callback.TableChangeOrAddCallBack;
+import com.mylove.sqlitelib.callback.TableDeleteCallBack;
+import com.mylove.sqlitelib.callback.TableInsertCallBack;
+import com.mylove.sqlitelib.callback.TableQueryCallBack;
+import com.mylove.sqlitelib.callback.TableUpdateCallBack;
 import com.mylove.sqlitelib.config.TableSort;
 
 /**
  * @author YanYi
  * @date 2019/3/29 14:36
  * @email ben@yanyi.red
- * @overview
+ * @overview 增删拆逻辑区分
  */
 public class TableOperation implements OperationCallBack {
     private SQLiteDatabase database;
@@ -29,23 +34,23 @@ public class TableOperation implements OperationCallBack {
     }
 
     @Override
-    public TableInsert insert() {
+    public TableInsertCallBack insert() {
         return new TableInsert.Builder()
                 .setDatabase(this.database)
                 .builder(this.tClass);
     }
 
     @Override
-    public TableDelete delete() {
+    public TableDeleteCallBack delete() {
         return new TableDelete.Builder()
-                .setTableQuery(query())
+                .setTableQueryCallBack(query())
                 .setConditionKey(this.conditionKey)
                 .setConditionValue(this.conditionValue)
                 .builder(database, this.tClass);
     }
 
     @Override
-    public TableQuery query() {
+    public TableQueryCallBack query() {
         return new TableQuery.Builder()
                 .setField(this.field)
                 .setSort(this.sort)
@@ -55,30 +60,20 @@ public class TableOperation implements OperationCallBack {
     }
 
     @Override
-    public TableUpdate update() {
+    public TableUpdateCallBack update() {
         return new TableUpdate.Builder()
-                .setTableQuery(query())
+                .setTableQueryCallBack(query())
+                .setConditionKey(this.conditionKey)
+                .setConditionValue(this.conditionValue)
                 .builder(this.database, this.tClass);
     }
 
     @Override
-    public TableChangeOrAdd changeOrAdd() {
-        TableInsert tableInsert = new TableInsert.Builder()
-                .setDatabase(this.database)
-                .builder(this.tClass);
-        TableQuery tableQuery = new TableQuery.Builder()
-                .setField(this.field)
-                .setSort(this.sort)
-                .setConditionKey(this.conditionKey)
-                .setConditionValue(this.conditionValue)
-                .builder(this.database, this.tClass);
-        TableUpdate tableUpdate = new TableUpdate.Builder()
-                .setTableQuery(query())
-                .builder(this.database, this.tClass);
+    public TableChangeOrAddCallBack changeOrAdd() {
         return new TableChangeOrAdd.Builder()
-                .setTableInsert(tableInsert)
-                .setTableQuery(tableQuery)
-                .setTableUpdate(tableUpdate)
+                .setTableInsertCallBack(insert())
+                .setTableQueryCallBack(query())
+                .setTableUpdateCallBack(update())
                 .builder();
     }
 
@@ -109,7 +104,7 @@ public class TableOperation implements OperationCallBack {
             return this;
         }
 
-        public <T> TableOperation builder(SQLiteDatabase database, Class<T> tClass) {
+        public <T> OperationCallBack builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableOperation(database, tClass, this);
         }
     }

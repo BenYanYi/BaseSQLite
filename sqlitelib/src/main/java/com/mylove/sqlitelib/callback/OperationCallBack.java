@@ -1,11 +1,5 @@
 package com.mylove.sqlitelib.callback;
 
-import com.mylove.sqlitelib.operation.TableChangeOrAdd;
-import com.mylove.sqlitelib.operation.TableDelete;
-import com.mylove.sqlitelib.operation.TableInsert;
-import com.mylove.sqlitelib.operation.TableQuery;
-import com.mylove.sqlitelib.operation.TableUpdate;
-
 /**
  * @author YanYi
  * @date 2019/3/29 14:10
@@ -13,13 +7,13 @@ import com.mylove.sqlitelib.operation.TableUpdate;
  * @overview 逻辑操作
  */
 public interface OperationCallBack {
-    TableInsert insert();
+    TableInsertCallBack insert();
 
-    TableDelete delete();
+    TableDeleteCallBack delete();
 
-    TableQuery query();
+    TableQueryCallBack query();
 
-    TableUpdate update();
+    TableUpdateCallBack update();
 
-    TableChangeOrAdd changeOrAdd();
+    TableChangeOrAddCallBack changeOrAdd();
 }

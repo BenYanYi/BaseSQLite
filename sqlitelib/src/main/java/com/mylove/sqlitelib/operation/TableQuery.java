@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.googlecode.openbeans.PropertyDescriptor;
+import com.mylove.sqlitelib.callback.TableQueryCallBack;
 import com.mylove.sqlitelib.config.TableSort;
 
 import java.lang.reflect.Field;
@@ -19,7 +20,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableQuery {
+public class TableQuery implements TableQueryCallBack {
     private SQLiteDatabase database;
     private Class<?> tClass;
     private Builder builder;
@@ -155,7 +156,7 @@ public class TableQuery {
             return this;
         }
 
-        <T> TableQuery builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableQueryCallBack builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableQuery(database, tClass, this);
         }
     }

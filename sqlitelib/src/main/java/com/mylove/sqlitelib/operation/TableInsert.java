@@ -2,6 +2,7 @@ package com.mylove.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.mylove.sqlitelib.callback.TableInsertCallBack;
 import com.mylove.sqlitelib.exception.TableException;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableInsert {
+public class TableInsert implements TableInsertCallBack {
     private SQLiteDatabase database;
     private Class<?> tClass;
 
@@ -58,7 +59,7 @@ public class TableInsert {
             return this;
         }
 
-        <T> TableInsert builder(Class<T> tClass) {
+        <T> TableInsertCallBack builder(Class<T> tClass) {
             return new TableInsert(tClass, this);
         }
     }

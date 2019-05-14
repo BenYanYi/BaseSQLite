@@ -1,9 +1,7 @@
 package com.mylove.sqlitelib.callback;
 
-import com.mylove.sqlitelib.config.TableSort;
 import com.mylove.sqlitelib.condition.ConditionMsg;
-import com.mylove.sqlitelib.condition.TableCondition;
-import com.mylove.sqlitelib.operation.TableOperation;
+import com.mylove.sqlitelib.config.TableSort;
 
 import java.util.List;
 
@@ -14,27 +12,28 @@ import java.util.List;
  * @overview 条件处理
  */
 public interface ConditionCallBack {
-    TableCondition eq(List<ConditionMsg> list);
 
-    TableCondition eq(ConditionMsg conditionMsg);
+    ConditionCallBack eq(List<ConditionMsg> list);
 
-    TableCondition notEq(List<ConditionMsg> list);
+    ConditionCallBack eq(ConditionMsg conditionMsg);
 
-    TableCondition notEq(ConditionMsg conditionMsg);
+    ConditionCallBack notEq(List<ConditionMsg> list);
 
-    TableCondition greater(List<ConditionMsg> list);
+    ConditionCallBack notEq(ConditionMsg conditionMsg);
 
-    TableCondition greater(ConditionMsg conditionMsg);
+    ConditionCallBack greater(List<ConditionMsg> list);
 
-    TableCondition less(List<ConditionMsg> list);
+    ConditionCallBack greater(ConditionMsg conditionMsg);
 
-    TableCondition less(ConditionMsg conditionMsg);
+    ConditionCallBack less(List<ConditionMsg> list);
 
-    TableCondition in(List<ConditionMsg> list);
+    ConditionCallBack less(ConditionMsg conditionMsg);
 
-    TableCondition in(ConditionMsg conditionMsg);
+    ConditionCallBack in(List<ConditionMsg> list);
 
-    TableCondition sort(String field, TableSort sort);
+    ConditionCallBack in(ConditionMsg conditionMsg);
 
-    TableOperation operation();
+    ConditionCallBack sort(String field, TableSort sort);
+
+    OperationCallBack operation();
 }

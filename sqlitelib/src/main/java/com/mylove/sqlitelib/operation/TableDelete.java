@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.googlecode.openbeans.PropertyDescriptor;
+import com.mylove.sqlitelib.callback.TableDeleteCallBack;
+import com.mylove.sqlitelib.callback.TableQueryCallBack;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -16,9 +18,9 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableDelete {
+public class TableDelete implements TableDeleteCallBack {
     private SQLiteDatabase database;
-    private TableQuery tableQuery;
+    private TableQueryCallBack tableQuery;
     private Class<?> tClass;
     private String conditionKey;
     private String[] conditionValue;
@@ -68,6 +70,7 @@ public class TableDelete {
 
     /**
      * 删除逻辑处理
+     *
      * @param obj
      * @return
      */
@@ -98,12 +101,12 @@ public class TableDelete {
     }
 
     static class Builder {
-        private TableQuery tableQuery;
+        private TableQueryCallBack tableQuery;
         private String conditionKey;
         private String[] conditionValue;
 
-        Builder setTableQuery(TableQuery tableQuery) {
-            this.tableQuery = tableQuery;
+        Builder setTableQueryCallBack(TableQueryCallBack tableQueryCallBack) {
+            this.tableQuery = tableQueryCallBack;
             return this;
         }
 
@@ -117,7 +120,7 @@ public class TableDelete {
             return this;
         }
 
-        <T> TableDelete builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableDeleteCallBack builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableDelete(database, tClass, this);
         }
     }

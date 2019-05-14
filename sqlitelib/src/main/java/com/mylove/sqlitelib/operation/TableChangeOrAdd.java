@@ -1,5 +1,10 @@
 package com.mylove.sqlitelib.operation;
 
+import com.mylove.sqlitelib.callback.TableChangeOrAddCallBack;
+import com.mylove.sqlitelib.callback.TableInsertCallBack;
+import com.mylove.sqlitelib.callback.TableQueryCallBack;
+import com.mylove.sqlitelib.callback.TableUpdateCallBack;
+
 import java.util.List;
 
 /**
@@ -8,10 +13,10 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableChangeOrAdd {
-    private TableQuery tableQuery;
-    private TableInsert tableInsert;
-    private TableUpdate tableUpdate;
+public class TableChangeOrAdd implements TableChangeOrAddCallBack {
+    private TableQueryCallBack tableQuery;
+    private TableInsertCallBack tableInsert;
+    private TableUpdateCallBack tableUpdate;
 
     private TableChangeOrAdd(Builder builder) {
         this.tableQuery = builder.tableQuery;
@@ -19,6 +24,7 @@ public class TableChangeOrAdd {
         this.tableUpdate = builder.tableUpdate;
     }
 
+    @Override
     public <T> long[] findAll(T t) {
         List<T> all = this.tableQuery.findAll();
         if (all != null && all.size() > 0) {
@@ -33,6 +39,7 @@ public class TableChangeOrAdd {
         }
     }
 
+    @Override
     public <T> long findFirst(T t) {
         T t1 = this.tableQuery.findFirst();
         if (t1 != null) {
@@ -42,6 +49,7 @@ public class TableChangeOrAdd {
         }
     }
 
+    @Override
     public <T> long findLast(T t) {
         T t1 = this.tableQuery.findLast();
         if (t1 != null) {
@@ -52,26 +60,26 @@ public class TableChangeOrAdd {
     }
 
     static class Builder {
-        private TableQuery tableQuery;
-        private TableInsert tableInsert;
-        private TableUpdate tableUpdate;
+        private TableQueryCallBack tableQuery;
+        private TableInsertCallBack tableInsert;
+        private TableUpdateCallBack tableUpdate;
 
-        Builder setTableQuery(TableQuery tableQuery) {
-            this.tableQuery = tableQuery;
+        Builder setTableQueryCallBack(TableQueryCallBack tableQueryCallBack) {
+            this.tableQuery = tableQueryCallBack;
             return this;
         }
 
-        Builder setTableInsert(TableInsert tableInsert) {
+        Builder setTableInsertCallBack(TableInsertCallBack tableInsert) {
             this.tableInsert = tableInsert;
             return this;
         }
 
-        Builder setTableUpdate(TableUpdate tableUpdate) {
-            this.tableUpdate = tableUpdate;
+        Builder setTableUpdateCallBack(TableUpdateCallBack tableUpdateCallBack) {
+            this.tableUpdate = tableUpdateCallBack;
             return this;
         }
 
-        TableChangeOrAdd builder() {
+        TableChangeOrAddCallBack builder() {
             return new TableChangeOrAdd(this);
         }
     }

@@ -2,6 +2,7 @@ package com.mylove.sqlitelib.condition;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.mylove.sqlitelib.callback.OperationCallBack;
 import com.mylove.sqlitelib.config.TableSort;
 import com.mylove.sqlitelib.callback.ConditionCallBack;
 import com.mylove.sqlitelib.operation.TableOperation;
@@ -43,7 +44,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition eq(List<ConditionMsg> list) {
+    public ConditionCallBack eq(List<ConditionMsg> list) {
         this.eqList.addAll(list);
         return this;
     }
@@ -55,7 +56,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition eq(ConditionMsg conditionMsg) {
+    public ConditionCallBack eq(ConditionMsg conditionMsg) {
         this.eqList.add(conditionMsg);
         return this;
     }
@@ -67,7 +68,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition notEq(List<ConditionMsg> list) {
+    public ConditionCallBack notEq(List<ConditionMsg> list) {
         this.notEqList.addAll(list);
         return this;
     }
@@ -79,7 +80,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition notEq(ConditionMsg conditionMsg) {
+    public ConditionCallBack notEq(ConditionMsg conditionMsg) {
         this.notEqList.add(conditionMsg);
         return this;
     }
@@ -91,7 +92,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition greater(List<ConditionMsg> list) {
+    public ConditionCallBack greater(List<ConditionMsg> list) {
         this.greaterList.addAll(list);
         return this;
     }
@@ -103,7 +104,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition greater(ConditionMsg conditionMsg) {
+    public ConditionCallBack greater(ConditionMsg conditionMsg) {
         this.greaterList.add(conditionMsg);
         return this;
     }
@@ -115,7 +116,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition less(List<ConditionMsg> list) {
+    public ConditionCallBack less(List<ConditionMsg> list) {
         this.lessList.addAll(list);
         return this;
     }
@@ -127,7 +128,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition less(ConditionMsg conditionMsg) {
+    public ConditionCallBack less(ConditionMsg conditionMsg) {
         this.lessList.add(conditionMsg);
         return this;
     }
@@ -139,7 +140,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition in(List<ConditionMsg> list) {
+    public ConditionCallBack in(List<ConditionMsg> list) {
         this.inList.addAll(list);
         return this;
     }
@@ -151,7 +152,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition in(ConditionMsg conditionMsg) {
+    public ConditionCallBack in(ConditionMsg conditionMsg) {
         this.inList.add(conditionMsg);
         return this;
     }
@@ -164,7 +165,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableCondition sort(String field, TableSort sort) {
+    public ConditionCallBack sort(String field, TableSort sort) {
         this.field = field;
         this.sort = sort;
         return this;
@@ -176,7 +177,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public TableOperation operation() {
+    public OperationCallBack operation() {
         TableOperation.Builder builder = new TableOperation.Builder()
                 .setConditionKey(conditionKey())
                 .setConditionValue(conditionValue())
@@ -306,7 +307,7 @@ public class TableCondition implements ConditionCallBack {
             return this;
         }
 
-        public TableCondition builder(SQLiteDatabase database, Class<?> tClass) {
+        public ConditionCallBack builder(SQLiteDatabase database, Class<?> tClass) {
             return new TableCondition(database, tClass, this);
         }
     }

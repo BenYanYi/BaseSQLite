@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.googlecode.openbeans.PropertyDescriptor;
+import com.mylove.sqlitelib.callback.TableQueryCallBack;
+import com.mylove.sqlitelib.callback.TableUpdateCallBack;
 import com.mylove.sqlitelib.exception.TableException;
 
 import java.lang.reflect.Field;
@@ -17,10 +19,10 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableUpdate {
+public class TableUpdate implements TableUpdateCallBack {
     private SQLiteDatabase database;
     private Class<?> tClass;
-    private TableQuery tableQuery;
+    private TableQueryCallBack tableQuery;
     private String conditionKey;
     private String[] conditionValue;
 
@@ -84,12 +86,12 @@ public class TableUpdate {
     }
 
     static class Builder {
-        private TableQuery tableQuery;
+        private TableQueryCallBack tableQuery;
         private String conditionKey;
         private String[] conditionValue;
 
-        Builder setTableQuery(TableQuery tableQuery) {
-            this.tableQuery = tableQuery;
+        Builder setTableQueryCallBack(TableQueryCallBack tableQueryCallBack) {
+            this.tableQuery = tableQueryCallBack;
             return this;
         }
 
@@ -103,7 +105,7 @@ public class TableUpdate {
             return this;
         }
 
-        <T> TableUpdate builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableUpdateCallBack builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableUpdate(database, tClass, this);
         }
     }
