@@ -3,7 +3,6 @@ package com.mylove.sqlitelib.operation;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mylove.sqlitelib.callback.TableInsertCallBack;
-import com.mylove.sqlitelib.exception.TableException;
 
 import java.util.List;
 
@@ -13,29 +12,29 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableInsert implements TableInsertCallBack {
+public class TableInsert<T> implements TableInsertCallBack<T> {
     private SQLiteDatabase database;
-    private Class<?> tClass;
+    private Class<T> tClass;
 
-    private TableInsert(Class<?> tClass, Builder builder) {
+    private TableInsert(Class<T> tClass, Builder builder) {
         this.tClass = tClass;
         this.database = builder.database;
     }
 
-    public <T> long find(T t) {
-        if (this.tClass != t.getClass()) {
-            throw new TableException("添加的数据与表不符");
-        }
+    public long find(T t) {
+//        if (this.tClass != t.getClass()) {
+//            throw new TableException("添加的数据与表不符");
+//        }
         return insert(t);
     }
 
-    public <T> long[] find(List<T> list) {
-        if (list == null || list.size() <= 0) {
-            throw new TableException("添加的数据列表不能为空");
-        }
-        if (this.tClass != list.get(0).getClass()) {
-            throw new TableException("添加的数据与表不符");
-        }
+    public long[] find(List<T> list) {
+//        if (list == null || list.size() <= 0) {
+//            throw new TableException("添加的数据列表不能为空");
+//        }
+//        if (this.tClass != list.get(0).getClass()) {
+//            throw new TableException("添加的数据与表不符");
+//        }
         long[] l = new long[list.size()];
         for (int i = 0; i < list.size(); i++) {
             l[i] = insert(list.get(i));
@@ -43,7 +42,7 @@ public class TableInsert implements TableInsertCallBack {
         return l;
     }
 
-    private <T> long insert(T t) {
+    private long insert(T t) {
         if (TableTool.values(t) == null) {
             return -1;
         } else {
@@ -59,7 +58,7 @@ public class TableInsert implements TableInsertCallBack {
             return this;
         }
 
-        <T> TableInsertCallBack builder(Class<T> tClass) {
+        <T> TableInsertCallBack<T> builder(Class<T> tClass) {
             return new TableInsert(tClass, this);
         }
     }

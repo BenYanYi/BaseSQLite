@@ -23,11 +23,23 @@ public class TableDao {
     public static final String DB_NAME = "base_db_db_name";
     private String dbName;
     private int version;
+    private TableCondition.Builder builder;
+
 
     private TableDao(Context context, Builder builder) {
         this.context = context;
         this.dbName = builder.dbName;
         this.version = builder.version;
+        this.builder = init();
+    }
+
+    private TableCondition.Builder init() {
+        return new TableCondition.Builder()
+                .setEqList(new ArrayList<ConditionMsg>())
+                .setNotEqList(new ArrayList<ConditionMsg>())
+                .setGreaterList(new ArrayList<ConditionMsg>())
+                .setLessList(new ArrayList<ConditionMsg>())
+                .setInList(new ArrayList<ConditionMsg>());
     }
 
     private <T> boolean isTabBean(Class<T> tClass) {
@@ -40,18 +52,19 @@ public class TableDao {
             TableHelper tableHelper = TableInject.init(context, dbName, version, tClass);
             return tableHelper.getWritableDatabase();
         } else {
-            throw new TableException("当前类没有定义成表结构类");
+            throw new TableException("当前类没有定义成表结构类。(The current class is not defined as a table structure class.)");
         }
     }
 
-    public <T> ConditionCallBack where(Class<T> tClass) {
-        TableCondition.Builder builder = new TableCondition.Builder()
-                .setEqList(new ArrayList<ConditionMsg>())
-                .setNotEqList(new ArrayList<ConditionMsg>())
-                .setGreaterList(new ArrayList<ConditionMsg>())
-                .setLessList(new ArrayList<ConditionMsg>())
-                .setInList(new ArrayList<ConditionMsg>());
-        return builder.builder(getDB(tClass), tClass);
+    public <T> ConditionCallBack<T> where(Class<T> tClass) {
+//        return new TableCondition.Builder()
+//                .setEqList(new ArrayList<ConditionMsg>())
+//                .setNotEqList(new ArrayList<ConditionMsg>())
+//                .setGreaterList(new ArrayList<ConditionMsg>())
+//                .setLessList(new ArrayList<ConditionMsg>())
+//                .setInList(new ArrayList<ConditionMsg>())
+//                .builder(getDB(tClass), tClass);
+        return this.builder.builder(getDB(tClass), tClass);
     }
 
     public static class Builder {

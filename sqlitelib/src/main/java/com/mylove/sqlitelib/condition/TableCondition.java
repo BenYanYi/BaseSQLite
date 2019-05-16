@@ -15,8 +15,8 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableCondition implements ConditionCallBack {
-    private Class<?> tClass;
+public class TableCondition<T> implements ConditionCallBack<T> {
+    private Class<T> tClass;
     private TableSort sort = TableSort.DETAILS;
     private String field;
     private List<ConditionMsg> eqList;
@@ -27,7 +27,7 @@ public class TableCondition implements ConditionCallBack {
 
     private SQLiteDatabase database;
 
-    private TableCondition(SQLiteDatabase database, Class<?> tClass, Builder builder) {
+    private TableCondition(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
         this.eqList = builder.eqList;
@@ -44,7 +44,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack eq(List<ConditionMsg> list) {
+    public ConditionCallBack<T> eq(List<ConditionMsg> list) {
         this.eqList.addAll(list);
         return this;
     }
@@ -56,7 +56,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack eq(ConditionMsg conditionMsg) {
+    public ConditionCallBack<T> eq(ConditionMsg conditionMsg) {
         this.eqList.add(conditionMsg);
         return this;
     }
@@ -68,7 +68,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack notEq(List<ConditionMsg> list) {
+    public ConditionCallBack<T> notEq(List<ConditionMsg> list) {
         this.notEqList.addAll(list);
         return this;
     }
@@ -80,7 +80,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack notEq(ConditionMsg conditionMsg) {
+    public ConditionCallBack<T> notEq(ConditionMsg conditionMsg) {
         this.notEqList.add(conditionMsg);
         return this;
     }
@@ -92,7 +92,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack greater(List<ConditionMsg> list) {
+    public ConditionCallBack<T> greater(List<ConditionMsg> list) {
         this.greaterList.addAll(list);
         return this;
     }
@@ -104,7 +104,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack greater(ConditionMsg conditionMsg) {
+    public ConditionCallBack<T> greater(ConditionMsg conditionMsg) {
         this.greaterList.add(conditionMsg);
         return this;
     }
@@ -116,7 +116,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack less(List<ConditionMsg> list) {
+    public ConditionCallBack<T> less(List<ConditionMsg> list) {
         this.lessList.addAll(list);
         return this;
     }
@@ -128,7 +128,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack less(ConditionMsg conditionMsg) {
+    public ConditionCallBack<T> less(ConditionMsg conditionMsg) {
         this.lessList.add(conditionMsg);
         return this;
     }
@@ -140,7 +140,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack in(List<ConditionMsg> list) {
+    public ConditionCallBack<T> in(List<ConditionMsg> list) {
         this.inList.addAll(list);
         return this;
     }
@@ -152,7 +152,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack in(ConditionMsg conditionMsg) {
+    public ConditionCallBack<T> in(ConditionMsg conditionMsg) {
         this.inList.add(conditionMsg);
         return this;
     }
@@ -165,7 +165,7 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public ConditionCallBack sort(String field, TableSort sort) {
+    public ConditionCallBack<T> sort(String field, TableSort sort) {
         this.field = field;
         this.sort = sort;
         return this;
@@ -177,17 +177,17 @@ public class TableCondition implements ConditionCallBack {
      * @return
      */
     @Override
-    public OperationCallBack operation() {
-        TableOperation.Builder builder = new TableOperation.Builder()
+    public OperationCallBack<T> operation() {
+        return new TableOperation.Builder()
                 .setConditionKey(conditionKey())
                 .setConditionValue(conditionValue())
                 .setField(this.field)
-                .setSort(this.sort);
-        return builder.builder(this.database, tClass);
+                .setSort(this.sort)
+                .builder(this.database, tClass);
     }
 
     /**
-     * 条件处理
+     * 条件键处理
      *
      * @return
      */
@@ -307,7 +307,7 @@ public class TableCondition implements ConditionCallBack {
             return this;
         }
 
-        public ConditionCallBack builder(SQLiteDatabase database, Class<?> tClass) {
+        public <T> ConditionCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableCondition(database, tClass, this);
         }
     }

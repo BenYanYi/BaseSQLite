@@ -6,14 +6,14 @@ package com.mylove.sqlitelib.callback;
  * @email ben@yanyi.red
  * @overview 逻辑操作
  */
-public interface OperationCallBack {
-    TableInsertCallBack insert();
+public interface OperationCallBack<T> {
+    TableInsertCallBack<T> insert();
 
-    TableDeleteCallBack delete();
+    TableDeleteCallBack<T> delete();
 
-    TableQueryCallBack query();
+    TableQueryCallBack<T> query();
 
-    TableUpdateCallBack update();
+    TableUpdateCallBack<T> update();
 
-    TableChangeOrAddCallBack changeOrAdd();
+    TableChangeOrAddCallBack<T> changeOrAdd();
 }

@@ -16,15 +16,15 @@ import com.mylove.sqlitelib.config.TableSort;
  * @email ben@yanyi.red
  * @overview 增删拆逻辑区分
  */
-public class TableOperation implements OperationCallBack {
+public class TableOperation<T> implements OperationCallBack<T> {
     private SQLiteDatabase database;
-    private Class<?> tClass;
+    private Class<T> tClass;
     private TableSort sort;
     private String field;
     private String conditionKey;
     private String[] conditionValue;
 
-    private TableOperation(SQLiteDatabase database, Class<?> tClass, Builder builder) {
+    private TableOperation(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
         this.sort = builder.sort;
@@ -34,14 +34,14 @@ public class TableOperation implements OperationCallBack {
     }
 
     @Override
-    public TableInsertCallBack insert() {
+    public TableInsertCallBack<T> insert() {
         return new TableInsert.Builder()
                 .setDatabase(this.database)
                 .builder(this.tClass);
     }
 
     @Override
-    public TableDeleteCallBack delete() {
+    public TableDeleteCallBack<T> delete() {
         return new TableDelete.Builder()
                 .setTableQueryCallBack(query())
                 .setConditionKey(this.conditionKey)
@@ -50,7 +50,7 @@ public class TableOperation implements OperationCallBack {
     }
 
     @Override
-    public TableQueryCallBack query() {
+    public TableQueryCallBack<T> query() {
         return new TableQuery.Builder()
                 .setField(this.field)
                 .setSort(this.sort)
@@ -60,7 +60,7 @@ public class TableOperation implements OperationCallBack {
     }
 
     @Override
-    public TableUpdateCallBack update() {
+    public TableUpdateCallBack<T> update() {
         return new TableUpdate.Builder()
                 .setTableQueryCallBack(query())
                 .setConditionKey(this.conditionKey)
@@ -69,7 +69,7 @@ public class TableOperation implements OperationCallBack {
     }
 
     @Override
-    public TableChangeOrAddCallBack changeOrAdd() {
+    public TableChangeOrAddCallBack<T> changeOrAdd() {
         return new TableChangeOrAdd.Builder()
                 .setTableInsertCallBack(insert())
                 .setTableQueryCallBack(query())
@@ -104,7 +104,7 @@ public class TableOperation implements OperationCallBack {
             return this;
         }
 
-        public <T> OperationCallBack builder(SQLiteDatabase database, Class<T> tClass) {
+        public <T> OperationCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableOperation(database, tClass, this);
         }
     }

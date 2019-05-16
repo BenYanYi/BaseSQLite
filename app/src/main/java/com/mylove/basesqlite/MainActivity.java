@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.amitshekhar.DebugDB;
 import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.TableDao;
+import com.mylove.sqlitelib.callback.ConditionCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 //            bean.setTt("tt" + i);
             list.add(bean);
         }
+        ConditionCallBack<DBBean> where = session.where(DBBean.class);
         long[] insert = session.where(DBBean.class).operation().insert().find(list);
         for (long l : insert) {
             JLog.v("插入" + l);

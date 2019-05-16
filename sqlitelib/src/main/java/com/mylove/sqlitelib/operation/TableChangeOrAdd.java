@@ -13,10 +13,10 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableChangeOrAdd implements TableChangeOrAddCallBack {
-    private TableQueryCallBack tableQuery;
-    private TableInsertCallBack tableInsert;
-    private TableUpdateCallBack tableUpdate;
+public class TableChangeOrAdd<T> implements TableChangeOrAddCallBack<T> {
+    private TableQueryCallBack<T> tableQuery;
+    private TableInsertCallBack<T> tableInsert;
+    private TableUpdateCallBack<T> tableUpdate;
 
     private TableChangeOrAdd(Builder builder) {
         this.tableQuery = builder.tableQuery;
@@ -25,7 +25,7 @@ public class TableChangeOrAdd implements TableChangeOrAddCallBack {
     }
 
     @Override
-    public <T> long[] findAll(T t) {
+    public long[] findAll(T t) {
         List<T> all = this.tableQuery.findAll();
         if (all != null && all.size() > 0) {
             int[] i = this.tableUpdate.findAll(t);
@@ -40,7 +40,7 @@ public class TableChangeOrAdd implements TableChangeOrAddCallBack {
     }
 
     @Override
-    public <T> long findFirst(T t) {
+    public long findFirst(T t) {
         T t1 = this.tableQuery.findFirst();
         if (t1 != null) {
             return this.tableUpdate.findFirst(t);
@@ -50,7 +50,7 @@ public class TableChangeOrAdd implements TableChangeOrAddCallBack {
     }
 
     @Override
-    public <T> long findLast(T t) {
+    public long findLast(T t) {
         T t1 = this.tableQuery.findLast();
         if (t1 != null) {
             return this.tableUpdate.findFirst(t);
@@ -59,27 +59,27 @@ public class TableChangeOrAdd implements TableChangeOrAddCallBack {
         }
     }
 
-    static class Builder {
-        private TableQueryCallBack tableQuery;
-        private TableInsertCallBack tableInsert;
-        private TableUpdateCallBack tableUpdate;
+    static class Builder<T> {
+        private TableQueryCallBack<T> tableQuery;
+        private TableInsertCallBack<T> tableInsert;
+        private TableUpdateCallBack<T> tableUpdate;
 
-        Builder setTableQueryCallBack(TableQueryCallBack tableQueryCallBack) {
+        Builder setTableQueryCallBack(TableQueryCallBack<T> tableQueryCallBack) {
             this.tableQuery = tableQueryCallBack;
             return this;
         }
 
-        Builder setTableInsertCallBack(TableInsertCallBack tableInsert) {
+        Builder setTableInsertCallBack(TableInsertCallBack<T> tableInsert) {
             this.tableInsert = tableInsert;
             return this;
         }
 
-        Builder setTableUpdateCallBack(TableUpdateCallBack tableUpdateCallBack) {
+        Builder setTableUpdateCallBack(TableUpdateCallBack<T> tableUpdateCallBack) {
             this.tableUpdate = tableUpdateCallBack;
             return this;
         }
 
-        TableChangeOrAddCallBack builder() {
+        TableChangeOrAddCallBack<T> builder() {
             return new TableChangeOrAdd(this);
         }
     }

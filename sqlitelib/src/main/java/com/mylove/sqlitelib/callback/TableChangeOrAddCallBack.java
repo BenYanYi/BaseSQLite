@@ -1,13 +1,15 @@
 package com.mylove.sqlitelib.callback;
 
 /**
- * @author yangjiewei
- * @time 2019/5/14 17:14
+ * @author YanYi
+ * @date 2019/5/16 17:17
+ * @email ben@yanyi.red
+ * @overview
  */
-public interface TableChangeOrAddCallBack {
-    <T> long[] findAll(T t);
+public interface TableChangeOrAddCallBack<T> {
+    long[] findAll(T t);
 
-    <T> long findFirst(T t);
+    long findFirst(T t);
 
-    <T> long findLast(T t);
+    long findLast(T t);
 }

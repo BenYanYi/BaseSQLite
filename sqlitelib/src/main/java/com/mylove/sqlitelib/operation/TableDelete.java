@@ -18,14 +18,14 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableDelete implements TableDeleteCallBack {
+public class TableDelete<T> implements TableDeleteCallBack<T> {
     private SQLiteDatabase database;
     private TableQueryCallBack tableQuery;
-    private Class<?> tClass;
+    private Class<T> tClass;
     private String conditionKey;
     private String[] conditionValue;
 
-    private TableDelete(SQLiteDatabase database, Class<?> tClass, Builder builder) {
+    private TableDelete(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
         this.tableQuery = builder.tableQuery;
@@ -120,7 +120,7 @@ public class TableDelete implements TableDeleteCallBack {
             return this;
         }
 
-        <T> TableDeleteCallBack builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableDeleteCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableDelete(database, tClass, this);
         }
     }

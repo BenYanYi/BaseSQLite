@@ -19,14 +19,14 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableUpdate implements TableUpdateCallBack {
+public class TableUpdate<T> implements TableUpdateCallBack<T> {
     private SQLiteDatabase database;
-    private Class<?> tClass;
+    private Class<T> tClass;
     private TableQueryCallBack tableQuery;
     private String conditionKey;
     private String[] conditionValue;
 
-    private TableUpdate(SQLiteDatabase database, Class<?> tClass, Builder builder) {
+    private TableUpdate(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
         this.tableQuery = builder.tableQuery;
@@ -34,17 +34,18 @@ public class TableUpdate implements TableUpdateCallBack {
         this.conditionValue = builder.conditionValue;
     }
 
-    public <T> int findFirst(T t) {
+
+    public int findFirst(T t) {
         Object first = this.tableQuery.findFirst();
         return update(t, first);
     }
 
-    public <T> int findLast(T t) {
+    public int findLast(T t) {
         Object last = this.tableQuery.findLast();
         return update(t, last);
     }
 
-    public <T> int[] findAll(T t) {
+    public int[] findAll(T t) {
         if (this.tClass != t.getClass()) {
             throw new TableException("修改的数据与表结构不符");
         }
@@ -56,7 +57,7 @@ public class TableUpdate implements TableUpdateCallBack {
         return l;
     }
 
-    private <T> int update(T t, Object obj) {
+    private int update(T t, Object obj) {
         if (this.tClass != t.getClass()) {
             throw new TableException("修改的数据与表结构不符");
         }
@@ -105,7 +106,7 @@ public class TableUpdate implements TableUpdateCallBack {
             return this;
         }
 
-        <T> TableUpdateCallBack builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableUpdateCallBack<T> builder(SQLiteDatabase database, Class<?> tClass) {
             return new TableUpdate(database, tClass, this);
         }
     }

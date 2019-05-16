@@ -1,11 +1,12 @@
 package com.mylove.sqlitelib.callback;
 
 /**
- * @author yangjiewei
- * @time 2019/5/14 17:20
- * 删除逻辑处理
+ * @author YanYi
+ * @date 2019/5/16 17:17
+ * @email ben@yanyi.red
+ * @overview 删除逻辑处理
  */
-public interface TableDeleteCallBack {
+public interface TableDeleteCallBack<T> {
     /**
      * 删除第一条数据
      *

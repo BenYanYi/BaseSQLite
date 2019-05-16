@@ -20,12 +20,12 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableQuery implements TableQueryCallBack {
+public class TableQuery<T> implements TableQueryCallBack<T> {
     private SQLiteDatabase database;
-    private Class<?> tClass;
+    private Class<T> tClass;
     private Builder builder;
 
-    private TableQuery(SQLiteDatabase database, Class<?> tClass, Builder builder) {
+    private TableQuery(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
         this.builder = builder;
@@ -42,14 +42,14 @@ public class TableQuery implements TableQueryCallBack {
                 this.builder.conditionValue, null, null, orderBy);
     }
 
-    public <T> List<T> findAll() {
+    public List<T> findAll() {
         Cursor cursor = query();
         List<T> list = getCursor(cursor);
         cursor.close();
         return list;
     }
 
-    public <T> T findFirst() {
+    public T findFirst() {
         Cursor cursor = query();
         List<T> list = getCursor(cursor);
         cursor.close();
@@ -60,7 +60,7 @@ public class TableQuery implements TableQueryCallBack {
         }
     }
 
-    public <T> T findLast() {
+    public T findLast() {
         Cursor cursor = query();
         List<T> list = getCursor(cursor);
         cursor.close();
@@ -71,7 +71,7 @@ public class TableQuery implements TableQueryCallBack {
         }
     }
 
-    private <T> List<T> getCursor(Cursor cursor) {
+    private List<T> getCursor(Cursor cursor) {
         try {
             List<T> list = new LinkedList<>();
             while (cursor.moveToNext()) {
@@ -156,7 +156,7 @@ public class TableQuery implements TableQueryCallBack {
             return this;
         }
 
-        <T> TableQueryCallBack builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableQueryCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableQuery(database, tClass, this);
         }
     }

@@ -65,7 +65,7 @@ class TableInject {
                 }
             }
         } catch (Exception e) {
-            throw new TableException("创建数据库失败:" + "\n" + e.getMessage());
+            throw new TableException("创建数据库失败(failed to create database):" + "\n" + e.getMessage());
         }
         tableMsg.setList(oList);
         return tableMsg;

@@ -111,7 +111,7 @@ public class TableTool {
         }
     }
 
-    public static <T> String getTabName(Class<T> tClass) {
+    static <T> String getTabName(Class<T> tClass) {
         TableBean annotation = tClass.getAnnotation(TableBean.class);
         if (annotation != null) {
             String value = annotation.value();

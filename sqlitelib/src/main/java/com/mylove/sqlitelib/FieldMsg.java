@@ -4,7 +4,7 @@ package com.mylove.sqlitelib;
  * @author YanYi
  * @date 2019/3/28 17:16
  * @email ben@yanyi.red
- * @overview
+ * @overview 建表时列明和类型判断，是否为空判断
  */
 class FieldMsg {
     private String key;
