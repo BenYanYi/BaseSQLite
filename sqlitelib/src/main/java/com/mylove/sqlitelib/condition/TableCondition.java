@@ -2,6 +2,7 @@ package com.mylove.sqlitelib.condition;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.callback.OperationCallBack;
 import com.mylove.sqlitelib.config.TableSort;
 import com.mylove.sqlitelib.callback.ConditionCallBack;
@@ -178,6 +179,7 @@ public class TableCondition<T> implements ConditionCallBack<T> {
      */
     @Override
     public OperationCallBack<T> operation() {
+        JLog.d();
         return new TableOperation.Builder()
                 .setConditionKey(conditionKey())
                 .setConditionValue(conditionValue())
@@ -308,7 +310,7 @@ public class TableCondition<T> implements ConditionCallBack<T> {
         }
 
         public <T> ConditionCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
-            return new TableCondition(database, tClass, this);
+            return (ConditionCallBack<T>) (new TableCondition(database, tClass, this));
         }
     }
 }

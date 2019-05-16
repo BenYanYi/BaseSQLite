@@ -1,5 +1,6 @@
 package com.mylove.basesqlite;
 
+import com.mylove.sqlitelib.annotation.ColumnName;
 import com.mylove.sqlitelib.annotation.ID;
 import com.mylove.sqlitelib.annotation.NotNull;
 import com.mylove.sqlitelib.annotation.TableBean;
@@ -17,6 +18,7 @@ public class DBBean {
     @NotNull
     private String title;
     private String msg;
+    @ColumnName("tt")
     private String tt;
 
     //    private String hh;
@@ -44,14 +46,14 @@ public class DBBean {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-//
-//    public String getTt() {
-//        return tt;
-//    }
-//
-//    public void setTt(String tt) {
-//        this.tt = tt;
-//    }
+
+    public String getTt() {
+        return tt;
+    }
+
+    public void setTt(String tt) {
+        this.tt = tt;
+    }
 
 //    public String getHh() {
 //        return hh;

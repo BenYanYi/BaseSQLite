@@ -28,5 +28,5 @@ dependencies {
     implementation project(':sqlitelib')
     debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
     releaseImplementation 'com.idescout.sql:sqlscout-server-noop:4.1'
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
+//    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
 }

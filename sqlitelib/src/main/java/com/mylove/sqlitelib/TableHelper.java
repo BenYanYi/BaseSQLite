@@ -41,11 +41,16 @@ class TableHelper extends SQLiteOpenHelper {
         }
         field = field.deleteCharAt(field.length() - 1);
         String sql;
-        if (tableMsg.isIncrease() && (tableMsg.getType().equals("long") || tableMsg.getType().equals("Long"))) {
+        if (tableMsg.isIncrease()
+                && (tableMsg.getType().equals("long") || tableMsg.getType().equals("Long"))) {
             sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key autoincrement," + field + ")";//有主键自增
-        } else if (!TextUtils.isEmpty(tableMsg.getId()) && !"null".equals(tableMsg.getId()) && tableMsg.getId().trim().length() != 0 && tableMsg.isNotNULL()) {
+        } else if (!TextUtils.isEmpty(tableMsg.getId())
+                && !"null".equals(tableMsg.getId().toLowerCase().trim())
+                && tableMsg.getId().trim().equals("") && tableMsg.isNotNULL()) {
             sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key NOT NULL," + field + ")";//有主键不为空
-        } else if (!TextUtils.isEmpty(tableMsg.getId()) && !"null".equals(tableMsg.getId()) && tableMsg.getId().trim().length() != 0 && tableMsg.isNotNULL()) {
+        } else if (!TextUtils.isEmpty(tableMsg.getId())
+                && !"null".equals(tableMsg.getId().toLowerCase().trim())
+                && tableMsg.getId().trim().equals("") && tableMsg.isNotNULL()) {
             sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key," + field + ")";//有主键不为空
         } else {
             sql = "create table " + tabName + " (" + field + ")";

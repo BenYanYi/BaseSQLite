@@ -13,7 +13,7 @@ public interface TableInsertCallBack<T> {
      * 插入一条数据
      *
      * @param t 数据
-     * @return
+     * @return 当前行号
      */
     long find(T t);
 
@@ -21,7 +21,7 @@ public interface TableInsertCallBack<T> {
      * 插入多条数据
      *
      * @param list 数据集
-     * @return
+     * @return 对应的行号
      */
     long[] find(List<T> list);
 }

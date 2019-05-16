@@ -85,7 +85,8 @@ public class TableDao {
         }
 
         public TableDao builder(Context context) {
-            if (TextUtils.isEmpty(dbName)) {
+            if (TextUtils.isEmpty(dbName) || dbName.trim().equals("")
+                    || dbName.toLowerCase().trim().equals("null")) {
                 dbName = context.getPackageName() + "_TABLE_DB";
             }
             return new TableDao(context, this);

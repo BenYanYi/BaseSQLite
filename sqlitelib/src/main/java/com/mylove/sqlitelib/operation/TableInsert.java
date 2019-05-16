@@ -2,6 +2,7 @@ package com.mylove.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.callback.TableInsertCallBack;
 
 import java.util.List;
@@ -35,10 +36,12 @@ public class TableInsert<T> implements TableInsertCallBack<T> {
 //        if (this.tClass != list.get(0).getClass()) {
 //            throw new TableException("添加的数据与表不符");
 //        }
+        JLog.d(list);
         long[] l = new long[list.size()];
         for (int i = 0; i < list.size(); i++) {
             l[i] = insert(list.get(i));
         }
+        JLog.d();
         return l;
     }
 

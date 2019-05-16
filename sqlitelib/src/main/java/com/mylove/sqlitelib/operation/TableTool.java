@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.text.TextUtils;
 
 import com.googlecode.openbeans.PropertyDescriptor;
+import com.mylove.loglib.JLog;
+import com.mylove.sqlitelib.annotation.ColumnName;
 import com.mylove.sqlitelib.annotation.ID;
 import com.mylove.sqlitelib.annotation.NotNull;
 import com.mylove.sqlitelib.annotation.TableBean;
@@ -21,13 +23,14 @@ import java.lang.reflect.Method;
 public class TableTool {
     public static <T> ContentValues values(T t) {
         ContentValues values = new ContentValues();
-        try {
-            Field[] fields = t.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
-                        !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
-                    ID annotation = field.getAnnotation(ID.class);
-                    NotNull notNull = field.getAnnotation(NotNull.class);
+        Field[] fields = t.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
+                    !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
+                ID annotation = field.getAnnotation(ID.class);
+                NotNull notNull = field.getAnnotation(NotNull.class);
+                ColumnName columnName = field.getAnnotation(ColumnName.class);
+                try {
                     PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), t.getClass());
                     Method method = descriptor.getReadMethod();//获得读方法
                     if (annotation != null) {
@@ -35,6 +38,9 @@ public class TableTool {
                         if (boo) {
                             if (!field.getType().getSimpleName().toLowerCase().equals("long")) {
                                 String invoke = String.valueOf(method.invoke(t));
+//                                if(){
+//                                }else{
+//                                }
                                 if (TextUtils.isEmpty(invoke) || "null".equals(invoke) || invoke.trim().length() != 0) {
                                     throw new TableException(field.getName() + "不能为空值,或将" + field.getName() + "类型设置为long");
                                 }
@@ -62,13 +68,33 @@ public class TableTool {
                                 contentValue(values, field, invoke);
                             }
                         } else {
+                            JLog.d(field.getName() + "\t" + invoke);
                             contentValue(values, field, invoke);
                         }
                     }
+                } catch (Exception e) {
+                    String msgMethod;
+                    if (e.getMessage().contains("set")) {
+                        msgMethod = "set";
+                    } else if (e.getMessage().contains("get")) {
+                        msgMethod = "get";
+                    } else {
+                        msgMethod = "set或get";
+                    }
+                    throw new TableException(t.getClass().getSimpleName() + "类" + field.getName() + "变量缺少" + msgMethod + "方法");
+//                    if (e.getMessage().length() >= 4) {
+//                        int indexOf = e.getMessage().indexOf("[");
+//                        String substring = e.getMessage().substring(3, indexOf).trim().toUpperCase();
+//                        JLog.e(substring);
+//                        String
+//                        if (field.getName().toUpperCase().equals(substring)) {
+//
+//                        }
+//                    }
+//                    return null;
                 }
+
             }
-        } catch (Exception e) {
-            return null;
         }
         return values;
     }

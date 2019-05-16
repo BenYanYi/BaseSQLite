@@ -2,6 +2,7 @@ package com.mylove.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.callback.OperationCallBack;
 import com.mylove.sqlitelib.callback.TableChangeOrAddCallBack;
 import com.mylove.sqlitelib.callback.TableDeleteCallBack;
@@ -35,6 +36,8 @@ public class TableOperation<T> implements OperationCallBack<T> {
 
     @Override
     public TableInsertCallBack<T> insert() {
+        JLog.d(this.database);
+        JLog.d(this.tClass.getCanonicalName());
         return new TableInsert.Builder()
                 .setDatabase(this.database)
                 .builder(this.tClass);

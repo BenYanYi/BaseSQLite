@@ -3,6 +3,7 @@ package com.mylove.sqlitelib;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.mylove.sqlitelib.annotation.ColumnName;
 import com.mylove.sqlitelib.annotation.ID;
 import com.mylove.sqlitelib.annotation.NotNull;
 import com.mylove.sqlitelib.annotation.TableBean;
@@ -21,34 +22,44 @@ import java.util.List;
 class TableInject {
 
     static <T> TableHelper init(Context context, String dbName, int version, Class<T> tClass) {
-        return new TableHelper(context, dbName, getTabMsg(tClass), getTabName(tClass), version);
+        return new TableHelper(context, dbName, getTabColumnMsg(tClass), getTabName(tClass), version);
     }
 
     private static <T> String getTabName(Class<T> tClass) {
         TableBean annotation = tClass.getAnnotation(TableBean.class);
         if (annotation != null) {
             String value = annotation.value();
-            if (!TextUtils.isEmpty(value) && !"null".equals(value) && value.trim().length() != 0) {
+            if (!TextUtils.isEmpty(value) && !"null".equals(value.toLowerCase().trim()) && !value.trim().equals("")) {
                 return value;
             }
         }
         return tClass.getSimpleName();
     }
 
-    private static <T> TableMsg getTabMsg(Class<T> tClass) {
+    private static <T> TableMsg getTabColumnMsg(Class<T> tClass) {
         TableMsg tableMsg = new TableMsg();
         List<FieldMsg> oList = new ArrayList<>();
         try {
             Field[] declaredFields = tClass.getDeclaredFields();
             for (Field field : declaredFields) {
-                if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
-                        !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
+                if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID")
+                        && !TextUtils.isEmpty(field.getName())
+                        && !"null".equals(field.getName().toLowerCase().trim())
+                        && field.getName().trim().equals("")) {
                     ID annotation = field.getAnnotation(ID.class);
                     NotNull notNull = field.getAnnotation(NotNull.class);
+                    ColumnName columnName = field.getAnnotation(ColumnName.class);
                     if (annotation != null) {
                         boolean boo = annotation.increase();
                         tableMsg.setIncrease(boo);
-                        tableMsg.setId(field.getName());
+                        String idName = annotation.idName();
+                        if (!TextUtils.isEmpty(idName)
+                                && !idName.toLowerCase().trim().equals("null")
+                                && !idName.trim().equals("")) {
+                            tableMsg.setId(idName);
+                        } else {
+                            tableMsg.setId(field.getName());
+                        }
                         tableMsg.setType(field.getType().getSimpleName());
                         if (notNull != null) {
                             tableMsg.setNotNULL(notNull.notNull());
@@ -57,7 +68,13 @@ class TableInject {
                         }
                     } else {
                         FieldMsg fieldMsg = new FieldMsg();
-                        fieldMsg.setKey(field.getName());
+                        if (columnName != null && !TextUtils.isEmpty(columnName.value())
+                                && !columnName.value().trim().equals("")
+                                && !columnName.value().trim().toUpperCase().equals("NULL")) {
+                            fieldMsg.setKey(columnName.value());
+                        } else {
+                            fieldMsg.setKey(field.getName());
+                        }
                         fieldMsg.setType(isType(field.getType().getSimpleName()));
                         fieldMsg.setNotNULL(notNull != null);
                         oList.add(fieldMsg);
