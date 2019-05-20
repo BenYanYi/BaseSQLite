@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 22
 
 
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
 
@@ -24,12 +24,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:appcompat-v7:22.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.code.gson:gson:+'
-    api files('libs/openbeans-1.0.jar')
-    api 'com.yanyi.benyanyi:loglib:1.0.1'
+//    api 'com.yanyi.benyanyi:loglib:1.0.1'
+//    implementation files('libs/sqlite-jdbc-3.21.0.1.jar')
+//    debugApi 'com.amitshekhar.android:debug-db:1.0.6'
 }
 apply from: 'bintrayUpload.gradle'

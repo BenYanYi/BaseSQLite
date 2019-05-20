@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -22,12 +21,13 @@ import java.util.Set;
  * @email ben@yanyi.red
  * @overview
  */
-class TableHelper extends SQLiteOpenHelper {
+final class TableHelper extends SQLiteOpenHelper implements TableHelperCallBack {
     /**
      * 表名
      */
     private String tabName;
     private TableMsg tableMsg;
+    private Context mContext;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -46,11 +46,11 @@ class TableHelper extends SQLiteOpenHelper {
             sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key autoincrement," + field + ")";//有主键自增
         } else if (!TextUtils.isEmpty(tableMsg.getId())
                 && !"null".equals(tableMsg.getId().toLowerCase().trim())
-                && tableMsg.getId().trim().equals("") && tableMsg.isNotNULL()) {
+                && !tableMsg.getId().trim().equals("") && tableMsg.isNotNULL()) {
             sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key NOT NULL," + field + ")";//有主键不为空
         } else if (!TextUtils.isEmpty(tableMsg.getId())
                 && !"null".equals(tableMsg.getId().toLowerCase().trim())
-                && tableMsg.getId().trim().equals("") && tableMsg.isNotNULL()) {
+                && !tableMsg.getId().trim().equals("") && tableMsg.isNotNULL()) {
             sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key," + field + ")";//有主键不为空
         } else {
             sql = "create table " + tabName + " (" + field + ")";
@@ -180,8 +180,14 @@ class TableHelper extends SQLiteOpenHelper {
      */
     TableHelper(Context context, String dbName, TableMsg tableMsg, String tabName, int version) {
         super(context, dbName, null, version);
+        this.mContext = context;
         this.tabName = tabName;
         this.tableMsg = tableMsg;
+    }
+
+    @Override
+    public SQLiteDatabase getHelperWritableDatabase() {
+        return this.getWritableDatabase();
     }
 
     /**
@@ -190,7 +196,7 @@ class TableHelper extends SQLiteOpenHelper {
      * @param tableName 表名
      * @return 存在返回false
      */
-    private boolean tableIsExist(String tableName) {
+    public boolean tableIsExist(String tableName) {
         boolean result = false;
         if (tableName == null) {
             return true;
@@ -212,5 +218,39 @@ class TableHelper extends SQLiteOpenHelper {
             return true;
         }
         return !result;
+    }
+
+    public boolean tabIsExist(String tabName) {
+        boolean result = false;
+        if (tabName == null) {
+            return false;
+        }
+        Cursor cursor = null;
+        try {
+            String sql = "select count(*) as c from sqlite_master where type ='table' and name ='" + tabName.trim() + "' ";
+            cursor = this.getReadableDatabase().rawQuery(sql, null);
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(0);
+                if (count > 0) {
+                    result = true;
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return result;
+    }
+
+    /**
+     * 获取数据库路径
+     **/
+    public String getDBPath() {
+        return this.mContext.getDatabasePath(this.tabName).getPath();
+    }
+
+
+    @Override
+    public void tableClose() {
+        this.close();
     }
 }

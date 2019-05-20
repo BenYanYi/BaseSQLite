@@ -2,10 +2,9 @@ package com.mylove.sqlitelib.condition;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mylove.loglib.JLog;
+import com.mylove.sqlitelib.callback.ConditionCallBack;
 import com.mylove.sqlitelib.callback.OperationCallBack;
 import com.mylove.sqlitelib.config.TableSort;
-import com.mylove.sqlitelib.callback.ConditionCallBack;
 import com.mylove.sqlitelib.operation.TableOperation;
 
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableCondition<T> implements ConditionCallBack<T> {
+public final class TableCondition<T> implements ConditionCallBack<T> {
     private Class<T> tClass;
     private TableSort sort = TableSort.DETAILS;
     private String field;
@@ -28,6 +27,9 @@ public class TableCondition<T> implements ConditionCallBack<T> {
 
     private SQLiteDatabase database;
 
+    private TableCondition() {
+    }
+
     private TableCondition(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
         this.tClass = tClass;
@@ -37,6 +39,31 @@ public class TableCondition<T> implements ConditionCallBack<T> {
         this.lessList = builder.lessList;
         this.inList = builder.inList;
     }
+
+//    TableCondition setEqList(List<ConditionMsg> eqList) {
+//        this.eqList = eqList;
+//        return this;
+//    }
+//
+//    TableCondition setNotEqList(List<ConditionMsg> notEqList) {
+//        this.notEqList = notEqList;
+//        return this;
+//    }
+//
+//    TableCondition setGreaterList(List<ConditionMsg> greaterList) {
+//        this.greaterList = greaterList;
+//        return this;
+//    }
+//
+//    TableCondition setLessList(List<ConditionMsg> lessList) {
+//        this.lessList = lessList;
+//        return this;
+//    }
+//
+//    TableCondition setInList(List<ConditionMsg> inList) {
+//        this.inList = inList;
+//        return this;
+//    }
 
     /**
      * 相等
@@ -179,7 +206,6 @@ public class TableCondition<T> implements ConditionCallBack<T> {
      */
     @Override
     public OperationCallBack<T> operation() {
-        JLog.d();
         return new TableOperation.Builder()
                 .setConditionKey(conditionKey())
                 .setConditionValue(conditionValue())
@@ -310,7 +336,7 @@ public class TableCondition<T> implements ConditionCallBack<T> {
         }
 
         public <T> ConditionCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
-            return (ConditionCallBack<T>) (new TableCondition(database, tClass, this));
+            return new TableCondition(database, tClass, this);
         }
     }
 }

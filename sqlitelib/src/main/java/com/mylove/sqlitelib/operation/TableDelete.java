@@ -3,12 +3,10 @@ package com.mylove.sqlitelib.operation;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.googlecode.openbeans.PropertyDescriptor;
 import com.mylove.sqlitelib.callback.TableDeleteCallBack;
 import com.mylove.sqlitelib.callback.TableQueryCallBack;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +16,14 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableDelete<T> implements TableDeleteCallBack<T> {
+public final class TableDelete<T> implements TableDeleteCallBack<T> {
     private SQLiteDatabase database;
     private TableQueryCallBack tableQuery;
     private Class<T> tClass;
     private String conditionKey;
     private String[] conditionValue;
+
+    private TableDelete(){}
 
     private TableDelete(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
@@ -82,10 +82,12 @@ public class TableDelete<T> implements TableDeleteCallBack<T> {
             for (Field field : fields) {
                 if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
                         !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
-                    PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.tClass);
-                    Method method = descriptor.getReadMethod();//获得读方法
+//                    PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), this.tClass);
+//                    Method method = descriptor.getReadMethod();//获得读方法
+                    field.setAccessible(true);
                     builder.append(field.getName()).append("= ? ").append(" and ");
-                    Object invoke = method.invoke(obj);
+//                    Object invoke = method.invoke(obj);
+                    Object invoke = field.get(obj);
                     list.add(invoke + "");
                 }
             }

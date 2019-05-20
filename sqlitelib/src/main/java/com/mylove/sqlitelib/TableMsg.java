@@ -8,7 +8,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-class TableMsg {
+final class TableMsg {
     private String id;
     private String type;
     private boolean isNotNULL = false;
@@ -55,4 +55,5 @@ class TableMsg {
     void setList(List<FieldMsg> list) {
         this.list = list;
     }
+
 }

@@ -8,7 +8,7 @@ import com.mylove.sqlitelib.config.TableNexus;
  * @email ben@yanyi.red
  * @overview 字段需要进行的条件逻辑
  */
-public class ConditionMsg {
+public final class ConditionMsg {
     private String field;//列字段名
     private String value;//值
     private TableNexus nexus = TableNexus.DETAILS;//条件 and 还是 or，默认and
@@ -46,5 +46,14 @@ public class ConditionMsg {
 
     public void setNexus(TableNexus nexus) {
         this.nexus = nexus;
+    }
+
+    @Override
+    public String toString() {
+        return "ConditionMsg{" +
+                "field='" + field + '\'' +
+                ", value='" + value + '\'' +
+                ", nexus=" + nexus +
+                '}';
     }
 }

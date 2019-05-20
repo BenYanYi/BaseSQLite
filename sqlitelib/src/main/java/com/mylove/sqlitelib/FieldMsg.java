@@ -6,7 +6,7 @@ package com.mylove.sqlitelib;
  * @email ben@yanyi.red
  * @overview 建表时列明和类型判断，是否为空判断
  */
-class FieldMsg {
+final class FieldMsg {
     private String key;
     private String type;
     private boolean isNotNULL = false;

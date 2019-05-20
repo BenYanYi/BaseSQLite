@@ -13,10 +13,13 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableChangeOrAdd<T> implements TableChangeOrAddCallBack<T> {
+public final class TableChangeOrAdd<T> implements TableChangeOrAddCallBack<T> {
     private TableQueryCallBack<T> tableQuery;
     private TableInsertCallBack<T> tableInsert;
     private TableUpdateCallBack<T> tableUpdate;
+
+    private TableChangeOrAdd() {
+    }
 
     private TableChangeOrAdd(Builder builder) {
         this.tableQuery = builder.tableQuery;

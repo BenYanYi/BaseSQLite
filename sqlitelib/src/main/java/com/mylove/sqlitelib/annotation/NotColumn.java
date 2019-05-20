@@ -7,12 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  * @author YanYi
- * @date 2019/3/26 16:58
+ * @date 2019/5/17 10:08
  * @email ben@yanyi.red
- * @overview id(默认不自增)
+ * @overview 设置当前变量不为表的列，默认为
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ID {
-    boolean increase() default false;
+public @interface NotColumn {
+    boolean notColumn() default true;
 }

@@ -8,23 +8,23 @@ package com.mylove.sqlitelib.callback;
  */
 public interface TableDeleteCallBack<T> {
     /**
-     * 删除第一条数据
+     * 删除符合条件的第一条数据
      *
-     * @return
+     * @return 成功执行条数
      */
     int findFirst();
 
     /**
-     * 删除最后一条数据
+     * 删除符合条件的最后一条数据
      *
-     * @return
+     * @return 成功执行条数
      */
     int findLast();
 
     /**
-     * 删除所有数据
+     * 删除符合条件的所有数据
      *
-     * @return
+     * @return 成功执行条数
      */
     int findAll();
 }

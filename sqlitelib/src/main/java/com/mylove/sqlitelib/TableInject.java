@@ -1,10 +1,12 @@
 package com.mylove.sqlitelib;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.mylove.sqlitelib.annotation.ColumnName;
 import com.mylove.sqlitelib.annotation.ID;
+import com.mylove.sqlitelib.annotation.NotColumn;
 import com.mylove.sqlitelib.annotation.NotNull;
 import com.mylove.sqlitelib.annotation.TableBean;
 import com.mylove.sqlitelib.exception.TableException;
@@ -19,10 +21,34 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-class TableInject {
+final class TableInject implements TableInjectCallBack {
 
-    static <T> TableHelper init(Context context, String dbName, int version, Class<T> tClass) {
-        return new TableHelper(context, dbName, getTabColumnMsg(tClass), getTabName(tClass), version);
+    private TableHelperCallBack helperCallBack;
+
+    public <T> TableInjectCallBack init(Context context, String dbName, int version, Class<T> tClass) {
+        this.helperCallBack = new TableHelper(context, dbName, getTabColumnMsg(tClass), getTabName(tClass), version);
+        return this;
+    }
+
+    @Override
+    public SQLiteDatabase getHelperWritableDatabase() {
+        return this.helperCallBack.getHelperWritableDatabase();
+    }
+
+    @Override
+    public boolean tableIsExist(String tableName) {
+//        return this.helperCallBack.tableIsExist(tableName);
+        return this.helperCallBack.tabIsExist(tableName);
+    }
+
+    @Override
+    public String getDBPath() {
+        return this.helperCallBack.getDBPath();
+    }
+
+    @Override
+    public void close() {
+        this.helperCallBack.tableClose();
     }
 
     private static <T> String getTabName(Class<T> tClass) {
@@ -39,24 +65,35 @@ class TableInject {
     private static <T> TableMsg getTabColumnMsg(Class<T> tClass) {
         TableMsg tableMsg = new TableMsg();
         List<FieldMsg> oList = new ArrayList<>();
+        int idSize = 0;
         try {
             Field[] declaredFields = tClass.getDeclaredFields();
             for (Field field : declaredFields) {
                 if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID")
                         && !TextUtils.isEmpty(field.getName())
                         && !"null".equals(field.getName().toLowerCase().trim())
-                        && field.getName().trim().equals("")) {
+                        && !field.getName().trim().equals("")) {
                     ID annotation = field.getAnnotation(ID.class);
                     NotNull notNull = field.getAnnotation(NotNull.class);
                     ColumnName columnName = field.getAnnotation(ColumnName.class);
+                    NotColumn notColumn = field.getAnnotation(NotColumn.class);
+                    if (notColumn != null) {
+                        boolean b = notColumn.notColumn();
+                        if (b) {
+                            continue;
+                        }
+                    }
                     if (annotation != null) {
+                        ++idSize;
                         boolean boo = annotation.increase();
                         tableMsg.setIncrease(boo);
-                        String idName = annotation.idName();
-                        if (!TextUtils.isEmpty(idName)
-                                && !idName.toLowerCase().trim().equals("null")
-                                && !idName.trim().equals("")) {
-                            tableMsg.setId(idName);
+                        if (columnName != null) {
+                            String idName = columnName.value();
+                            if (!TextUtils.isEmpty(idName)
+                                    && !idName.toLowerCase().trim().equals("null")
+                                    && !idName.trim().equals("")) {
+                                tableMsg.setId(idName);
+                            }
                         } else {
                             tableMsg.setId(field.getName());
                         }
@@ -66,6 +103,7 @@ class TableInject {
                         } else {
                             tableMsg.setNotNULL(false);
                         }
+
                     } else {
                         FieldMsg fieldMsg = new FieldMsg();
                         if (columnName != null && !TextUtils.isEmpty(columnName.value())
@@ -83,6 +121,9 @@ class TableInject {
             }
         } catch (Exception e) {
             throw new TableException("创建数据库失败(failed to create database):" + "\n" + e.getMessage());
+        }
+        if (idSize > 1) {
+            throw new TableException("创建数据库失败，该表存在多个ID");
         }
         tableMsg.setList(oList);
         return tableMsg;
@@ -120,4 +161,5 @@ class TableInject {
                 return "text";
         }
     }
+
 }

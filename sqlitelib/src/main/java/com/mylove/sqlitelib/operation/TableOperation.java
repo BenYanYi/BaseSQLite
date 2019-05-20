@@ -2,7 +2,6 @@ package com.mylove.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.callback.OperationCallBack;
 import com.mylove.sqlitelib.callback.TableChangeOrAddCallBack;
 import com.mylove.sqlitelib.callback.TableDeleteCallBack;
@@ -17,13 +16,16 @@ import com.mylove.sqlitelib.config.TableSort;
  * @email ben@yanyi.red
  * @overview 增删拆逻辑区分
  */
-public class TableOperation<T> implements OperationCallBack<T> {
+public final class TableOperation<T> implements OperationCallBack<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
     private TableSort sort;
     private String field;
     private String conditionKey;
     private String[] conditionValue;
+
+    private TableOperation() {
+    }
 
     private TableOperation(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
@@ -36,8 +38,6 @@ public class TableOperation<T> implements OperationCallBack<T> {
 
     @Override
     public TableInsertCallBack<T> insert() {
-        JLog.d(this.database);
-        JLog.d(this.tClass.getCanonicalName());
         return new TableInsert.Builder()
                 .setDatabase(this.database)
                 .builder(this.tClass);
@@ -66,8 +66,6 @@ public class TableOperation<T> implements OperationCallBack<T> {
     public TableUpdateCallBack<T> update() {
         return new TableUpdate.Builder()
                 .setTableQueryCallBack(query())
-                .setConditionKey(this.conditionKey)
-                .setConditionValue(this.conditionValue)
                 .builder(this.database, this.tClass);
     }
 

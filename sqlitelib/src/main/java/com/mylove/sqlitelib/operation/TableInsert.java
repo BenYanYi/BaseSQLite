@@ -1,8 +1,8 @@
 package com.mylove.sqlitelib.operation;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mylove.loglib.JLog;
 import com.mylove.sqlitelib.callback.TableInsertCallBack;
 
 import java.util.List;
@@ -13,9 +13,11 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableInsert<T> implements TableInsertCallBack<T> {
+public final class TableInsert<T> implements TableInsertCallBack<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
+
+    private TableInsert(){}
 
     private TableInsert(Class<T> tClass, Builder builder) {
         this.tClass = tClass;
@@ -36,20 +38,19 @@ public class TableInsert<T> implements TableInsertCallBack<T> {
 //        if (this.tClass != list.get(0).getClass()) {
 //            throw new TableException("添加的数据与表不符");
 //        }
-        JLog.d(list);
         long[] l = new long[list.size()];
         for (int i = 0; i < list.size(); i++) {
             l[i] = insert(list.get(i));
         }
-        JLog.d();
         return l;
     }
 
     private long insert(T t) {
-        if (TableTool.values(t) == null) {
+        ContentValues contentValues = TableTool.values(t);
+        if (contentValues == null) {
             return -1;
         } else {
-            return this.database.insert(TableTool.getTabName(this.tClass), null, TableTool.values(t));
+            return this.database.insert(TableTool.getTabName(this.tClass), null, contentValues);
         }
     }
 

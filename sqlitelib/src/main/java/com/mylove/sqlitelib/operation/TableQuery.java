@@ -4,12 +4,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.googlecode.openbeans.PropertyDescriptor;
+import com.mylove.sqlitelib.annotation.ColumnName;
+import com.mylove.sqlitelib.annotation.NotColumn;
 import com.mylove.sqlitelib.callback.TableQueryCallBack;
 import com.mylove.sqlitelib.config.TableSort;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,10 +20,13 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public class TableQuery<T> implements TableQueryCallBack<T> {
+public final class TableQuery<T> implements TableQueryCallBack<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
     private Builder builder;
+
+    private TableQuery() {
+    }
 
     private TableQuery(SQLiteDatabase database, Class<T> tClass, Builder builder) {
         this.database = database;
@@ -43,15 +46,15 @@ public class TableQuery<T> implements TableQueryCallBack<T> {
     }
 
     public List<T> findAll() {
-        Cursor cursor = query();
-        List<T> list = getCursor(cursor);
+        Cursor cursor = this.query();
+        List<T> list = this.getCursor(cursor);
         cursor.close();
         return list;
     }
 
     public T findFirst() {
-        Cursor cursor = query();
-        List<T> list = getCursor(cursor);
+        Cursor cursor = this.query();
+        List<T> list = this.getCursor(cursor);
         cursor.close();
         if (list.size() > 0) {
             return list.get(0);
@@ -61,8 +64,8 @@ public class TableQuery<T> implements TableQueryCallBack<T> {
     }
 
     public T findLast() {
-        Cursor cursor = query();
-        List<T> list = getCursor(cursor);
+        Cursor cursor = this.query();
+        List<T> list = this.getCursor(cursor);
         cursor.close();
         if (list.size() > 0) {
             return list.get(list.size() - 1);
@@ -75,57 +78,87 @@ public class TableQuery<T> implements TableQueryCallBack<T> {
         try {
             List<T> list = new LinkedList<>();
             while (cursor.moveToNext()) {
-                Object instance = tClass.newInstance();
-                Field[] fields = tClass.getDeclaredFields();
+                T instance = this.tClass.newInstance();
+                Field[] fields = this.tClass.getDeclaredFields();
                 for (Field field : fields) {
+                    NotColumn notColumn = field.getAnnotation(NotColumn.class);
+                    if (notColumn != null) {
+                        if (notColumn.notColumn()) {
+                            continue;
+                        }
+                    }
                     if (!field.getName().equals("$change") && !field.getName().equals("serialVersionUID") &&
-                            !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName()) && field.getName().trim().length() != 0) {
-                        PropertyDescriptor pd = new PropertyDescriptor(field.getName(), tClass);
-                        Method method = pd.getWriteMethod();//获取写方法
-                        cursor.getString(cursor.getColumnIndex(field.getName()));
+                            !TextUtils.isEmpty(field.getName()) && !"null".equals(field.getName())
+                            && field.getName().trim().length() != 0) {
+                        String columnNameStr = field.getName();
+                        ColumnName columnName = field.getAnnotation(ColumnName.class);
+                        if (columnName != null) {
+                            String value = columnName.value();
+                            if (!TextUtils.isEmpty(value)
+                                    && !value.toLowerCase().trim().equals("null")
+                                    && value.trim().length() > 0) {
+                                columnNameStr = value;
+                            }
+                        }
+//                        PropertyDescriptor pd = new PropertyDescriptor(field.getName(), tClass);
+//                        Method method = pd.getWriteMethod();//获取写方法
+                        field.setAccessible(true);
+                        cursor.getString(cursor.getColumnIndex(columnNameStr));
                         String simpleName = field.getType().getSimpleName();
                         if (simpleName.toLowerCase().equals("boolean")) {
-                            int i = cursor.getInt(cursor.getColumnIndex(field.getName()));
-                            method.invoke(instance, i == 1);
+                            int i = cursor.getInt(cursor.getColumnIndex(columnNameStr));
+//                            method.invoke(instance, i == 1);
+                            field.set(instance, i == 1);
                         } else if (simpleName.toLowerCase().equals("byte")) {
-                            String str = cursor.getString(cursor.getColumnIndex(field.getName()));
+                            String str = cursor.getString(cursor.getColumnIndex(columnNameStr));
                             if (!TextUtils.isEmpty(str) && !"null".equals(str) && str.trim().length() != 0) {
-                                method.invoke(instance, str.getBytes()[0]);
+//                                method.invoke(instance, str.getBytes()[0]);
+                                field.set(instance, str.getBytes()[0]);
                             } else {
-                                method.invoke(instance, null);
+//                                method.invoke(instance, null);
+                                field.set(instance, null);
                             }
                         } else if (simpleName.equals("int") || simpleName.equals("Integer")) {
-                            int i = cursor.getInt(cursor.getColumnIndex(field.getName()));
-                            method.invoke(instance, i);
+                            int i = cursor.getInt(cursor.getColumnIndex(columnNameStr));
+//                            method.invoke(instance, i);
+                            field.set(instance, i);
                         } else if (simpleName.toLowerCase().equals("long")) {
-                            long aLong = cursor.getLong(cursor.getColumnIndex(field.getName()));
-                            method.invoke(instance, aLong);
+                            long aLong = cursor.getLong(cursor.getColumnIndex(columnNameStr));
+//                            method.invoke(instance, aLong);
+                            field.set(instance, aLong);
                         } else if (simpleName.toLowerCase().equals("short")) {
-                            short aShort = cursor.getShort(cursor.getColumnIndex(field.getName()));
-                            method.invoke(instance, aShort);
+                            short aShort = cursor.getShort(cursor.getColumnIndex(columnNameStr));
+//                            method.invoke(instance, aShort);
+                            field.set(instance, aShort);
                         } else if (simpleName.toLowerCase().equals("float")) {
-                            float aFloat = cursor.getFloat(cursor.getColumnIndex(field.getName()));
-                            method.invoke(instance, aFloat);
+                            float aFloat = cursor.getFloat(cursor.getColumnIndex(columnNameStr));
+//                            method.invoke(instance, aFloat);
+                            field.set(instance, aFloat);
                         } else if (simpleName.toLowerCase().equals("double")) {
-                            double aDouble = cursor.getDouble(cursor.getColumnIndex(field.getName()));
-                            method.invoke(instance, aDouble);
+                            double aDouble = cursor.getDouble(cursor.getColumnIndex(columnNameStr));
+//                            method.invoke(instance, aDouble);
+                            field.set(instance, aDouble);
                         } else if (simpleName.equals("char") || simpleName.equals("Character")) {
-                            String str = cursor.getString(cursor.getColumnIndex(field.getName()));
+                            String str = cursor.getString(cursor.getColumnIndex(columnNameStr));
                             if (!TextUtils.isEmpty(str) && !"null".equals(str) && str.trim().length() != 0) {
-                                method.invoke(instance, str.charAt(0));
+//                                method.invoke(instance, str.charAt(0));
+                                field.set(instance, str.charAt(0));
                             } else {
-                                method.invoke(instance, null);
+//                                method.invoke(instance, null);
+                                field.set(instance, null);
                             }
                         } else {
-                            String str = cursor.getString(cursor.getColumnIndex(field.getName()));
-                            method.invoke(instance, str);
+                            String str = cursor.getString(cursor.getColumnIndex(columnNameStr));
+//                            method.invoke(instance, str);
+                            field.set(instance, str);
                         }
                     }
                 }
-                list.add((T) instance);
+                list.add(instance);
             }
             return list;
         } catch (Exception e) {
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }
