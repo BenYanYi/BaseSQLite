@@ -20,7 +20,8 @@
     TableSessionCallBack<your table bean> session = dao.getSession(your TableBean.class);
                 
 #### 注解声明
-* @TableBean &nbsp;声明当前类为表结构类，表名为默认为类名，设置value值可更改自定义表明。<br/><font color=#ff0000>**特别注意，使用TableBean注解的类中属性需要添加set和get方法**</font>
+* @TableBean &nbsp;声明当前类为表结构类，表名为默认为类名，设置value值可更改自定义表明。
+<!--<br/><font color=#ff0000>**特别注意，使用TableBean注解的类中属性需要添加set和get方法**</font>-->
 * @ID &nbsp;声明属性名为表主键id，默认id不自增，设置increase为true则自增
 * @NotNull &nbsp;声明当前属性对应的表列值不能为空
 * @ColumnName &nbsp;声明表中列名，列名为空时使用变量名，不能为null
@@ -74,7 +75,7 @@ your data可以为一条数据，也可以为数据集
 * void close();关闭数据库
 
 ### 更新记录
-* 2019/05/20 提交1.0.2版本，优化数据处理方法，添加获取数据库地址方法，添加获取SQLiteDatabase方法，添加数据库关闭方法，添加判断某张表是否存在方法
+* 2019/05/20 提交1.0.2版本，优化数据处理方法，添加获取数据库地址方法，添加获取SQLiteDatabase方法，添加数据库关闭方法，添加判断某张表是否存在方法,使用TableBean注解的类中变量不再强制需要添加set和get方法
 * 2019/04/04 提交1.0.1版本，添加有数据时修改，没数据时添加操作
 * 2019/04/03 提交1.0.0版本,第一次更新
 
