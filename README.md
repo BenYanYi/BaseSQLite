@@ -5,7 +5,9 @@
 ### module 下添加
 
     compile 'com.yanyi.benyanyi:sqlitelib:1.0.2'
-    
+
+
+推荐一个查看数据库的开源库(Android-Debug-Database)[https://github.com/amitshekhariitbhu/Android-Debug-Database]<br/>
 ### 使用介绍
 #### 配置数据库信息
 
@@ -77,8 +79,7 @@ your data可以为一条数据，也可以为数据集
 * 2019/04/03 提交1.0.0版本,第一次更新
 
 <!--#### 下一版本预计添加内容-->
-<!--* 自定义列名-->
-<!--* 添加有数据时修改，没数据时添加操作-->
+<!--* 自定义数据库路径-->
 
 ## 联系
 若在使用过程中出现什么问题，可以联系作者<br/>
