@@ -4,7 +4,7 @@
 
 ### module 下添加
 
-    compile 'com.yanyi.benyanyi:sqlitelib:1.0.2'
+    compile 'com.yanyi.benyanyi:sqlitelib:1.0.3'
 
 
 推荐一个查看数据库的开源库[Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)<br/>
@@ -74,7 +74,7 @@ your data可以为一条数据，也可以为数据集
 * void close();关闭数据库
 
 ### 更新记录
-* 2019/05/20 提交1.0.2版本，优化数据处理方法，添加获取数据库地址方法，添加获取SQLiteDatabase方法，添加数据库关闭方法，添加判断某张表是否存在方法,使用TableBean注解的类中变量不再强制需要添加set和get方法
+* 2019/05/20 提交1.0.3版本，优化数据处理方法，添加获取数据库地址方法，添加获取SQLiteDatabase方法，添加数据库关闭方法，添加判断某张表是否存在方法,使用TableBean注解的类中变量不再强制需要添加set和get方法
 * 2019/04/04 提交1.0.1版本，添加有数据时修改，没数据时添加操作
 * 2019/04/03 提交1.0.0版本,第一次更新
 
