@@ -18,6 +18,10 @@ public interface TableSessionCallBack<T> {
     ConditionCallBack<T> where();
 
 
+    /**
+     * 返回数据库管理类
+     * @return
+     */
     SQLiteDatabase getSQLiteDatabase();
 
     /**
@@ -33,5 +37,8 @@ public interface TableSessionCallBack<T> {
      */
     String getDBPath();
 
+    /**
+     * 关闭数据库
+     */
     void close();
 }

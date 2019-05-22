@@ -83,17 +83,17 @@ final class TableTool {
                     contentValue(values, columnNameStr, field, invoke);
                 } catch (Exception e) {
                     String errorMsg = e.getMessage();
-                    if (e.getMessage().contains("set")) {
-                        String msgMethod = "set";
-                        errorMsg = getTabName(t.getClass()) + "表中" + columnNameStr + "列对应的"
-                                + t.getClass().getSimpleName() + "类中" + field.getName() + "变量缺少"
-                                + msgMethod + "方法";
-                    } else if (e.getMessage().contains("get")) {
-                        String msgMethod = "get";
-                        errorMsg = getTabName(t.getClass()) + "表中" + columnNameStr + "列对应的"
-                                + t.getClass().getSimpleName() + "类中" + field.getName() + "变量缺少"
-                                + msgMethod + "方法";
-                    }
+//                    if (e.getMessage().contains("set")) {
+//                        String msgMethod = "set";
+//                        errorMsg = getTabName(t.getClass()) + "表中" + columnNameStr + "列对应的"
+//                                + t.getClass().getSimpleName() + "类中" + field.getName() + "变量缺少"
+//                                + msgMethod + "方法";
+//                    } else if (e.getMessage().contains("get")) {
+//                        String msgMethod = "get";
+//                        errorMsg = getTabName(t.getClass()) + "表中" + columnNameStr + "列对应的"
+//                                + t.getClass().getSimpleName() + "类中" + field.getName() + "变量缺少"
+//                                + msgMethod + "方法";
+//                    }
 
                     throw new TableException(errorMsg);
                 }
