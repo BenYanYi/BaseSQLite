@@ -4,7 +4,7 @@
 
 ### module 下添加
 
-    compile 'com.yanyi.benyanyi:sqlitelib:1.0.3'
+    compile 'com.yanyi.benyanyi:sqlitelib:1.0.4'
 
 
 推荐一个查看数据库的开源库[Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)<br/>
@@ -28,7 +28,7 @@
 
 #### 添加数据(insert)
 your data可以为一条数据，也可以为数据集
-    
+
     dao.where().(your condition)[可不选].operation().insert().find(your data);
     
     
