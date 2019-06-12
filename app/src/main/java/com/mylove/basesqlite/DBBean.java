@@ -1,9 +1,9 @@
 package com.mylove.basesqlite;
 
-import com.mylove.sqlitelib.annotation.ColumnName;
-import com.mylove.sqlitelib.annotation.ID;
-import com.mylove.sqlitelib.annotation.NotNull;
-import com.mylove.sqlitelib.annotation.TableBean;
+import com.benyanyi.sqlitelib.annotation.ColumnName;
+import com.benyanyi.sqlitelib.annotation.ID;
+import com.benyanyi.sqlitelib.annotation.NotNull;
+import com.benyanyi.sqlitelib.annotation.TableBean;
 
 /**
  * @author YanYi

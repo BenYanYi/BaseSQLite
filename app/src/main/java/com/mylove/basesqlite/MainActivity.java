@@ -3,9 +3,9 @@ package com.mylove.basesqlite;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.mylove.sqlitelib.TableDao;
-import com.mylove.sqlitelib.callback.TableDaoCallBack;
-import com.mylove.sqlitelib.callback.TableSessionCallBack;
+import com.benyanyi.sqlitelib.TableDao;
+import com.benyanyi.sqlitelib.callback.TableDaoCallBack;
+import com.benyanyi.sqlitelib.callback.TableSessionCallBack;
 
 import java.util.List;
 
