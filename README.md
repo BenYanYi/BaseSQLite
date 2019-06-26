@@ -10,15 +10,15 @@
 推荐一个查看数据库的开源库[Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)<br/>
 ### 使用介绍
 #### 配置数据库信息
-
+`
      TableDaoCallBack dao = new TableDao.Builder()
                 .setVersion(your version)
                 .builder(context);
-
+`
 #### 配置表信息
-
+`
     TableSessionCallBack<your table bean> session = dao.getSession(your TableBean.class);
-                
+ `               
 #### 注解声明
 * @TableBean &nbsp;声明当前类为表结构类，表名为默认为类名，设置value值可更改自定义表明。<!--<br/><font color=#ff0000>**特别注意，使用TableBean注解的类中属性需要添加set和get方法**</font>-->
 * @ID &nbsp;声明属性名为表主键id，默认id不自增，设置increase为true则自增
