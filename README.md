@@ -29,28 +29,28 @@
 #### 添加数据(insert)
 your data可以为一条数据，也可以为数据集
 
-    dao.where().(your condition)[可不选].operation().insert().find(your data);
+    session.where().(your condition)[可不选].operation().insert().find(your data);
     
     
 #### 删除数据(delete)
 可删除全部(findAll)，也可只删除第一条(findFirst)或最后一条(findLast)
    
-    dao.where().(your condition)[可不选].operation().delete().findAll();
+    session.where().(your condition)[可不选].operation().delete().findAll();
    
 #### 查询数据(query)
 可查询所有(findAll)，也可查询第一条(findFirst)或最后一条(findLast)
 
-    dao.where().(your condition)[可不选].operation().query().findAll()
+    session.where().(your condition)[可不选].operation().query().findAll()
     
 #### 更改数据(update)
 可更改所有(findAll(your change data))，也可更改第一条(findFirst(your change data))或最后一条(findLast(your change data))
     
-    dao.where().(your condition)[可不选].operation().update().findAll(your change data);
+    session.where().(your condition)[可不选].operation().update().findAll(your change data);
     
 #### 修改或者添加(changeOrAdd)
 可在不确定数据是否存在时修改数据，数据存在则进行修改，数据不存在是则进行添加,可处理所有数据(findAll(your changeOrAdd data)),也可处理第一条数据(findFirst(your changeOrAdd data))或最后一条数据(findLast(your changeOrAdd data))
 
-    dao.where().(your condition)[可不选].operation().changeOrAdd().findAll(your changeOrAdd data);
+    session.where().(your condition)[可不选].operation().changeOrAdd().findAll(your changeOrAdd data);
     
 #### 条件属性(your condition)
 * eq(ConditionMsg) 声明当条件中的列为何值时满足条件
