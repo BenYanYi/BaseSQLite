@@ -3,9 +3,9 @@
 ## 使用
 
 ### module 下添加
-
-    compile 'com.yanyi.benyanyi:sqlitelib:1.0.6'
-
+`
+    implementation 'com.yanyi.benyanyi:sqlitelib:1.0.7'
+`
 
 推荐一个查看数据库的开源库[Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)<br/>
 ### 使用介绍
