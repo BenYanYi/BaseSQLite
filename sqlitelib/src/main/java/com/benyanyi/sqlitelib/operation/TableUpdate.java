@@ -114,16 +114,21 @@ public final class TableUpdate<T> implements TableUpdateCallBack<T> {
                     list.add(TableTool.where(field, invoke));
                 } catch (Exception e) {
                     String msgMethod;
+                    String errorMsg;
                     if (e.getMessage().contains("set")) {
                         msgMethod = "set";
+                        errorMsg = TableTool.getTabName(t.getClass()) + "表中" + columnNameStr + "列对应的"
+                                + t.getClass().getSimpleName() + "类中" + field.getName() + "变量缺少"
+                                + msgMethod + "方法";
                     } else if (e.getMessage().contains("get")) {
                         msgMethod = "get";
+                        errorMsg = TableTool.getTabName(t.getClass()) + "表中" + columnNameStr + "列对应的"
+                                + t.getClass().getSimpleName() + "类中" + field.getName() + "变量缺少"
+                                + msgMethod + "方法";
                     } else {
-                        msgMethod = "set或get";
+                        errorMsg = e.getMessage();
                     }
-                    String errorMsg = TableTool.getTabName(t.getClass()) + "表中" + columnNameStr + "列对应的"
-                            + t.getClass().getSimpleName() + "类中" + field.getName() + "变量缺少"
-                            + msgMethod + "方法";
+
                     throw new TableException(errorMsg);
                 }
             }
