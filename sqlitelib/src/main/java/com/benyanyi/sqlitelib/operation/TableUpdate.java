@@ -101,7 +101,7 @@ public final class TableUpdate<T> implements TableUpdateCallBack<T> {
                             if (invoke == null) {
                                 throw new TableException(columnNameStr + "的值不能为null");
                             } else {
-                                String str = (String) invoke;
+                                String str = String.valueOf(invoke);
                                 boolean boo3 = TextUtils.isEmpty(str)
                                         || "null".equals(str.toLowerCase().trim())
                                         || str.trim().length() <= 0;
