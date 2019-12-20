@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.benyanyi.sqlitelib.annotation.NotColumn;
 import com.benyanyi.sqlitelib.config.TableSort;
 import com.benyanyi.sqlitelib.annotation.ColumnName;
-import com.benyanyi.sqlitelib.callback.TableQueryCallBack;
+import com.benyanyi.sqlitelib.impl.TableQueryImpl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableQuery<T> implements TableQueryCallBack<T> {
+public final class TableQuery<T> implements TableQueryImpl<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
     private Builder builder;
@@ -183,7 +183,7 @@ public final class TableQuery<T> implements TableQueryCallBack<T> {
             return this;
         }
 
-        <T> TableQueryCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableQueryImpl<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableQuery(database, tClass, this);
         }
     }

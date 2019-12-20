@@ -2,11 +2,12 @@ package com.benyanyi.sqlitelib.condition;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.benyanyi.sqlitelib.callback.OperationCallBack;
+import com.benyanyi.sqlitelib.impl.OperationImpl;
 import com.benyanyi.sqlitelib.config.TableSort;
-import com.benyanyi.sqlitelib.callback.ConditionCallBack;
+import com.benyanyi.sqlitelib.impl.ConditionImpl;
 import com.benyanyi.sqlitelib.operation.TableOperation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableCondition<T> implements ConditionCallBack<T> {
+public final class TableCondition<T> implements ConditionImpl<T> {
     private Class<T> tClass;
     private TableSort sort = TableSort.DETAILS;
     private String field;
@@ -40,31 +41,6 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
         this.inList = builder.inList;
     }
 
-//    TableCondition setEqList(List<ConditionMsg> eqList) {
-//        this.eqList = eqList;
-//        return this;
-//    }
-//
-//    TableCondition setNotEqList(List<ConditionMsg> notEqList) {
-//        this.notEqList = notEqList;
-//        return this;
-//    }
-//
-//    TableCondition setGreaterList(List<ConditionMsg> greaterList) {
-//        this.greaterList = greaterList;
-//        return this;
-//    }
-//
-//    TableCondition setLessList(List<ConditionMsg> lessList) {
-//        this.lessList = lessList;
-//        return this;
-//    }
-//
-//    TableCondition setInList(List<ConditionMsg> inList) {
-//        this.inList = inList;
-//        return this;
-//    }
-
     /**
      * 相等
      *
@@ -72,7 +48,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> eq(List<ConditionMsg> list) {
+    public ConditionImpl<T> eq(List<ConditionMsg> list) {
         this.eqList.addAll(list);
         return this;
     }
@@ -84,7 +60,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> eq(ConditionMsg conditionMsg) {
+    public ConditionImpl<T> eq(ConditionMsg conditionMsg) {
         this.eqList.add(conditionMsg);
         return this;
     }
@@ -96,7 +72,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> notEq(List<ConditionMsg> list) {
+    public ConditionImpl<T> notEq(List<ConditionMsg> list) {
         this.notEqList.addAll(list);
         return this;
     }
@@ -108,7 +84,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> notEq(ConditionMsg conditionMsg) {
+    public ConditionImpl<T> notEq(ConditionMsg conditionMsg) {
         this.notEqList.add(conditionMsg);
         return this;
     }
@@ -120,7 +96,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> greater(List<ConditionMsg> list) {
+    public ConditionImpl<T> greater(List<ConditionMsg> list) {
         this.greaterList.addAll(list);
         return this;
     }
@@ -132,7 +108,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> greater(ConditionMsg conditionMsg) {
+    public ConditionImpl<T> greater(ConditionMsg conditionMsg) {
         this.greaterList.add(conditionMsg);
         return this;
     }
@@ -144,7 +120,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> less(List<ConditionMsg> list) {
+    public ConditionImpl<T> less(List<ConditionMsg> list) {
         this.lessList.addAll(list);
         return this;
     }
@@ -156,7 +132,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> less(ConditionMsg conditionMsg) {
+    public ConditionImpl<T> less(ConditionMsg conditionMsg) {
         this.lessList.add(conditionMsg);
         return this;
     }
@@ -168,7 +144,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> in(List<ConditionMsg> list) {
+    public ConditionImpl<T> in(List<ConditionMsg> list) {
         this.inList.addAll(list);
         return this;
     }
@@ -180,7 +156,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> in(ConditionMsg conditionMsg) {
+    public ConditionImpl<T> in(ConditionMsg conditionMsg) {
         this.inList.add(conditionMsg);
         return this;
     }
@@ -193,7 +169,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public ConditionCallBack<T> sort(String field, TableSort sort) {
+    public ConditionImpl<T> sort(String field, TableSort sort) {
         this.field = field;
         this.sort = sort;
         return this;
@@ -205,7 +181,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     @Override
-    public OperationCallBack<T> operation() {
+    public OperationImpl<T> operation() {
         return new TableOperation.Builder()
                 .setConditionKey(conditionKey())
                 .setConditionValue(conditionValue())
@@ -220,8 +196,8 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     private String conditionKey() {
-        if (this.eqList.size() > 0 || this.notEqList.size() > 0 || this.greaterList.size() > 0 || this.lessList.size() > 0 || this.inList.size() > 0) {
-            StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
+        if (this.eqList != null && !this.eqList.isEmpty()) {
             for (int i = 0; i < this.eqList.size(); i++) {
                 if (this.eqList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
@@ -230,6 +206,8 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
                 }
                 builder.append(this.eqList.get(i).getField()).append(" = ? ");
             }
+        }
+        if (this.notEqList != null && !this.notEqList.isEmpty()) {
             for (int i = 0; i < this.notEqList.size(); i++) {
                 if (this.notEqList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
@@ -238,6 +216,8 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
                 }
                 builder.append(this.notEqList.get(i).getField()).append(" != ? ");
             }
+        }
+        if (this.greaterList != null && !this.greaterList.isEmpty()) {
             for (int i = 0; i < this.greaterList.size(); i++) {
                 if (this.greaterList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
@@ -246,6 +226,8 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
                 }
                 builder.append(this.greaterList.get(i).getField()).append(" > ? ");
             }
+        }
+        if (this.lessList != null && !this.lessList.isEmpty()) {
             for (int i = 0; i < this.lessList.size(); i++) {
                 if (this.lessList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
@@ -254,6 +236,8 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
                 }
                 builder.append(this.lessList.get(i).getField()).append(" < ? ");
             }
+        }
+        if (this.inList != null && !this.inList.isEmpty()) {
             for (int i = 0; i < this.inList.size(); i++) {
                 if (this.inList.get(i).getNexus().isNexus()) {
                     builder.append("and ");
@@ -262,11 +246,11 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
                 }
                 builder.append(this.inList.get(i).getField()).append(" like ? ");
             }
-            builder = builder.delete(0, 3);
-            return builder.toString();
-        } else {
-            return null;
         }
+        if (builder.length() > 3) {
+            builder = builder.delete(0, 3);
+        }
+        return builder.toString();
     }
 
     /**
@@ -275,29 +259,34 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
      * @return
      */
     private String[] conditionValue() {
-        if (this.eqList.size() > 0 || this.notEqList.size() > 0 || this.greaterList.size() > 0 || this.lessList.size() > 0 || this.inList.size() > 0) {
-            int size = this.eqList.size() + this.notEqList.size() + this.greaterList.size() + this.lessList.size() + this.inList.size();
-            String[] values = new String[size];
+        List<String> oList = new ArrayList<>();
+        if (this.eqList != null && !this.eqList.isEmpty()) {
             for (int i = 0; i < this.eqList.size(); i++) {
-                values[i] = this.eqList.get(i).getValue();
+                oList.add(this.eqList.get(i).getValue().toString());
             }
+        }
+        if (this.notEqList != null && !this.notEqList.isEmpty()) {
             for (int i = 0; i < this.notEqList.size(); i++) {
-                int index = this.eqList.size() + i;
-                values[index] = notEqList.get(i).getValue();
+                oList.add(this.notEqList.get(i).getValue().toString());
             }
+        }
+        if (this.greaterList != null && !this.greaterList.isEmpty()) {
             for (int i = 0; i < this.greaterList.size(); i++) {
-                int index = this.eqList.size() + this.notEqList.size() + i;
-                values[index] = this.greaterList.get(i).getValue();
+                oList.add(this.greaterList.get(i).getValue().toString());
             }
+        }
+        if (this.lessList != null && !this.lessList.isEmpty()) {
             for (int i = 0; i < this.lessList.size(); i++) {
-                int index = this.eqList.size() + this.notEqList.size() + this.greaterList.size() + i;
-                values[index] = this.lessList.get(i).getValue();
+                oList.add(this.lessList.get(i).getValue().toString());
             }
+        }
+        if (this.inList != null && !this.inList.isEmpty()) {
             for (int i = 0; i < this.inList.size(); i++) {
-                int index = this.eqList.size() + this.notEqList.size() + this.greaterList.size() + this.lessList.size() + i;
-                values[index] = "'%" + this.inList.get(i).getValue() + "%'";
+                oList.add("'%" + this.inList.get(i).getValue() + "%'");
             }
-            return values;
+        }
+        if (!oList.isEmpty()) {
+            return oList.toArray(new String[0]);
         } else {
             return null;
         }
@@ -335,7 +324,7 @@ public final class TableCondition<T> implements ConditionCallBack<T> {
             return this;
         }
 
-        public <T> ConditionCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
+        public <T> ConditionImpl<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableCondition(database, tClass, this);
         }
     }

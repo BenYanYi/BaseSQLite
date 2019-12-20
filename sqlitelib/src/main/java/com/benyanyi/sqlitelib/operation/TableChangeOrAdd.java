@@ -1,9 +1,9 @@
 package com.benyanyi.sqlitelib.operation;
 
-import com.benyanyi.sqlitelib.callback.TableChangeOrAddCallBack;
-import com.benyanyi.sqlitelib.callback.TableUpdateCallBack;
-import com.benyanyi.sqlitelib.callback.TableInsertCallBack;
-import com.benyanyi.sqlitelib.callback.TableQueryCallBack;
+import com.benyanyi.sqlitelib.impl.TableChangeOrAddImpl;
+import com.benyanyi.sqlitelib.impl.TableUpdateImpl;
+import com.benyanyi.sqlitelib.impl.TableInsertImpl;
+import com.benyanyi.sqlitelib.impl.TableQueryImpl;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableChangeOrAdd<T> implements TableChangeOrAddCallBack<T> {
-    private TableQueryCallBack<T> tableQuery;
-    private TableInsertCallBack<T> tableInsert;
-    private TableUpdateCallBack<T> tableUpdate;
+public final class TableChangeOrAdd<T> implements TableChangeOrAddImpl<T> {
+    private TableQueryImpl<T> tableQuery;
+    private TableInsertImpl<T> tableInsert;
+    private TableUpdateImpl<T> tableUpdate;
 
     private TableChangeOrAdd() {
     }
@@ -63,26 +63,26 @@ public final class TableChangeOrAdd<T> implements TableChangeOrAddCallBack<T> {
     }
 
     static class Builder<T> {
-        private TableQueryCallBack<T> tableQuery;
-        private TableInsertCallBack<T> tableInsert;
-        private TableUpdateCallBack<T> tableUpdate;
+        private TableQueryImpl<T> tableQuery;
+        private TableInsertImpl<T> tableInsert;
+        private TableUpdateImpl<T> tableUpdate;
 
-        Builder setTableQueryCallBack(TableQueryCallBack<T> tableQueryCallBack) {
-            this.tableQuery = tableQueryCallBack;
+        Builder setTableQueryCallBack(TableQueryImpl<T> tableQueryImpl) {
+            this.tableQuery = tableQueryImpl;
             return this;
         }
 
-        Builder setTableInsertCallBack(TableInsertCallBack<T> tableInsert) {
+        Builder setTableInsertCallBack(TableInsertImpl<T> tableInsert) {
             this.tableInsert = tableInsert;
             return this;
         }
 
-        Builder setTableUpdateCallBack(TableUpdateCallBack<T> tableUpdateCallBack) {
-            this.tableUpdate = tableUpdateCallBack;
+        Builder setTableUpdateCallBack(TableUpdateImpl<T> tableUpdateImpl) {
+            this.tableUpdate = tableUpdateImpl;
             return this;
         }
 
-        TableChangeOrAddCallBack<T> builder() {
+        TableChangeOrAddImpl<T> builder() {
             return new TableChangeOrAdd(this);
         }
     }

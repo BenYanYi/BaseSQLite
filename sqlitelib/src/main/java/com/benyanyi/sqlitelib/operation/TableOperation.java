@@ -2,13 +2,13 @@ package com.benyanyi.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.benyanyi.sqlitelib.callback.OperationCallBack;
-import com.benyanyi.sqlitelib.callback.TableChangeOrAddCallBack;
-import com.benyanyi.sqlitelib.callback.TableUpdateCallBack;
+import com.benyanyi.sqlitelib.impl.OperationImpl;
+import com.benyanyi.sqlitelib.impl.TableChangeOrAddImpl;
+import com.benyanyi.sqlitelib.impl.TableUpdateImpl;
 import com.benyanyi.sqlitelib.config.TableSort;
-import com.benyanyi.sqlitelib.callback.TableDeleteCallBack;
-import com.benyanyi.sqlitelib.callback.TableInsertCallBack;
-import com.benyanyi.sqlitelib.callback.TableQueryCallBack;
+import com.benyanyi.sqlitelib.impl.TableDeleteImpl;
+import com.benyanyi.sqlitelib.impl.TableInsertImpl;
+import com.benyanyi.sqlitelib.impl.TableQueryImpl;
 
 /**
  * @author YanYi
@@ -16,7 +16,7 @@ import com.benyanyi.sqlitelib.callback.TableQueryCallBack;
  * @email ben@yanyi.red
  * @overview 增删拆逻辑区分
  */
-public final class TableOperation<T> implements OperationCallBack<T> {
+public final class TableOperation<T> implements OperationImpl<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
     private TableSort sort;
@@ -37,14 +37,14 @@ public final class TableOperation<T> implements OperationCallBack<T> {
     }
 
     @Override
-    public TableInsertCallBack<T> insert() {
+    public TableInsertImpl<T> insert() {
         return new TableInsert.Builder()
                 .setDatabase(this.database)
                 .builder(this.tClass);
     }
 
     @Override
-    public TableDeleteCallBack<T> delete() {
+    public TableDeleteImpl<T> delete() {
         return new TableDelete.Builder()
                 .setTableQueryCallBack(query())
                 .setConditionKey(this.conditionKey)
@@ -53,7 +53,7 @@ public final class TableOperation<T> implements OperationCallBack<T> {
     }
 
     @Override
-    public TableQueryCallBack<T> query() {
+    public TableQueryImpl<T> query() {
         return new TableQuery.Builder()
                 .setField(this.field)
                 .setSort(this.sort)
@@ -63,14 +63,14 @@ public final class TableOperation<T> implements OperationCallBack<T> {
     }
 
     @Override
-    public TableUpdateCallBack<T> update() {
+    public TableUpdateImpl<T> update() {
         return new TableUpdate.Builder()
                 .setTableQueryCallBack(query())
                 .builder(this.database, this.tClass);
     }
 
     @Override
-    public TableChangeOrAddCallBack<T> changeOrAdd() {
+    public TableChangeOrAddImpl<T> changeOrAdd() {
         return new TableChangeOrAdd.Builder()
                 .setTableInsertCallBack(insert())
                 .setTableQueryCallBack(query())
@@ -105,7 +105,7 @@ public final class TableOperation<T> implements OperationCallBack<T> {
             return this;
         }
 
-        public <T> OperationCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
+        public <T> OperationImpl<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableOperation(database, tClass, this);
         }
     }

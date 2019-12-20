@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
  * @email ben@yanyi.red
  * @overview
  */
-interface TableHelperCallBack {
+interface TableHelperImpl {
 
     /**
      * SQLiteDatabase

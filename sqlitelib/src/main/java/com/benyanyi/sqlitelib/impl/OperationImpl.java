@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 /**
  * @author YanYi
@@ -6,39 +6,39 @@ package com.benyanyi.sqlitelib.callback;
  * @email ben@yanyi.red
  * @overview 逻辑操作
  */
-public interface OperationCallBack<T> {
+public interface OperationImpl<T> {
     /**
      * 数据插入
      *
      * @return
      */
-    TableInsertCallBack<T> insert();
+    TableInsertImpl<T> insert();
 
     /**
      * 数据删除
      *
      * @return
      */
-    TableDeleteCallBack<T> delete();
+    TableDeleteImpl<T> delete();
 
     /**
      * 数据查询
      *
      * @return
      */
-    TableQueryCallBack<T> query();
+    TableQueryImpl<T> query();
 
     /**
      * 数据修改
      *
      * @return
      */
-    TableUpdateCallBack<T> update();
+    TableUpdateImpl<T> update();
 
     /**
      * 存在符合条件的数据则修改数据，不存在符合条件的数据则添加数据
      *
      * @return
      */
-    TableChangeOrAddCallBack<T> changeOrAdd();
+    TableChangeOrAddImpl<T> changeOrAdd();
 }

@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteDatabase;
  * @email ben@yanyi.red
  * @overview
  */
-public interface TableSessionCallBack<T> {
+public interface TableSessionImpl<T> {
 
     /**
      * 条件处理类
      *
      * @return
      */
-    ConditionCallBack<T> where();
+    ConditionImpl<T> where();
 
 
     /**

@@ -3,7 +3,7 @@ package com.benyanyi.sqlitelib.operation;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.benyanyi.sqlitelib.callback.TableInsertCallBack;
+import com.benyanyi.sqlitelib.impl.TableInsertImpl;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableInsert<T> implements TableInsertCallBack<T> {
+public final class TableInsert<T> implements TableInsertImpl<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
 
@@ -55,7 +55,7 @@ public final class TableInsert<T> implements TableInsertCallBack<T> {
             return this;
         }
 
-        <T> TableInsertCallBack<T> builder(Class<T> tClass) {
+        <T> TableInsertImpl<T> builder(Class<T> tClass) {
             return new TableInsert(tClass, this);
         }
     }

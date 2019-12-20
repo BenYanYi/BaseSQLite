@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
  * @email ben@yanyi.red
  * @overview
  */
-interface TableInjectCallBack {
+interface TableInjectImpl {
 
     /**
      * SQLiteDatabase
@@ -28,7 +28,7 @@ interface TableInjectCallBack {
      * @param <T>
      * @return
      */
-    <T> TableInjectCallBack init(Context context, String dbName, int version, Class<T> tClass);
+    <T> TableInjectImpl init(Context context, String dbName, int version, Class<T> tClass);
 
     /**
      * 判断某张表是否存在

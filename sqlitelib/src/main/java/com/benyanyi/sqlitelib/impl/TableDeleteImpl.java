@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 /**
  * @author YanYi
@@ -6,7 +6,7 @@ package com.benyanyi.sqlitelib.callback;
  * @email ben@yanyi.red
  * @overview 删除逻辑处理
  */
-public interface TableDeleteCallBack<T> {
+public interface TableDeleteImpl<T> {
     /**
      * 删除符合条件的第一条数据
      *

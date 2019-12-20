@@ -3,8 +3,8 @@ package com.benyanyi.sqlitelib;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.benyanyi.sqlitelib.callback.TableDaoCallBack;
-import com.benyanyi.sqlitelib.callback.TableSessionCallBack;
+import com.benyanyi.sqlitelib.impl.TableDaoImpl;
+import com.benyanyi.sqlitelib.impl.TableSessionImpl;
 
 /**
  * @author YanYi
@@ -12,7 +12,7 @@ import com.benyanyi.sqlitelib.callback.TableSessionCallBack;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableDao implements TableDaoCallBack {
+public final class TableDao implements TableDaoImpl {
     private String dbName;
     private int version;
     private Context mContext;
@@ -31,7 +31,7 @@ public final class TableDao implements TableDaoCallBack {
     }
 
     @Override
-    public <T> TableSessionCallBack<T> getSession(Class<T> tClass) {
+    public <T> TableSessionImpl<T> getSession(Class<T> tClass) {
         return this.session.init(this.dbName, this.version, this.mContext, tClass);
     }
 
@@ -52,7 +52,7 @@ public final class TableDao implements TableDaoCallBack {
             return this;
         }
 
-        public TableDaoCallBack builder(Context context) {
+        public TableDaoImpl builder(Context context) {
             boolean boo = TextUtils.isEmpty(dbName) || "".equals(dbName.trim())
                     || "null".equals(dbName.toLowerCase().trim());
             if (boo) {

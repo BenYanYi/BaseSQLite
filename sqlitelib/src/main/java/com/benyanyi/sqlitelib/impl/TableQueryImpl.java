@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview 查询数据
  */
-public interface TableQueryCallBack<T> {
+public interface TableQueryImpl<T> {
 
     /**
      * 查询符合条件的第一条数据

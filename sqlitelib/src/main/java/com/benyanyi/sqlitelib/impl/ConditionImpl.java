@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 import com.benyanyi.sqlitelib.condition.ConditionMsg;
 import com.benyanyi.sqlitelib.config.TableSort;
@@ -11,7 +11,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview 条件处理
  */
-public interface ConditionCallBack<T> {
+public interface ConditionImpl<T> {
 
     /**
      * 相等
@@ -19,7 +19,7 @@ public interface ConditionCallBack<T> {
      * @param list 多相等条件
      * @return
      */
-    ConditionCallBack<T> eq(List<ConditionMsg> list);
+    ConditionImpl<T> eq(List<ConditionMsg> list);
 
     /**
      * 相等
@@ -27,7 +27,7 @@ public interface ConditionCallBack<T> {
      * @param conditionMsg 单相等条件
      * @return
      */
-    ConditionCallBack<T> eq(ConditionMsg conditionMsg);
+    ConditionImpl<T> eq(ConditionMsg conditionMsg);
 
     /**
      * 不等
@@ -35,7 +35,7 @@ public interface ConditionCallBack<T> {
      * @param list 多不等条件
      * @return
      */
-    ConditionCallBack<T> notEq(List<ConditionMsg> list);
+    ConditionImpl<T> notEq(List<ConditionMsg> list);
 
     /**
      * 不等
@@ -43,7 +43,7 @@ public interface ConditionCallBack<T> {
      * @param conditionMsg 单条不等条件
      * @return
      */
-    ConditionCallBack<T> notEq(ConditionMsg conditionMsg);
+    ConditionImpl<T> notEq(ConditionMsg conditionMsg);
 
     /**
      * 大于
@@ -51,7 +51,7 @@ public interface ConditionCallBack<T> {
      * @param list 多条大于条件
      * @return
      */
-    ConditionCallBack<T> greater(List<ConditionMsg> list);
+    ConditionImpl<T> greater(List<ConditionMsg> list);
 
     /**
      * 大于
@@ -59,7 +59,7 @@ public interface ConditionCallBack<T> {
      * @param conditionMsg 单条大于条件
      * @return
      */
-    ConditionCallBack<T> greater(ConditionMsg conditionMsg);
+    ConditionImpl<T> greater(ConditionMsg conditionMsg);
 
     /**
      * 小于
@@ -67,7 +67,7 @@ public interface ConditionCallBack<T> {
      * @param list 多条小于条件
      * @return
      */
-    ConditionCallBack<T> less(List<ConditionMsg> list);
+    ConditionImpl<T> less(List<ConditionMsg> list);
 
     /**
      * 小于
@@ -75,7 +75,7 @@ public interface ConditionCallBack<T> {
      * @param conditionMsg 单条小于条件
      * @return
      */
-    ConditionCallBack<T> less(ConditionMsg conditionMsg);
+    ConditionImpl<T> less(ConditionMsg conditionMsg);
 
     /**
      * 部分存在（模糊）
@@ -83,7 +83,7 @@ public interface ConditionCallBack<T> {
      * @param list 多条部分存在条件
      * @return
      */
-    ConditionCallBack<T> in(List<ConditionMsg> list);
+    ConditionImpl<T> in(List<ConditionMsg> list);
 
     /**
      * 部分存在（模糊)
@@ -91,7 +91,7 @@ public interface ConditionCallBack<T> {
      * @param conditionMsg 单条部分存在条件
      * @return
      */
-    ConditionCallBack<T> in(ConditionMsg conditionMsg);
+    ConditionImpl<T> in(ConditionMsg conditionMsg);
 
     /**
      * 排序
@@ -100,12 +100,12 @@ public interface ConditionCallBack<T> {
      * @param sort  排序规则
      * @return
      */
-    ConditionCallBack<T> sort(String field, TableSort sort);
+    ConditionImpl<T> sort(String field, TableSort sort);
 
     /**
      * 逻辑处理（增删查改）
      *
      * @return
      */
-    OperationCallBack<T> operation();
+    OperationImpl<T> operation();
 }

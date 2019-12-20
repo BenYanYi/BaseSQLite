@@ -16,18 +16,18 @@ public final class ConditionMsg {
     /**
      * 值
      */
-    private String value;
+    private Object value;
     /**
      * 条件 and 还是 or，默认and
      */
     private TableNexus nexus = TableNexus.DETAILS;
 
-    public ConditionMsg(String field, String value) {
+    public ConditionMsg(String field, Object value) {
         this.field = field;
         this.value = value;
     }
 
-    public ConditionMsg(String field, String value, TableNexus nexus) {
+    public ConditionMsg(String field, Object value, TableNexus nexus) {
         this.field = field;
         this.value = value;
         this.nexus = nexus;
@@ -41,11 +41,11 @@ public final class ConditionMsg {
         this.field = field;
     }
 
-    String getValue() {
+    Object getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 

@@ -5,10 +5,10 @@ import android.text.TextUtils;
 
 import com.benyanyi.sqlitelib.annotation.NotColumn;
 import com.benyanyi.sqlitelib.annotation.NotNull;
-import com.benyanyi.sqlitelib.callback.TableUpdateCallBack;
+import com.benyanyi.sqlitelib.impl.TableUpdateImpl;
 import com.benyanyi.sqlitelib.exception.TableException;
 import com.benyanyi.sqlitelib.annotation.ColumnName;
-import com.benyanyi.sqlitelib.callback.TableQueryCallBack;
+import com.benyanyi.sqlitelib.impl.TableQueryImpl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableUpdate<T> implements TableUpdateCallBack<T> {
+public final class TableUpdate<T> implements TableUpdateImpl<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
-    private TableQueryCallBack<T> tableQuery;
+    private TableQueryImpl<T> tableQuery;
 
     private TableUpdate() {
     }
@@ -143,14 +143,14 @@ public final class TableUpdate<T> implements TableUpdateCallBack<T> {
     }
 
     static class Builder<T> {
-        private TableQueryCallBack<T> tableQuery;
+        private TableQueryImpl<T> tableQuery;
 
-        Builder setTableQueryCallBack(TableQueryCallBack<T> tableQueryCallBack) {
-            this.tableQuery = tableQueryCallBack;
+        Builder setTableQueryCallBack(TableQueryImpl<T> tableQueryImpl) {
+            this.tableQuery = tableQueryImpl;
             return this;
         }
 
-        TableUpdateCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
+        TableUpdateImpl<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableUpdate(database, tClass, this);
         }
     }

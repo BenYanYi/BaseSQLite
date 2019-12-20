@@ -28,7 +28,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.google.code.gson:gson:+'
+    implementation 'com.google.code.gson:gson:2.8.6'
 //    api 'com.yanyi.benyanyi:loglib:1.0.1'
 //    implementation files('libs/sqlite-jdbc-3.21.0.1.jar')
 //    debugApi 'com.amitshekhar.android:debug-db:1.0.6'

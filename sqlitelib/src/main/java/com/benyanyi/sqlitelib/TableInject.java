@@ -21,12 +21,12 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-final class TableInject implements TableInjectCallBack {
+final class TableInject implements TableInjectImpl {
 
-    private TableHelperCallBack helperCallBack;
+    private TableHelperImpl helperCallBack;
 
     @Override
-    public <T> TableInjectCallBack init(Context context, String dbName, int version, Class<T> tClass) {
+    public <T> TableInjectImpl init(Context context, String dbName, int version, Class<T> tClass) {
         this.helperCallBack = new TableHelper(context, dbName, getTabColumnMsg(tClass), getTabName(tClass), version);
         return this;
     }

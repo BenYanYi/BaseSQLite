@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 /**
  * @author YanYi
@@ -6,7 +6,7 @@ package com.benyanyi.sqlitelib.callback;
  * @email ben@yanyi.red
  * @overview 修改数据
  */
-public interface TableUpdateCallBack<T> {
+public interface TableUpdateImpl<T> {
     /**
      * 修改符合条件的第一条数据
      *

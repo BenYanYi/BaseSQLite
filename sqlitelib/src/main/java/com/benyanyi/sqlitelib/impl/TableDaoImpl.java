@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 /**
  * @author YanYi
@@ -6,7 +6,7 @@ package com.benyanyi.sqlitelib.callback;
  * @email ben@yanyi.red
  * @overview
  */
-public interface TableDaoCallBack {
+public interface TableDaoImpl {
 
     /**
      * 返回表操作
@@ -15,5 +15,5 @@ public interface TableDaoCallBack {
      * @param <T>
      * @return
      */
-    <T> TableSessionCallBack<T> getSession(Class<T> tClass);
+    <T> TableSessionImpl<T> getSession(Class<T> tClass);
 }

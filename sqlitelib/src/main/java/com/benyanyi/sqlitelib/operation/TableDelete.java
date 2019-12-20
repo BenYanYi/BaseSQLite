@@ -3,8 +3,8 @@ package com.benyanyi.sqlitelib.operation;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.benyanyi.sqlitelib.callback.TableDeleteCallBack;
-import com.benyanyi.sqlitelib.callback.TableQueryCallBack;
+import com.benyanyi.sqlitelib.impl.TableDeleteImpl;
+import com.benyanyi.sqlitelib.impl.TableQueryImpl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,9 +16,9 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableDelete<T> implements TableDeleteCallBack<T> {
+public final class TableDelete<T> implements TableDeleteImpl<T> {
     private SQLiteDatabase database;
-    private TableQueryCallBack tableQuery;
+    private TableQueryImpl tableQuery;
     private Class<T> tClass;
     private String conditionKey;
     private String[] conditionValue;
@@ -108,12 +108,12 @@ public final class TableDelete<T> implements TableDeleteCallBack<T> {
     }
 
     static class Builder {
-        private TableQueryCallBack tableQuery;
+        private TableQueryImpl tableQuery;
         private String conditionKey;
         private String[] conditionValue;
 
-        Builder setTableQueryCallBack(TableQueryCallBack tableQueryCallBack) {
-            this.tableQuery = tableQueryCallBack;
+        Builder setTableQueryCallBack(TableQueryImpl tableQueryImpl) {
+            this.tableQuery = tableQueryImpl;
             return this;
         }
 
@@ -127,7 +127,7 @@ public final class TableDelete<T> implements TableDeleteCallBack<T> {
             return this;
         }
 
-        <T> TableDeleteCallBack<T> builder(SQLiteDatabase database, Class<T> tClass) {
+        <T> TableDeleteImpl<T> builder(SQLiteDatabase database, Class<T> tClass) {
             return new TableDelete(database, tClass, this);
         }
     }

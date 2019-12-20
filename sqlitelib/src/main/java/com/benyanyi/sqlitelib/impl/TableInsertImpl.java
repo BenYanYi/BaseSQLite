@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview 插入数据
  */
-public interface TableInsertCallBack<T> {
+public interface TableInsertImpl<T> {
     /**
      * 插入一条数据
      *

@@ -5,11 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.benyanyi.sqlitelib.annotation.TableBean;
-import com.benyanyi.sqlitelib.callback.TableSessionCallBack;
+import com.benyanyi.sqlitelib.impl.TableSessionImpl;
 import com.benyanyi.sqlitelib.condition.ConditionMsg;
 import com.benyanyi.sqlitelib.condition.TableCondition;
 import com.benyanyi.sqlitelib.exception.TableException;
-import com.benyanyi.sqlitelib.callback.ConditionCallBack;
+import com.benyanyi.sqlitelib.impl.ConditionImpl;
 
 import java.util.ArrayList;
 
@@ -19,12 +19,12 @@ import java.util.ArrayList;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableSession<T> implements TableSessionCallBack<T> {
+public final class TableSession<T> implements TableSessionImpl<T> {
     private String dbName;
     private int version;
     private Context context;
     private Class<T> tClass;
-    private TableInjectCallBack injectCallBack;
+    private TableInjectImpl injectCallBack;
     private SQLiteDatabase database;
     private TableCondition.Builder builder;
 
@@ -32,7 +32,7 @@ public final class TableSession<T> implements TableSessionCallBack<T> {
 
     }
 
-    TableSessionCallBack<T> init(String dbName, int version, Context context, Class<T> tClass) {
+    TableSessionImpl<T> init(String dbName, int version, Context context, Class<T> tClass) {
         this.dbName = dbName;
         this.version = version;
         this.context = context;
@@ -68,7 +68,7 @@ public final class TableSession<T> implements TableSessionCallBack<T> {
     }
 
     @Override
-    public ConditionCallBack<T> where() {
+    public ConditionImpl<T> where() {
         return this.builder.builder(this.database, this.tClass);
     }
 

@@ -1,4 +1,4 @@
-package com.benyanyi.sqlitelib.callback;
+package com.benyanyi.sqlitelib.impl;
 
 /**
  * @author YanYi
@@ -6,7 +6,7 @@ package com.benyanyi.sqlitelib.callback;
  * @email ben@yanyi.red
  * @overview 存在符合条件的数据则修改数据，不存在符合条件的数据则添加数据
  */
-public interface TableChangeOrAddCallBack<T> {
+public interface TableChangeOrAddImpl<T> {
 
     /**
      * 修改符合条件的第一条数据，没找到符合条件的数据时添加数据
