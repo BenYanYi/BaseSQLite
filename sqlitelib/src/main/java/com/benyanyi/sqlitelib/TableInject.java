@@ -23,32 +23,32 @@ import java.util.List;
  */
 final class TableInject implements TableInjectImpl {
 
-    private TableHelperImpl helperCallBack;
+    private TableHelperImpl helperImpl;
 
     @Override
     public <T> TableInjectImpl init(Context context, String dbName, int version, Class<T> tClass) {
-        this.helperCallBack = new TableHelper(context, dbName, getTabColumnMsg(tClass), getTabName(tClass), version);
+        this.helperImpl = new TableHelper(context, dbName, getTabColumnMsg(tClass), getTabName(tClass), version);
         return this;
     }
 
     @Override
     public SQLiteDatabase getHelperWritableDatabase() {
-        return this.helperCallBack.getHelperWritableDatabase();
+        return this.helperImpl.getHelperWritableDatabase();
     }
 
     @Override
     public boolean tableIsExist(String tableName) {
-        return this.helperCallBack.tabIsExist(tableName);
+        return this.helperImpl.tabIsExist(tableName);
     }
 
     @Override
     public String getDBPath() {
-        return this.helperCallBack.getDBPath();
+        return this.helperImpl.getDBPath();
     }
 
     @Override
     public void close() {
-        this.helperCallBack.tableClose();
+        this.helperImpl.tableClose();
     }
 
     private static <T> String getTabName(Class<T> tClass) {
@@ -138,16 +138,12 @@ final class TableInject implements TableInjectImpl {
         switch (type) {
             case "boolean":
             case "Boolean":
-                return "INTEGER";
             case "byte":
             case "Byte":
-                return "INTEGER";
             case "int":
             case "Integer":
-                return "INTEGER";
             case "long":
             case "Long":
-                return "INTEGER";
             case "short":
             case "Short":
                 return "INTEGER";

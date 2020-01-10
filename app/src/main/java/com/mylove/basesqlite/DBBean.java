@@ -16,9 +16,9 @@ public class DBBean {
     @ID(increase = true)
     private long id;
     @NotNull
-    private String title = "titleStr";
+    private String title = "titleStr1";
     @ColumnName("Message")
-    private String msg = "msgStr";
+    private String msg = "msgStr1";
 
     @Override
     public String toString() {

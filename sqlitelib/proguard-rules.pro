@@ -19,3 +19,32 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.benyanyi.sqlitelib.*
+-keep class com.benyanyi.sqlitelib.annotation.*
+-keep class com.benyanyi.sqlitelib.exception.*
+-keep class com.benyanyi.sqlitelib.condition.*
+-keep class com.benyanyi.sqlitelib.config.*
+-keep class com.benyanyi.sqlitelib.impl.*
+
+-keepattributes *Annotation*
+
+#-keepclassmembers class com.benyanyi.sqlitelib.*{*;}
+-keepclassmembers class com.benyanyi.sqlitelib.annotation.*{*;}
+-keepclassmembers class com.benyanyi.sqlitelib.condition.*{*;}
+-keepclassmembers class com.benyanyi.sqlitelib.config.*{*;}
+-keepclassmembers class com.benyanyi.sqlitelib.impl.*{*;}
+
+-keepclassmembers class com.benyanyi.sqlitelib.TableDao.*{*;}
+-keepclassmembers class com.benyanyi.sqlitelib.TableSession.*{*;}
+
+#"$"的含义是保留某类的内部类不会被混淆
+-keepclassmembers class com.benyanyi.sqlitelib.TableDao$Builder {
+     public <methods>;
+}
+
+-keepattributes Signature
+
+-keepclassmembers enum * {
+      public static **[] values();
+      public static ** valueOf(java.lang.String);
+}

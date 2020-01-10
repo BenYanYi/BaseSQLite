@@ -24,7 +24,7 @@ public final class TableSession<T> implements TableSessionImpl<T> {
     private int version;
     private Context context;
     private Class<T> tClass;
-    private TableInjectImpl injectCallBack;
+    private TableInjectImpl injectImpl;
     private SQLiteDatabase database;
     private TableCondition.Builder builder;
 
@@ -37,7 +37,7 @@ public final class TableSession<T> implements TableSessionImpl<T> {
         this.version = version;
         this.context = context;
         this.tClass = tClass;
-        this.injectCallBack = new TableInject();
+        this.injectImpl = new TableInject();
         this.database = getDB();
         this.builder = getTableCondition();
         return this;
@@ -48,11 +48,10 @@ public final class TableSession<T> implements TableSessionImpl<T> {
         return annotation != null;
     }
 
-
     private SQLiteDatabase getDB() {
         if (isTabBean()) {
-            injectCallBack = this.injectCallBack.init(context, dbName, version, tClass);
-            return injectCallBack.getHelperWritableDatabase();
+            injectImpl = this.injectImpl.init(context, dbName, version, tClass);
+            return injectImpl.getHelperWritableDatabase();
         } else {
             throw new TableException("当前类没有定义成表结构类。(The current class is not defined as a table structure class.)");
         }
@@ -84,16 +83,16 @@ public final class TableSession<T> implements TableSessionImpl<T> {
         if (boo) {
             return false;
         }
-        return this.injectCallBack.tableIsExist(tableName);
+        return this.injectImpl.tableIsExist(tableName);
     }
 
     @Override
     public String getDBPath() {
-        return this.injectCallBack.getDBPath();
+        return this.injectImpl.getDBPath();
     }
 
     @Override
     public void close() {
-        this.injectCallBack.close();
+        this.injectImpl.close();
     }
 }

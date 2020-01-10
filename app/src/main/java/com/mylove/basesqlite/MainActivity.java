@@ -3,6 +3,8 @@ package com.mylove.basesqlite;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.amitshekhar.DebugDB;
+import com.benyanyi.loglib.Jlog;
 import com.benyanyi.sqlitelib.TableDao;
 import com.benyanyi.sqlitelib.impl.TableDaoImpl;
 import com.benyanyi.sqlitelib.impl.TableSessionImpl;
@@ -19,14 +21,15 @@ public class MainActivity extends AppCompatActivity {
         TableSessionImpl<DBBean> session = tableDao.getSession(DBBean.class);
         DBBean dbBean = new DBBean();
         boolean tableIsExist = session.tableIsExist("DBBean");
-//        JLog.d(tableIsExist);
+        Jlog.d(tableIsExist);
+        Jlog.v(session.getDBPath());
         long l = session.where().operation().insert().find(dbBean);
-//        JLog.d(l);
+        Jlog.d(l);
         List<DBBean> beanList = session.where().operation().query().findAll();
         for (DBBean dbBean1 : beanList) {
-//            JLog.d(dbBean1);
+            Jlog.d(dbBean1);
         }
-//        DebugDB.getAddressLog();
+        DebugDB.getAddressLog();
     }
 }
 

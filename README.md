@@ -4,20 +4,20 @@
 
 ### module 下添加
 `
-    implementation 'com.yanyi.benyanyi:sqlitelib:1.0.8'
+    implementation 'com.yanyi.benyanyi:sqlitelib:1.1.0'
 `
 
 推荐一个查看数据库的开源库[Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)<br/>
 ### 使用介绍
 #### 配置数据库信息
 
-     TableDaoCallBack dao = new TableDao.Builder()
+     TableDaoImpl dao = new TableDao.Builder()
                 .setVersion(your version)
                 .builder(context);
 
 #### 配置表信息
 
-    TableSessionCallBack<your table bean> session = dao.getSession(your TableBean.class);
+    TableSessionImpl<your table bean> session = dao.getSession(your TableBean.class);
                 
 #### 注解声明
 * @TableBean &nbsp;声明当前类为表结构类，表名为默认为类名，设置value值可更改自定义表明。<!--<br/><font color=#ff0000>**特别注意，使用TableBean注解的类中属性需要添加set和get方法**</font>-->
@@ -74,6 +74,7 @@ your data可以为一条数据，也可以为数据集
 * void close();关闭数据库
 
 ### 更新记录
+* 2019-01-10 提交1.1.0版本，优化代码，修复个别问题
 * 2019-12-20 提交1.0.8版本，修复条件问题
 * 2019-12-03 提交1.0.7版本，修复修改数据时报缺少set和get方法问题
 * 2019-06-26 提交1.0.5版本，删除重复方法
