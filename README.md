@@ -11,17 +11,13 @@
 ~~~
 repositories {
         maven {
-            url "http://144.34.196.85:8081/nexus/content/repositories/Android/"
+            url "http://47.107.99.122:8081/nexus/content/repositories/mylove/"
         }
     }
 ~~~
 ### module 下添加
 ~~~
 implementation 'com.yanyi.benyanyi:basesqlite:1.1.1'
-~~~
-或者(补传android support版)
-~~~
-implementation 'com.yanyi.benyanyi:basesqlite:1.1.0'
 ~~~
 
 推荐一个查看数据库的开源库[Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)<br/>
@@ -99,7 +95,7 @@ session.where().(your condition)[可不选].operation().changeOrAdd().findAll(yo
 更新记录
 ----
 * 2020-05-15 提交1.1.1版本，修复条件缓存问题，添加是否要清除缓存判断及方法,将android support转成androidx支持,并将Maven库存放到个人服务器上
-* 2020-01-10 提交1.1.0版本，优化代码，修复个别问题(该版本被误删，后面再个人服务器上补传)
+* 2020-01-10 提交1.1.0版本，优化代码，修复个别问题(该版本被误删)
 * 2019-12-20 提交1.0.8版本，修复条件问题
 * 2019-12-03 提交1.0.7版本，修复修改数据时报缺少set和get方法问题
 * 2019-06-26 提交1.0.5版本，删除重复方法
