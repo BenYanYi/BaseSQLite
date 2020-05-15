@@ -11,7 +11,7 @@
 ~~~
 repositories {
         maven {
-            url "http://47.107.99.122:8081/nexus/content/repositories/mylove/"
+            url "http://maven.yanyi.online:8081/nexus/content/repositories/mylove/"
         }
     }
 ~~~
