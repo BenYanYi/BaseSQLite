@@ -41,6 +41,22 @@ public final class TableCondition<T> implements ConditionImpl<T> {
         this.inList = builder.inList;
     }
 
+
+    /**
+     * 清空条件
+     *
+     * @return
+     */
+    @Override
+    public ConditionImpl<T> cleanCondition() {
+        this.eqList = new ArrayList<>();
+        this.notEqList = new ArrayList<>();
+        this.greaterList = new ArrayList<>();
+        this.lessList = new ArrayList<>();
+        this.inList = new ArrayList<>();
+        return this;
+    }
+
     /**
      * 相等
      *

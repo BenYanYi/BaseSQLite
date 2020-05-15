@@ -2,13 +2,13 @@ package com.benyanyi.sqlitelib.operation;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.benyanyi.sqlitelib.config.TableSort;
 import com.benyanyi.sqlitelib.impl.OperationImpl;
 import com.benyanyi.sqlitelib.impl.TableChangeOrAddImpl;
-import com.benyanyi.sqlitelib.impl.TableUpdateImpl;
-import com.benyanyi.sqlitelib.config.TableSort;
 import com.benyanyi.sqlitelib.impl.TableDeleteImpl;
 import com.benyanyi.sqlitelib.impl.TableInsertImpl;
 import com.benyanyi.sqlitelib.impl.TableQueryImpl;
+import com.benyanyi.sqlitelib.impl.TableUpdateImpl;
 
 /**
  * @author YanYi
@@ -34,6 +34,18 @@ public final class TableOperation<T> implements OperationImpl<T> {
         this.field = builder.field;
         this.conditionKey = builder.conditionKey;
         this.conditionValue = builder.conditionValue;
+    }
+
+    /**
+     * 清空条件
+     *
+     * @return
+     */
+    @Override
+    public OperationImpl<T> cleanCondition() {
+        this.conditionKey = "";
+        this.conditionValue = null;
+        return this;
     }
 
     @Override

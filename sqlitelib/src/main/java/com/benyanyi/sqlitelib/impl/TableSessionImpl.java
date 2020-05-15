@@ -11,11 +11,19 @@ import android.database.sqlite.SQLiteDatabase;
 public interface TableSessionImpl<T> {
 
     /**
-     * 条件处理类
+     * 条件处理类（会出现条件缓存）
      *
      * @return
      */
     ConditionImpl<T> where();
+
+    /**
+     * 条件处理类
+     *
+     * @param isCleanCondition 是否清空条件
+     * @return
+     */
+    ConditionImpl<T> where(boolean isCleanCondition);
 
 
     /**

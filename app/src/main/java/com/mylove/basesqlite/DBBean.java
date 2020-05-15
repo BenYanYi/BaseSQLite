@@ -20,6 +20,22 @@ public class DBBean {
     @ColumnName("Message")
     private String msg = "msgStr1";
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return "DBBean{" +

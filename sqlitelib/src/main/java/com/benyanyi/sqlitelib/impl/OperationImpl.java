@@ -7,6 +7,14 @@ package com.benyanyi.sqlitelib.impl;
  * @overview 逻辑操作
  */
 public interface OperationImpl<T> {
+
+    /**
+     * 清空条件
+     *
+     * @return
+     */
+    OperationImpl<T> cleanCondition();
+
     /**
      * 数据插入
      *

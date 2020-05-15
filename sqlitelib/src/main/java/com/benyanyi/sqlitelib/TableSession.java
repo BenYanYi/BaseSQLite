@@ -71,6 +71,26 @@ public final class TableSession<T> implements TableSessionImpl<T> {
         return this.builder.builder(this.database, this.tClass);
     }
 
+    /**
+     * 条件处理类
+     *
+     * @param isCleanCondition 是否清空条件
+     * @return
+     */
+    @Override
+    public ConditionImpl<T> where(boolean isCleanCondition) {
+        if (isCleanCondition) {
+            return this.builder.setEqList(new ArrayList<ConditionMsg>())
+                    .setNotEqList(new ArrayList<ConditionMsg>())
+                    .setGreaterList(new ArrayList<ConditionMsg>())
+                    .setLessList(new ArrayList<ConditionMsg>())
+                    .setInList(new ArrayList<ConditionMsg>())
+                    .builder(this.database, this.tClass);
+        } else {
+            return where();
+        }
+    }
+
     @Override
     public SQLiteDatabase getSQLiteDatabase() {
         return this.database;

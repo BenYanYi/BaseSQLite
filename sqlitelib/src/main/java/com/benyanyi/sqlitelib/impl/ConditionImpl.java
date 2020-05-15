@@ -14,6 +14,13 @@ import java.util.List;
 public interface ConditionImpl<T> {
 
     /**
+     * 清空条件
+     *
+     * @return
+     */
+    ConditionImpl<T> cleanCondition();
+
+    /**
      * 相等
      *
      * @param list 多相等条件
