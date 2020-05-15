@@ -3,7 +3,6 @@ package com.mylove.basesqlite;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.amitshekhar.DebugDB;
 import com.benyanyi.loglib.Jlog;
 import com.benyanyi.sqlitelib.TableDao;
 import com.benyanyi.sqlitelib.impl.TableDaoImpl;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         for (DBBean dbBean1 : beanList) {
             Jlog.d(dbBean1);
         }
-        DebugDB.getAddressLog();
+//        DebugDB.getAddressLog();
     }
 }
 
