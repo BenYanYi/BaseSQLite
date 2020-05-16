@@ -20,6 +20,16 @@ repositories {
 implementation 'com.yanyi.benyanyi:basesqlite:1.1.1'
 ~~~
 
+或者
+~~~
+<dependency>
+  <groupId>com.yanyi.benyanyi</groupId>
+  <artifactId>basesqlite</artifactId>
+  <version>1.1.2</version>
+  <type>aar</type>
+</dependency>
+~~~
+
 推荐一个查看数据库的开源库[Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)<br/>
 ### 使用介绍
 #### 配置数据库信息
