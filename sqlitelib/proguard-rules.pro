@@ -29,13 +29,17 @@
 -keepattributes *Annotation*
 
 #-keepclassmembers class com.benyanyi.sqlitelib.*{*;}
--keepclassmembers class com.benyanyi.sqlitelib.annotation.*{*;}
+-keepclassmembers class com.benyanyi.sqlitelib.annotation.*{
+*;
+}
 -keepclassmembers class com.benyanyi.sqlitelib.condition.*{*;}
 -keepclassmembers class com.benyanyi.sqlitelib.config.*{*;}
 -keepclassmembers class com.benyanyi.sqlitelib.impl.*{*;}
 
 -keepclassmembers class com.benyanyi.sqlitelib.TableDao.*{*;}
 -keepclassmembers class com.benyanyi.sqlitelib.TableSession.*{*;}
+# 内部类不会被混淆
+-keepattributes SourceFile,LineNumberTable,InnerClasses
 
 #"$"的含义是保留某类的内部类不会被混淆
 -keepclassmembers class com.benyanyi.sqlitelib.TableDao$Builder {
