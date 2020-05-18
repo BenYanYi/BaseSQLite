@@ -36,6 +36,13 @@ public interface TableSessionImpl<T> {
     /**
      * 判断某张表是否存在
      *
+     * @return
+     */
+    boolean tableIsExist();
+
+    /**
+     * 判断某张表是否存在
+     *
      * @param tableName
      * @return
      */
@@ -47,6 +54,13 @@ public interface TableSessionImpl<T> {
      * @return
      */
     String getDBPath();
+
+    /**
+     * 获取数据库路径
+     *
+     * @return
+     */
+    String getDBPath(String tabName);
 
     /**
      * 关闭数据库

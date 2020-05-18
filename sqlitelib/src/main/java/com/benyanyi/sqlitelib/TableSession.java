@@ -1,15 +1,12 @@
 package com.benyanyi.sqlitelib;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.benyanyi.sqlitelib.annotation.TableBean;
-import com.benyanyi.sqlitelib.impl.TableSessionImpl;
 import com.benyanyi.sqlitelib.condition.ConditionMsg;
 import com.benyanyi.sqlitelib.condition.TableCondition;
-import com.benyanyi.sqlitelib.exception.TableException;
 import com.benyanyi.sqlitelib.impl.ConditionImpl;
+import com.benyanyi.sqlitelib.impl.TableSessionImpl;
 
 import java.util.ArrayList;
 
@@ -20,9 +17,6 @@ import java.util.ArrayList;
  * @overview
  */
 public final class TableSession<T> implements TableSessionImpl<T> {
-    private String dbName;
-    private int version;
-    private Context context;
     private Class<T> tClass;
     private TableInjectImpl injectImpl;
     private SQLiteDatabase database;
@@ -32,29 +26,16 @@ public final class TableSession<T> implements TableSessionImpl<T> {
 
     }
 
-    TableSessionImpl<T> init(String dbName, int version, Context context, Class<T> tClass) {
-        this.dbName = dbName;
-        this.version = version;
-        this.context = context;
+    TableSessionImpl<T> init(Class<T> tClass, TableInjectImpl injectImpl) {
         this.tClass = tClass;
-        this.injectImpl = new TableInject();
+        this.injectImpl = injectImpl;
         this.database = getDB();
         this.builder = getTableCondition();
         return this;
     }
 
-    private boolean isTabBean() {
-        TableBean annotation = tClass.getAnnotation(TableBean.class);
-        return annotation != null;
-    }
-
     private SQLiteDatabase getDB() {
-        if (isTabBean()) {
-            injectImpl = this.injectImpl.init(context, dbName, version, tClass);
-            return injectImpl.getHelperWritableDatabase();
-        } else {
-            throw new TableException("当前类没有定义成表结构类。(The current class is not defined as a table structure class.)");
-        }
+        return this.injectImpl.getHelperWritableDatabase();
     }
 
     private TableCondition.Builder getTableCondition() {
@@ -96,6 +77,14 @@ public final class TableSession<T> implements TableSessionImpl<T> {
         return this.database;
     }
 
+    /**
+     * 判断某张表是否存在
+     */
+    @Override
+    public boolean tableIsExist() {
+        return this.injectImpl.tableIsExist(tClass);
+    }
+
     @Override
     public boolean tableIsExist(String tableName) {
         boolean boo = TextUtils.isEmpty(tableName) || "null".equals(tableName.toLowerCase().trim())
@@ -106,9 +95,17 @@ public final class TableSession<T> implements TableSessionImpl<T> {
         return this.injectImpl.tableIsExist(tableName);
     }
 
+    /**
+     * 获取数据库路径
+     */
     @Override
     public String getDBPath() {
-        return this.injectImpl.getDBPath();
+        return this.injectImpl.getDBPath(tClass);
+    }
+
+    @Override
+    public String getDBPath(String tabName) {
+        return this.injectImpl.getDBPath(tabName);
     }
 
     @Override

@@ -17,7 +17,7 @@ repositories {
 ~~~
 ### module 下添加
 ~~~
-implementation 'com.yanyi.benyanyi:basesqlite:1.1.1'
+implementation 'com.yanyi.benyanyi:basesqlite:1.1.3'
 ~~~
 
 或者
@@ -34,7 +34,7 @@ implementation 'com.yanyi.benyanyi:basesqlite:1.1.1'
 ### 使用介绍
 #### 配置数据库信息
 ~~~
-TableDaoImpl dao = new TableDao.Builder().setVersion(your version).builder(context);
+TableDaoImpl dao = new TableDao.Builder().setVersion(your version).setClasses(your table class).builder(context);
 ~~~
 #### 配置表信息
 ~~~
@@ -104,6 +104,7 @@ session.where().(your condition)[可不选].operation().changeOrAdd().findAll(yo
 
 更新记录
 ----
+* 2020-05-18 提交1.1.3版本，添加创建多表方法
 * 2020-05-16 提交1.1.2版本，修复1.1.1版本中内部类问题
 * 2020-05-15 提交1.1.1版本，修复条件缓存问题，添加是否要清除缓存判断及方法,将android support转成androidx支持,并将Maven库存放到个人服务器上
 * 2020-01-10 提交1.1.0版本，优化代码，修复个别问题(该版本被误删)

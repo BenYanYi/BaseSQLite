@@ -22,15 +22,18 @@ import java.util.Set;
  * @overview
  */
 final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
-    /**
-     * 表名
-     */
-    private String tabName;
-    private TableMsg tableMsg;
+
+    private List<TableMsg> tableMsg;
     private Context mContext;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        for (TableMsg msg : tableMsg) {
+            create(db, msg);
+        }
+    }
+
+    private void create(SQLiteDatabase db, TableMsg tableMsg) {
         StringBuilder field = new StringBuilder();
         for (FieldMsg fieldMsg : tableMsg.getList()) {
             field.append(fieldMsg.getKey()).append(" ").append(fieldMsg.getType()).append(" ");
@@ -45,7 +48,7 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
                 && ("long".equals(tableMsg.getType()) || "Long".equals(tableMsg.getType()));
         //有主键自增
         if (boo1) {
-            sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key autoincrement," + field + ")";
+            sql = "create table " + tableMsg.getTableName() + "(" + tableMsg.getId() + " integer primary key autoincrement," + field + ")";
             db.execSQL(sql);
             return;
         }
@@ -54,7 +57,7 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
                 && !"null".equals(tableMsg.getId().toLowerCase().trim())
                 && !"".equals(tableMsg.getId().trim()) && tableMsg.isNotNULL();
         if (boo1) {
-            sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key NOT NULL," + field + ")";
+            sql = "create table " + tableMsg.getTableName() + "(" + tableMsg.getId() + " integer primary key NOT NULL," + field + ")";
             db.execSQL(sql);
             return;
         }
@@ -63,11 +66,11 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
                 && !"null".equals(tableMsg.getId().toLowerCase().trim())
                 && !"".equals(tableMsg.getId().trim()) && tableMsg.isNotNULL();
         if (boo1) {
-            sql = "create table " + tabName + "(" + tableMsg.getId() + " integer primary key," + field + ")";
+            sql = "create table " + tableMsg.getTableName() + "(" + tableMsg.getId() + " integer primary key," + field + ")";
             db.execSQL(sql);
             return;
         }
-        sql = "create table " + tabName + " (" + field + ")";
+        sql = "create table " + tableMsg.getTableName() + " (" + field + ")";
         db.execSQL(sql);
     }
 
@@ -81,12 +84,14 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
-            if (tableIsExist(this.tabName)) {
-                changeTable(db);
-            } else {
-                String sql = "DROP TABLE IF EXISTS " + this.tabName;
-                db.execSQL(sql);
-                onCreate(db);
+            for (TableMsg msg : this.tableMsg) {
+                if (tableIsExist(msg.getTableName())) {
+                    changeTable(db, msg);
+                } else {
+                    String sql = "DROP TABLE IF EXISTS " + msg.getTableName();
+                    db.execSQL(sql);
+                    create(db, msg);
+                }
             }
         }
     }
@@ -94,12 +99,14 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion > newVersion) {
-            if (tableIsExist(this.tabName)) {
-                changeTable(db);
-            } else {
-                String sql = "DROP TABLE IF EXISTS " + this.tabName;
-                db.execSQL(sql);
-                onCreate(db);
+            for (TableMsg msg : this.tableMsg) {
+                if (tableIsExist(msg.getTableName())) {
+                    changeTable(db, msg);
+                } else {
+                    String sql = "DROP TABLE IF EXISTS " + msg.getTableName();
+                    db.execSQL(sql);
+                    create(db, msg);
+                }
             }
         }
     }
@@ -109,9 +116,9 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
      *
      * @param db
      */
-    private void changeTable(SQLiteDatabase db) {
+    private void changeTable(SQLiteDatabase db, TableMsg tableMsg) {
         List<Map<String, String>> list = new LinkedList<>();
-        String sql = "select * from " + this.tabName;
+        String sql = "select * from " + tableMsg.getTableName();
         Cursor cursor = db.rawQuery(sql, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -126,7 +133,7 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
             cursor.moveToNext();
         }
         cursor.close();
-        sql = "DROP TABLE IF EXISTS " + this.tabName;
+        sql = "DROP TABLE IF EXISTS " + tableMsg.getTableName();
         db.execSQL(sql);
         if (list.size() > 0) {
             Set<String> set = new HashSet<>();
@@ -136,9 +143,9 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
                 }
             }
             Set<String> keySet = new HashSet<>();
-            for (int i = 0; i < this.tableMsg.getList().size(); i++) {
+            for (int i = 0; i < tableMsg.getList().size(); i++) {
                 for (String str : set) {
-                    if (this.tableMsg.getList().get(i).getKey().equals(str) || this.tableMsg.getId().equals(str)) {
+                    if (tableMsg.getList().get(i).getKey().equals(str) || tableMsg.getId().equals(str)) {
                         keySet.add(str);
                     }
                 }
@@ -156,13 +163,13 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
                     fieldMsgList.add(fieldMsg);
                 }
             }
-            this.tableMsg.getList().addAll(fieldMsgList);
-            onCreate(db);
-            insertData(db, list);
+            tableMsg.getList().addAll(fieldMsgList);
+            create(db, tableMsg);
+            insertData(db, list, tableMsg);
         } else {
-            sql = "DROP TABLE IF EXISTS " + this.tabName;
+            sql = "DROP TABLE IF EXISTS " + tableMsg.getTableName();
             db.execSQL(sql);
-            onCreate(db);
+            create(db, tableMsg);
         }
     }
 
@@ -172,29 +179,27 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
      * @param db
      * @param list 上一版本数据
      */
-    private void insertData(SQLiteDatabase db, List<Map<String, String>> list) {
+    private void insertData(SQLiteDatabase db, List<Map<String, String>> list, TableMsg tableMsg) {
         for (int i = 0; i < list.size(); i++) {
             ContentValues values = new ContentValues();
             for (Map.Entry<String, String> entry : list.get(i).entrySet()) {
-                if (!entry.getKey().equals(this.tableMsg.getId())) {
+                if (!entry.getKey().equals(tableMsg.getId())) {
                     values.put(entry.getKey(), entry.getValue());
                 }
             }
-            db.insert(this.tabName, null, values);
+            db.insert(tableMsg.getTableName(), null, values);
         }
     }
 
     /**
      * @param context  上下文
      * @param dbName   tab名
-     * @param tableMsg 表信息
-     * @param tabName  db名
+     * @param tableMsg 表信息集合
      * @param version  版本号
      */
-    TableHelper(Context context, String dbName, TableMsg tableMsg, String tabName, int version) {
+    TableHelper(Context context, String dbName, List<TableMsg> tableMsg, int version) {
         super(context, dbName, null, version);
         this.mContext = context;
-        this.tabName = tabName;
         this.tableMsg = tableMsg;
     }
 
@@ -215,8 +220,8 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
         if (tableName == null) {
             return true;
         }
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
+        SQLiteDatabase db;
+        Cursor cursor;
         try {
             db = this.getReadableDatabase();
             String sql = "select count(*) as c from Sqlite_master  where type ='table' and name ='" + tableName.trim() + "' ";
@@ -260,8 +265,8 @@ final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
      * 获取数据库路径
      **/
     @Override
-    public String getDBPath() {
-        return this.mContext.getDatabasePath(this.tabName).getPath();
+    public String getDBPath(String tabName) {
+        return this.mContext.getDatabasePath(tabName).getPath();
     }
 
 

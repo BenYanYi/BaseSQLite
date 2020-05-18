@@ -38,7 +38,7 @@ interface TableHelperImpl {
      *
      * @return
      */
-    String getDBPath();
+    String getDBPath(String tabName);
 
     /**
      * 关闭数据库

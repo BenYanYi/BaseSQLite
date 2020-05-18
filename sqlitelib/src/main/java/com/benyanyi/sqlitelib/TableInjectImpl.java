@@ -24,11 +24,17 @@ interface TableInjectImpl {
      * @param context
      * @param dbName
      * @param version
-     * @param tClass
-     * @param <T>
      * @return
      */
-    <T> TableInjectImpl init(Context context, String dbName, int version, Class<T> tClass);
+    TableInjectImpl init(Context context, String dbName, int version, Class... classes);
+
+    /**
+     * 判断某张表是否存在
+     *
+     * @param tableName
+     * @return
+     */
+    <T> boolean tableIsExist(Class<T> tClass);
 
     /**
      * 判断某张表是否存在
@@ -43,7 +49,14 @@ interface TableInjectImpl {
      *
      * @return
      */
-    String getDBPath();
+    <T> String getDBPath(Class<T> tClass);
+
+    /**
+     * 获取数据库路劲
+     *
+     * @return
+     */
+    String getDBPath(String tabName);
 
     /**
      * 关闭数据库

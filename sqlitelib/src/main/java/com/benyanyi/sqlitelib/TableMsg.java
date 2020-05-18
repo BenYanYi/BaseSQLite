@@ -13,6 +13,7 @@ final class TableMsg {
     private String type;
     private boolean isNotNULL = false;
     private boolean increase = false;
+    private String tableName;
 
     private List<FieldMsg> list;
 
@@ -56,4 +57,11 @@ final class TableMsg {
         this.list = list;
     }
 
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 }

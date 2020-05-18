@@ -4,12 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.benyanyi.sqlitelib.annotation.ColumnName;
 import com.benyanyi.sqlitelib.annotation.ID;
 import com.benyanyi.sqlitelib.annotation.NotColumn;
 import com.benyanyi.sqlitelib.annotation.NotNull;
 import com.benyanyi.sqlitelib.annotation.TableBean;
 import com.benyanyi.sqlitelib.exception.TableException;
-import com.benyanyi.sqlitelib.annotation.ColumnName;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,14 +26,30 @@ final class TableInject implements TableInjectImpl {
     private TableHelperImpl helperImpl;
 
     @Override
-    public <T> TableInjectImpl init(Context context, String dbName, int version, Class<T> tClass) {
-        this.helperImpl = new TableHelper(context, dbName, getTabColumnMsg(tClass), getTabName(tClass), version);
-        return this;
+    public SQLiteDatabase getHelperWritableDatabase() {
+        return this.helperImpl.getHelperWritableDatabase();
     }
 
     @Override
-    public SQLiteDatabase getHelperWritableDatabase() {
-        return this.helperImpl.getHelperWritableDatabase();
+    public TableInjectImpl init(Context context, String dbName, int version, Class... classes) {
+        List<TableMsg> list = new ArrayList<>();
+        for (Class tClass : classes) {
+            TableMsg tableMsg = getTabColumnMsg(tClass);
+            tableMsg.setTableName(getTabName(tClass));
+            list.add(tableMsg);
+        }
+        this.helperImpl = new TableHelper(context, dbName, list, version);
+        return this;
+    }
+
+    /**
+     * 判断某张表是否存在
+     *
+     * @param tClass@return
+     */
+    @Override
+    public <T> boolean tableIsExist(Class<T> tClass) {
+        return tableIsExist(getTabName(tClass));
     }
 
     @Override
@@ -41,9 +57,20 @@ final class TableInject implements TableInjectImpl {
         return this.helperImpl.tabIsExist(tableName);
     }
 
+    /**
+     * 获取数据库路劲
+     *
+     * @param tClass
+     * @return
+     */
     @Override
-    public String getDBPath() {
-        return this.helperImpl.getDBPath();
+    public <T> String getDBPath(Class<T> tClass) {
+        return getDBPath(getTabName(tClass));
+    }
+
+    @Override
+    public String getDBPath(String tabName) {
+        return this.helperImpl.getDBPath(tabName);
     }
 
     @Override
@@ -51,7 +78,7 @@ final class TableInject implements TableInjectImpl {
         this.helperImpl.tableClose();
     }
 
-    private static <T> String getTabName(Class<T> tClass) {
+    private <T> String getTabName(Class<T> tClass) {
         TableBean annotation = tClass.getAnnotation(TableBean.class);
         if (annotation != null) {
             String value = annotation.value();
@@ -63,7 +90,7 @@ final class TableInject implements TableInjectImpl {
         return tClass.getSimpleName();
     }
 
-    private static <T> TableMsg getTabColumnMsg(Class<T> tClass) {
+    private <T> TableMsg getTabColumnMsg(Class<T> tClass) {
         TableMsg tableMsg = new TableMsg();
         List<FieldMsg> oList = new ArrayList<>();
         int idSize = 0;
@@ -134,7 +161,7 @@ final class TableInject implements TableInjectImpl {
         return tableMsg;
     }
 
-    private static String isType(String type) {
+    private String isType(String type) {
         switch (type) {
             case "boolean":
             case "Boolean":
