@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven{ url 'http://maven.yanyi.online:8081/nexus/content/repositories/mylove/'}
+        maven{ url 'http://maven.benyanyi.com:8081/nexus/content/repositories/mylove/'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0'

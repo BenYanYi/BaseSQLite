@@ -11,7 +11,7 @@
 ~~~
 repositories {
         maven {
-            url "http://maven.yanyi.online:8081/nexus/content/repositories/mylove/"
+            url "http://maven.benyanyi.com:8081/nexus/content/repositories/mylove/"
         }
     }
 ~~~
