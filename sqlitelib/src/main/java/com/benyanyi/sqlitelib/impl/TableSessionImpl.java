@@ -18,15 +18,6 @@ public interface TableSessionImpl<T> {
     ConditionImpl<T> where();
 
     /**
-     * 条件处理类
-     *
-     * @param isCleanCondition 是否清空条件
-     * @return
-     */
-    ConditionImpl<T> where(boolean isCleanCondition);
-
-
-    /**
      * 返回数据库管理类
      *
      * @return

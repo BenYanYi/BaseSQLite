@@ -16,7 +16,7 @@ import com.benyanyi.sqlitelib.impl.TableUpdateImpl;
  * @email ben@yanyi.red
  * @overview 增删拆逻辑区分
  */
-public final class TableOperation<T> implements OperationImpl<T> {
+public class TableOperation<T> implements OperationImpl<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
     private TableSort sort;

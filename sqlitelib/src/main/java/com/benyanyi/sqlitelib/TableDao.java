@@ -14,7 +14,7 @@ import com.benyanyi.sqlitelib.impl.TableSessionImpl;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableDao implements TableDaoImpl {
+public class TableDao implements TableDaoImpl {
     private String dbName;
     private int version;
     private Context mContext;

@@ -16,7 +16,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableDelete<T> implements TableDeleteImpl<T> {
+public class TableDelete<T> implements TableDeleteImpl<T> {
     private SQLiteDatabase database;
     private TableQueryImpl tableQuery;
     private Class<T> tClass;

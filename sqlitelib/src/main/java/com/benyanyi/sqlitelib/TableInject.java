@@ -21,7 +21,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-final class TableInject implements TableInjectImpl {
+class TableInject implements TableInjectImpl {
 
     private TableHelperImpl helperImpl;
 
@@ -31,9 +31,9 @@ final class TableInject implements TableInjectImpl {
     }
 
     @Override
-    public TableInjectImpl init(Context context, String dbName, int version, Class... classes) {
+    public TableInjectImpl init(Context context, String dbName, int version, Class<?>... classes) {
         List<TableMsg> list = new ArrayList<>();
-        for (Class tClass : classes) {
+        for (Class<?> tClass : classes) {
             TableMsg tableMsg = getTabColumnMsg(tClass);
             tableMsg.setTableName(getTabName(tClass));
             list.add(tableMsg);

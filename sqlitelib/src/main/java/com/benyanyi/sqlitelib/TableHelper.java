@@ -21,7 +21,7 @@ import java.util.Set;
  * @email ben@yanyi.red
  * @overview
  */
-final class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
+class TableHelper extends SQLiteOpenHelper implements TableHelperImpl {
 
     private List<TableMsg> tableMsg;
     private Context mContext;

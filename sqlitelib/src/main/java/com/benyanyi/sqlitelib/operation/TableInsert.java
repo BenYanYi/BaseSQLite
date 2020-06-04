@@ -13,11 +13,12 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableInsert<T> implements TableInsertImpl<T> {
+public class TableInsert<T> implements TableInsertImpl<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
 
-    private TableInsert(){}
+    private TableInsert() {
+    }
 
     private TableInsert(Class<T> tClass, Builder builder) {
         this.tClass = tClass;

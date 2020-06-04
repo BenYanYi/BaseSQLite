@@ -8,7 +8,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-final class TableMsg {
+class TableMsg {
     private String id;
     private String type;
     private boolean isNotNULL = false;

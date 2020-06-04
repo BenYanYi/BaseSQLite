@@ -13,7 +13,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableChangeOrAdd<T> implements TableChangeOrAddImpl<T> {
+public class TableChangeOrAdd<T> implements TableChangeOrAddImpl<T> {
     private TableQueryImpl<T> tableQuery;
     private TableInsertImpl<T> tableInsert;
     private TableUpdateImpl<T> tableUpdate;

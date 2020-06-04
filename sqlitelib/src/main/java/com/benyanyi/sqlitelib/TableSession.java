@@ -3,12 +3,9 @@ package com.benyanyi.sqlitelib;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.benyanyi.sqlitelib.condition.ConditionMsg;
 import com.benyanyi.sqlitelib.condition.TableCondition;
 import com.benyanyi.sqlitelib.impl.ConditionImpl;
 import com.benyanyi.sqlitelib.impl.TableSessionImpl;
-
-import java.util.ArrayList;
 
 /**
  * @author YanYi
@@ -16,21 +13,18 @@ import java.util.ArrayList;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableSession<T> implements TableSessionImpl<T> {
+public class TableSession<T> implements TableSessionImpl<T> {
     private Class<T> tClass;
     private TableInjectImpl injectImpl;
     private SQLiteDatabase database;
-    private TableCondition.Builder builder;
 
     TableSession() {
-
     }
 
     TableSessionImpl<T> init(Class<T> tClass, TableInjectImpl injectImpl) {
         this.tClass = tClass;
         this.injectImpl = injectImpl;
         this.database = getDB();
-        this.builder = getTableCondition();
         return this;
     }
 
@@ -38,38 +32,11 @@ public final class TableSession<T> implements TableSessionImpl<T> {
         return this.injectImpl.getHelperWritableDatabase();
     }
 
-    private TableCondition.Builder getTableCondition() {
-        return new TableCondition.Builder()
-                .setEqList(new ArrayList<ConditionMsg>())
-                .setNotEqList(new ArrayList<ConditionMsg>())
-                .setGreaterList(new ArrayList<ConditionMsg>())
-                .setLessList(new ArrayList<ConditionMsg>())
-                .setInList(new ArrayList<ConditionMsg>());
-    }
-
     @Override
     public ConditionImpl<T> where() {
-        return this.builder.builder(this.database, this.tClass);
-    }
-
-    /**
-     * 条件处理类
-     *
-     * @param isCleanCondition 是否清空条件
-     * @return
-     */
-    @Override
-    public ConditionImpl<T> where(boolean isCleanCondition) {
-        if (isCleanCondition) {
-            return this.builder.setEqList(new ArrayList<ConditionMsg>())
-                    .setNotEqList(new ArrayList<ConditionMsg>())
-                    .setGreaterList(new ArrayList<ConditionMsg>())
-                    .setLessList(new ArrayList<ConditionMsg>())
-                    .setInList(new ArrayList<ConditionMsg>())
-                    .builder(this.database, this.tClass);
-        } else {
-            return where();
-        }
+        return new TableCondition.Builder()
+                .setDatabase(this.database)
+                .builder(this.tClass);
     }
 
     @Override

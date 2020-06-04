@@ -26,7 +26,7 @@ interface TableInjectImpl {
      * @param version
      * @return
      */
-    TableInjectImpl init(Context context, String dbName, int version, Class... classes);
+    TableInjectImpl init(Context context, String dbName, int version, Class<?>... classes);
 
     /**
      * 判断某张表是否存在

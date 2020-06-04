@@ -17,7 +17,7 @@ repositories {
 ~~~
 ### module 下添加
 ~~~
-implementation 'com.yanyi.benyanyi:basesqlite:1.1.3'
+implementation 'com.yanyi.benyanyi:basesqlite:1.1.4'
 ~~~
 
 或者
@@ -25,7 +25,7 @@ implementation 'com.yanyi.benyanyi:basesqlite:1.1.3'
 <dependency>
   <groupId>com.yanyi.benyanyi</groupId>
   <artifactId>basesqlite</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.4</version>
   <type>aar</type>
 </dependency>
 ~~~
@@ -40,50 +40,53 @@ TableDaoImpl dao = new TableDao.Builder().setVersion(your version).setClasses(yo
 ~~~
 TableSessionImpl<your table bean> session = dao.getSession(your TableBean.class);
 ~~~
+#### 条件及逻辑处理
+~~~
+ConditionImpl<T> conditionImpl = session.where();//获取条件及逻辑处理类
+conditionImpl = conditionImpl.sort(条件);//排序条件，可不选
+OperationImpl<T> operation = conditionImpl.operation((your condition)[可不填])//获取逻辑处理类
+~~~
+##### 条件属性(your condition)
+* sort(String field,TableSort sort) 排序方式(field表示依据的列明)
+
+##### 配置类介绍
+* ConditionMsg(条件配置类)：field(列字段名)、value(当前列对应的值)、Condition(条件判断)、TableNexus(多个时用于当前条件是and还是or)
+* Condition(条件判断)：DETAILS(默认为eq相等)、EQ(相等)、NOT_EQ(不等)、GREATER(大于)、LESS(小于)、LIKE(包含)
+* TableNexus(多条件并且和或者)：DETAILS(默认值(and))、AND(and并且)、OR(or或者)
+* TableSort(排序方式)：DETAILS(默认排序)、ASCENDING(正序)、DESCENDING(倒序)
+
+##### 添加数据(insert)
+~~~
+operation.insert().find(your data);
+~~~
+##### 删除数据(delete)
+可删除全部(findAll)，也可只删除第一条(findFirst)或最后一条(findLast)
+~~~
+operation.delete().findAll();
+~~~
+##### 查询数据(query)
+可查询所有(findAll)，也可查询第一条(findFirst)或最后一条(findLast)
+~~~
+operation.query().findAll()
+~~~
+##### 更改数据(update)
+可更改所有(findAll(your change data))，也可更改第一条(findFirst(your change data))或最后一条(findLast(your change data))
+~~~
+operation.update().findAll(your change data);
+~~~
+##### 修改或者添加(changeOrAdd),必须设置your condition
+可在不确定数据是否存在时修改数据，数据存在则进行修改，数据不存在是则进行添加,可处理所有数据(findAll(your changeOrAdd data)),也可处理第一条数据(findFirst(your changeOrAdd data))或最后一条数据(findLast(your changeOrAdd data))
+~~~
+operation.changeOrAdd().findAll(your changeOrAdd data);
+~~~
+
 #### 注解声明
 * @TableBean &nbsp;声明当前类为表结构类，表名为默认为类名，设置value值可更改自定义表明。<!--<br/><font color=#ff0000>**特别注意，使用TableBean注解的类中属性需要添加set和get方法**</font>-->
 * @ID &nbsp;声明属性名为表主键id，默认id不自增，设置increase为true则自增
 * @NotNull &nbsp;声明当前属性对应的表列值不能为空
 * @ColumnName &nbsp;声明表中列名，列名为空时使用变量名，不能为null
 * @NotColumn &nbsp;声明当前变量不设置能列，默认使用为true值（不为列），设置notColumn值变更是否不为列
-#### 添加数据(insert)
-your data可以为一条数据，也可以为数据集
-~~~
-session.where().(your condition)[可不选].operation().insert().find(your data);
-~~~
-    
-#### 删除数据(delete)
-可删除全部(findAll)，也可只删除第一条(findFirst)或最后一条(findLast)
-~~~
-session.where().(your condition)[可不选].operation().delete().findAll();
-~~~
-#### 查询数据(query)
-可查询所有(findAll)，也可查询第一条(findFirst)或最后一条(findLast)
-~~~
-session.where().(your condition)[可不选].operation().query().findAll()
-~~~
-#### 更改数据(update)
-可更改所有(findAll(your change data))，也可更改第一条(findFirst(your change data))或最后一条(findLast(your change data))
-~~~
-session.where().(your condition)[可不选].operation().update().findAll(your change data);
-~~~
-#### 修改或者添加(changeOrAdd)
-可在不确定数据是否存在时修改数据，数据存在则进行修改，数据不存在是则进行添加,可处理所有数据(findAll(your changeOrAdd data)),也可处理第一条数据(findFirst(your changeOrAdd data))或最后一条数据(findLast(your changeOrAdd data))
-~~~
-session.where().(your condition)[可不选].operation().changeOrAdd().findAll(your changeOrAdd data);
-~~~
-#### 条件属性(your condition)
-* cleanCondition() 清空条件(包含缓存的条件)
-* eq(ConditionMsg) 声明当条件中的列为何值时满足条件
-* notEq(ConditionMsg) 声明当条件中的列不为何值满足条件
-* greater(ConditionMsg) 声明当条件中的列大于何值满足条件
-* less(ConditionMsg) 声明当条件中的列小于何值满足条件
-* in(ConditionMsg) 声明当条件中的列包含何值满足条件
-* sort(String field,TableSort sort) 排序方式(field表示依据的列明)
-#### 配置类介绍
-* ConditionMsg(条件配置类)：field(列字段名)、value(当前列对应的值)、TableNexus(多个时用于当前条件是and还是or)
-* TableNexus(多条件并且和或者)：DETAILS(默认值(and))、AND(and并且)、OR(or或者)
-* TableSort(排序方式)：DETAILS(默认排序)、ASCENDING(正序)、DESCENDING(倒序)
+
 
 #### 回调类介绍
 ##### TableSessionImpl<T>(数据库操作类）
@@ -104,6 +107,7 @@ session.where().(your condition)[可不选].operation().changeOrAdd().findAll(yo
 
 更新记录
 ----
+* 2020-06-04 提交1.1.4版本，修改条件属性方法，将多个方法统一调用，删除是否要清除缓存判断及方法，不会产生缓存条件
 * 2020-05-18 提交1.1.3版本，添加创建多表方法
 * 2020-05-16 提交1.1.2版本，修复1.1.1版本中内部类问题
 * 2020-05-15 提交1.1.1版本，修复条件缓存问题，添加是否要清除缓存判断及方法,将android support转成androidx支持,并将Maven库存放到个人服务器上

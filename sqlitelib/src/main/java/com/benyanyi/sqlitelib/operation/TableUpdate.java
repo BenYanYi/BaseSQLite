@@ -20,7 +20,7 @@ import java.util.List;
  * @email ben@yanyi.red
  * @overview
  */
-public final class TableUpdate<T> implements TableUpdateImpl<T> {
+public class TableUpdate<T> implements TableUpdateImpl<T> {
     private SQLiteDatabase database;
     private Class<T> tClass;
     private TableQueryImpl<T> tableQuery;

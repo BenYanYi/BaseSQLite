@@ -1,5 +1,6 @@
 package com.benyanyi.sqlitelib.condition;
 
+import com.benyanyi.sqlitelib.config.Condition;
 import com.benyanyi.sqlitelib.config.TableNexus;
 
 /**
@@ -8,7 +9,7 @@ import com.benyanyi.sqlitelib.config.TableNexus;
  * @email ben@yanyi.red
  * @overview 字段需要进行的条件逻辑
  */
-public final class ConditionMsg {
+public class ConditionMsg {
     /**
      * 列字段名
      */
@@ -17,8 +18,14 @@ public final class ConditionMsg {
      * 值
      */
     private Object value;
+
     /**
-     * 条件 and 还是 or，默认and
+     * 判断条件
+     */
+    private Condition condition = Condition.DETAILS;
+
+    /**
+     * 多条语句条件 and 还是 or，默认and
      */
     private TableNexus nexus = TableNexus.DETAILS;
 
@@ -27,9 +34,22 @@ public final class ConditionMsg {
         this.value = value;
     }
 
+    public ConditionMsg(String field, Object value, Condition condition) {
+        this.field = field;
+        this.value = value;
+        this.condition = condition;
+    }
+
     public ConditionMsg(String field, Object value, TableNexus nexus) {
         this.field = field;
         this.value = value;
+        this.nexus = nexus;
+    }
+
+    public ConditionMsg(String field, Object value, Condition condition, TableNexus nexus) {
+        this.field = field;
+        this.value = value;
+        this.condition = condition;
         this.nexus = nexus;
     }
 
@@ -47,6 +67,14 @@ public final class ConditionMsg {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    Condition getCondition() {
+        return condition;
+    }
+
+    public void setCondition(Condition condition) {
+        this.condition = condition;
     }
 
     TableNexus getNexus() {

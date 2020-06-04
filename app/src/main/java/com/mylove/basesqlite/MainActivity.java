@@ -1,10 +1,10 @@
 package com.mylove.basesqlite;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.benyanyi.loglib.Jlog;
 import com.benyanyi.sqlitelib.TableDao;
 import com.benyanyi.sqlitelib.impl.TableDaoImpl;
 import com.benyanyi.sqlitelib.impl.TableSessionImpl;
@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextView tv = findViewById(R.id.tv);
         TableDaoImpl tableDao = new TableDao.Builder()
                 .setDbName("mainDB")
                 .setClasses(DBBean.class, TestBean.class)
@@ -24,14 +25,14 @@ public class MainActivity extends AppCompatActivity {
         dbBean.setTitle("标题0");
         dbBean.setMsg("内容0");
         session.where().operation().insert().find(dbBean);
-        Jlog.v(session.getDBPath());
-        Jlog.v(session.tableIsExist());
+        tv.setText(session.getDBPath());
+        tv.append("\n" + session.tableIsExist());
         TableSessionImpl<TestBean> session1 = tableDao.getSession(TestBean.class);
         TestBean bean = new TestBean();
         bean.setMsg("哈哈");
         session1.where().operation().insert().find(bean);
-        Jlog.v(session1.getDBPath());
-        Jlog.v(session1.tableIsExist("TestBean"));
+        tv.append("\n" + session1.getDBPath());
+        tv.append("\n" + session1.tableIsExist("TestBean"));
 //        DebugDB.getAddressLog();
     }
 }

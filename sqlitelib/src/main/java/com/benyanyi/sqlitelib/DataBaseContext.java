@@ -15,7 +15,7 @@ import java.io.IOException;
  * @email ben@yanyi.red
  * @overview 用于修改sqlite保存地址
  */
-final class DataBaseContext extends ContextWrapper {
+class DataBaseContext extends ContextWrapper {
     private Context mContext;
 
     public DataBaseContext(Context base) {

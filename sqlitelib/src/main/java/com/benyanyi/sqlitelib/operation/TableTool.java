@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
  * @email ben@yanyi.red
  * @overview 表工具类
  */
-final class TableTool {
+class TableTool {
 
     /**
      * 获取值
@@ -142,8 +142,6 @@ final class TableTool {
                     break;
                 case "char":
                 case "character":
-                    values.put(columnName, invoke);
-                    break;
                 default:
                     values.put(columnName, invoke);
                     break;
