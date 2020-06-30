@@ -22,8 +22,18 @@ public interface ConditionImpl<T> {
      */
     ConditionImpl<T> sort(String field, TableSort sort);
 
+    /**
+     * 逻辑处理（增删查改）
+     *
+     * @param conditionMsg 判断条件
+     */
     OperationImpl<T> operation(ConditionMsg conditionMsg);
 
+    /**
+     * 逻辑处理（增删查改）
+     *
+     * @param list 多个判断条件集合
+     */
     OperationImpl<T> operation(List<ConditionMsg> list);
 
     /**

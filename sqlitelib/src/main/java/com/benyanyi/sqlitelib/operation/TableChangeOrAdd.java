@@ -27,6 +27,12 @@ public class TableChangeOrAdd<T> implements TableChangeOrAddImpl<T> {
         this.tableUpdate = builder.tableUpdate;
     }
 
+    /**
+     * 修改符合条件的第一条数据，没找到符合条件的数据时添加数据
+     *
+     * @param t 数据
+     * @return 操作数据的行号
+     */
     @Override
     public long[] findAll(T t) {
         List<T> all = this.tableQuery.findAll();
@@ -42,6 +48,12 @@ public class TableChangeOrAdd<T> implements TableChangeOrAddImpl<T> {
         }
     }
 
+    /**
+     * 修改符合条件的最后一条数据，没找到符合条件的数据时添加数据
+     *
+     * @param t 数据
+     * @return 操作数据的行号
+     */
     @Override
     public long findFirst(T t) {
         T t1 = this.tableQuery.findFirst();
@@ -52,6 +64,12 @@ public class TableChangeOrAdd<T> implements TableChangeOrAddImpl<T> {
         }
     }
 
+    /**
+     * 修改符合条件的全部数据，没找到符合条件的数据时添加数据
+     *
+     * @param t 数据
+     * @return 操作数据的行号数组
+     */
     @Override
     public long findLast(T t) {
         T t1 = this.tableQuery.findLast();

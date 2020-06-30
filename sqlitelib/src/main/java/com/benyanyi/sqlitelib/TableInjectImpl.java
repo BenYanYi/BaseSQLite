@@ -31,7 +31,7 @@ interface TableInjectImpl {
     /**
      * 判断某张表是否存在
      *
-     * @param tableName
+     * @param tClass
      * @return
      */
     <T> boolean tableIsExist(Class<T> tClass);
@@ -45,14 +45,14 @@ interface TableInjectImpl {
     boolean tableIsExist(String tableName);
 
     /**
-     * 获取数据库路劲
+     * 获取数据库路径
      *
      * @return
      */
     <T> String getDBPath(Class<T> tClass);
 
     /**
-     * 获取数据库路劲
+     * 获取数据库路径
      *
      * @return
      */

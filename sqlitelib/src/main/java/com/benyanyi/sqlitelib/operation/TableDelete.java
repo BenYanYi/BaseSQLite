@@ -37,7 +37,7 @@ public class TableDelete<T> implements TableDeleteImpl<T> {
     /**
      * 删除第一条数据
      *
-     * @return
+     * @return 成功执行条数
      */
     @Override
     public int findFirst() {
@@ -51,7 +51,7 @@ public class TableDelete<T> implements TableDeleteImpl<T> {
     /**
      * 删除最后一条数据
      *
-     * @return
+     * @return 成功执行条数
      */
     @Override
     public int findLast() {
@@ -65,7 +65,7 @@ public class TableDelete<T> implements TableDeleteImpl<T> {
     /**
      * 删除全部数据
      *
-     * @return
+     * @return 成功执行条数
      */
     @Override
     public int findAll() {

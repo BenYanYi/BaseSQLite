@@ -45,6 +45,11 @@ public class TableCondition<T> implements ConditionImpl<T> {
         return this;
     }
 
+    /**
+     * 增删查改处理
+     *
+     * @param conditionMsg 判断条件
+     */
     @Override
     public OperationImpl<T> operation(ConditionMsg conditionMsg) {
         List<ConditionMsg> list = new ArrayList<>();
@@ -57,6 +62,11 @@ public class TableCondition<T> implements ConditionImpl<T> {
                 .builder(this.database, tClass);
     }
 
+    /**
+     * 增删查改处理
+     *
+     * @param list 多个判断条件集合
+     */
     @Override
     public OperationImpl<T> operation(List<ConditionMsg> list) {
         return new TableOperation.Builder()
@@ -69,8 +79,6 @@ public class TableCondition<T> implements ConditionImpl<T> {
 
     /**
      * 增删查改处理
-     *
-     * @return
      */
     @Override
     public OperationImpl<T> operation() {

@@ -48,6 +48,11 @@ public class TableOperation<T> implements OperationImpl<T> {
         return this;
     }
 
+    /**
+     * 插入数据
+     *
+     * @return 插入数据操作
+     */
     @Override
     public TableInsertImpl<T> insert() {
         return new TableInsert.Builder()

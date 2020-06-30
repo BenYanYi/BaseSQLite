@@ -21,7 +21,7 @@ public interface TableInsertImpl<T> {
      * 插入多条数据
      *
      * @param list 数据集
-     * @return 对应的行号
+     * @return 对应的行号数组
      */
     long[] find(List<T> list);
 }

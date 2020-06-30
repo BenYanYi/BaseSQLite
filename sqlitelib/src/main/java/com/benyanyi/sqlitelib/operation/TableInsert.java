@@ -25,11 +25,23 @@ public class TableInsert<T> implements TableInsertImpl<T> {
         this.database = builder.database;
     }
 
+    /**
+     * 插入一条数据
+     *
+     * @param t 数据
+     * @return 当前行号
+     */
     @Override
     public long find(T t) {
         return insert(t);
     }
 
+    /**
+     * 插入一条数据
+     *
+     * @param list 数据集合
+     * @return 对应的行号数组
+     */
     @Override
     public long[] find(List<T> list) {
         long[] l = new long[list.size()];

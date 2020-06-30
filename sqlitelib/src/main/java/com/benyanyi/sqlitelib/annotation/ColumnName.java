@@ -14,5 +14,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ColumnName {
+    /**
+     * 指定列名
+     * @return 列名(默认为空，即变量名)
+     */
     String value() default "";
 }
