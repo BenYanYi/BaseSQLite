@@ -129,6 +129,8 @@ operation.changeOrAdd().findAll(your changeOrAdd data);
 <!--QQ：1541612424<br/>-->
 <!--email： work@yanyi.red<br/>-->
 <!--微信公众号：benyanyi(演绎未来)&nbsp;&nbsp;&nbsp;将会不定期的更新关于android的一些文章-->
+
+<!--生成javadoc 防止混淆 加入  -encoding utf-8 -charset utf-8-->
     
 
         
