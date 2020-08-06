@@ -39,6 +39,7 @@ class TableInject implements TableInjectImpl {
             list.add(tableMsg);
         }
         this.helperImpl = new TableHelper(context, dbName, list, version);
+        getHelperWritableDatabase();
         return this;
     }
 

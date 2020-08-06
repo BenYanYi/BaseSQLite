@@ -25,4 +25,4 @@ uploadArchives {
         }
     }
 }
-//gradlew bintrayUpload    terminal中输入
+//gradlew uploadArchives    terminal中输入
