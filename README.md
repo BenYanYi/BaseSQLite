@@ -1,5 +1,7 @@
 # BaseSQLite
 
+![](https://img.shields.io/badge/basesqlite-1.1.4-green)
+
 介绍
 ---
 ##### 旨在将sqlite使用变得简单化，处理数据时链式调用
