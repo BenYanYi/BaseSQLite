@@ -20,6 +20,8 @@ public class DBBean {
     @ColumnName("Message")
     private String msg = "msgStr1";
 
+    private String content = "";
+
     public String getTitle() {
         return title;
     }

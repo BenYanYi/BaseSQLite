@@ -19,7 +19,7 @@ repositories {
 ~~~
 ### module 下添加
 ~~~
-implementation 'com.yanyi.benyanyi:basesqlite:1.1.4'
+implementation 'com.yanyi.benyanyi:basesqlite:1.1.5'
 ~~~
 
 或者
@@ -27,7 +27,7 @@ implementation 'com.yanyi.benyanyi:basesqlite:1.1.4'
 <dependency>
   <groupId>com.yanyi.benyanyi</groupId>
   <artifactId>basesqlite</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <type>aar</type>
 </dependency>
 ~~~
@@ -109,6 +109,7 @@ operation.changeOrAdd().findAll(your changeOrAdd data);
 
 更新记录
 ----
+* 2020-08-07 提交1.1.5版本，使表在TableDao的初始化阶段即完成创建升级操作
 * 2020-06-04 提交1.1.4版本，修改条件属性方法，将多个方法统一调用，删除是否要清除缓存判断及方法，不会产生缓存条件
 * 2020-05-18 提交1.1.3版本，添加创建多表方法
 * 2020-05-16 提交1.1.2版本，修复1.1.1版本中内部类问题

@@ -64,4 +64,16 @@ class TableMsg {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
+
+    @Override
+    public String toString() {
+        return "TableMsg{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", isNotNULL=" + isNotNULL +
+                ", increase=" + increase +
+                ", tableName='" + tableName + '\'' +
+                ", list=" + list +
+                '}';
+    }
 }

@@ -17,13 +17,13 @@ interface TableHelperImpl {
      */
     SQLiteDatabase getHelperWritableDatabase();
 
-    /**
-     * 判断某张表是否存在
-     *
-     * @param tableName
-     * @return
-     */
-    boolean tableIsExist(String tableName);
+//    /**
+//     * 判断某张表是否存在
+//     *
+//     * @param tableName
+//     * @return
+//     */
+//    boolean tableIsExist(String tableName);
 
     /**
      * 判断某张表是否存在
