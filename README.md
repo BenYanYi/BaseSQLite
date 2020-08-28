@@ -1,6 +1,6 @@
 # BaseSQLite
 
-![](https://img.shields.io/badge/basesqlite-1.1.4-green)
+![](https://img.shields.io/badge/basesqlite-1.1.5-green)
 
 介绍
 ---
