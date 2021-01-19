@@ -6,6 +6,7 @@
 ---
 ##### 旨在将sqlite使用变得简单化，处理数据时链式调用
 ##### 注意1.1.1版本开始将只支持androidx项目
+##### [javadoc](/javadoc/index.html)
 
 使用
 ---
